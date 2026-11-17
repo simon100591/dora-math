@@ -50,6 +50,46 @@
       60% { transform: translateX(-6px); }
       80% { transform: translateX(6px); }
     }
+
+    /* ===== Science Lab v2 ===== */
+    .plant-svg .sway { transform-box: view-box; transform-origin: 170px 222px; animation: plantSway 5s ease-in-out infinite; }
+    @keyframes plantSway { 0%,100% { transform: rotate(-1.6deg); } 50% { transform: rotate(1.6deg); } }
+    .plant-svg .sun-rays { transform-box: fill-box; transform-origin: center; animation: spinSlow 18s linear infinite; }
+    @keyframes spinSlow { to { transform: rotate(360deg); } }
+    .plant-svg .cloud { animation: cloudDrift 14s ease-in-out infinite alternate; }
+    @keyframes cloudDrift { from { transform: translateX(-12px); } to { transform: translateX(18px); } }
+    .plant-svg .organ { cursor: pointer; transition: opacity .35s, filter .35s; }
+    .plant-svg .organ:hover { filter: brightness(1.1) drop-shadow(0 0 4px rgba(255,255,255,.9)); }
+    .plant-svg[class*="sel-"] .organ { opacity: .35; }
+    .plant-svg.sel-flower .organ[data-k=flower], .plant-svg.sel-leaf .organ[data-k=leaf],
+    .plant-svg.sel-stem .organ[data-k=stem], .plant-svg.sel-fruit .organ[data-k=fruit],
+    .plant-svg.sel-root .organ[data-k=root] { opacity: 1; filter: drop-shadow(0 0 7px #FDE047) drop-shadow(0 0 2px #FFF); }
+    .plant-svg .fx { display: none; }
+    .plant-svg.sel-flower .fx-flower, .plant-svg.sel-leaf .fx-leaf, .plant-svg.sel-stem .fx-stem,
+    .plant-svg.sel-fruit .fx-fruit, .plant-svg.sel-root .fx-root { display: inline; }
+    .plant-svg .lbl { transition: opacity .3s; pointer-events: none; }
+    .plant-svg[class*="sel-"] .lbl { opacity: .25; }
+    .plant-svg.sel-flower .lbl-flower, .plant-svg.sel-leaf .lbl-leaf, .plant-svg.sel-stem .lbl-stem,
+    .plant-svg.sel-fruit .lbl-fruit, .plant-svg.sel-root .lbl-root { opacity: 1; }
+    .flow-dash { stroke-dasharray: 6 8; animation: dashFlow .8s linear infinite; }
+    @keyframes dashFlow { to { stroke-dashoffset: -14; } }
+    .seed-fall { animation: seedFall 3.2s ease-in infinite; }
+    @keyframes seedFall { 0% { transform: translate(0,0); opacity: 0; } 8% { opacity: 1; } 45% { transform: translate(14px,62px); opacity: 1; } 100% { transform: translate(14px,62px); opacity: 0; } }
+    .sprout-grow { transform-box: fill-box; transform-origin: bottom center; animation: sproutGrow 3.2s ease-out infinite; }
+    @keyframes sproutGrow { 0%,45% { transform: scale(0); opacity: 0; } 70% { transform: scale(1.1); opacity: 1; } 90% { transform: scale(1); opacity: 1; } 100% { opacity: 0; } }
+    .pulse-ring { transform-box: fill-box; transform-origin: center; animation: pulseRing 1.6s ease-out infinite; }
+    @keyframes pulseRing { from { transform: scale(.6); opacity: .9; } to { transform: scale(1.8); opacity: 0; } }
+    .organ-btn.active { background: linear-gradient(135deg,#34D399,#10B981); color: #fff; border-color: #10B981; box-shadow: 0 4px 14px rgba(16,185,129,.35); transform: translateY(-1px); }
+    .info-pop { animation: infoPop .45s cubic-bezier(.2,1.4,.4,1); }
+    @keyframes infoPop { from { opacity: 0; transform: translateY(10px) scale(.97); } to { opacity: 1; transform: none; } }
+    /* magnet */
+    .mag-flip { transform-box: fill-box; transform-origin: center; animation: magFlip .5s ease-in-out; }
+    @keyframes magFlip { 0% { transform: scaleX(1); } 50% { transform: scaleX(0) scaleY(1.08); } 100% { transform: scaleX(1); } }
+    .field-line { fill: none; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 5 7; animation: dashFlow .7s linear infinite; }
+    .field-line.rev { animation-direction: reverse; }
+    .mag-hit { cursor: pointer; }
+    .mag-hit:hover rect.body { filter: brightness(1.12); }
+    .force-badge { animation: infoPop .4s cubic-bezier(.2,1.4,.4,1); }
     .animate-shake {
       animation: shakeHorizontal 0.4s ease-in-out;
     }
@@ -83,6 +123,46 @@
         break-before: page;
       }
     }
+
+    /* ===== Dora 全科動畫學院 v5 ===== */
+    .anim-studio{margin-top:1.5rem;border:1px solid #f0cdd7;border-radius:1.75rem;overflow:hidden;background:linear-gradient(145deg,#fff 0%,#fff8fa 55%,#f5fbff 100%);box-shadow:0 18px 45px -30px rgba(146,63,91,.45)}
+    .anim-studio-head{padding:1rem 1.1rem;background:linear-gradient(120deg,#fff1f5,#fff9ec 52%,#eefaff);border-bottom:1px solid #f4d8df}
+    .anim-kicker{font-size:.67rem;font-weight:900;letter-spacing:.14em;color:#db718b;text-transform:uppercase}
+    .anim-tabs{display:flex;gap:.45rem;overflow-x:auto;padding:.75rem 1rem .25rem;scroll-snap-type:x proximity}
+    .anim-tab{scroll-snap-align:start;white-space:nowrap;padding:.55rem .78rem;border-radius:1rem;background:#fff;border:1px solid #f2d6dd;color:#76505a;font-size:.72rem;font-weight:900;transition:.25s;box-shadow:0 3px 10px rgba(140,80,100,.05)}
+    .anim-tab:hover{transform:translateY(-2px);border-color:#ed9db0}.anim-tab.active{color:#fff;border-color:transparent;background:linear-gradient(135deg,#ed8fa5,#df728b);box-shadow:0 7px 18px rgba(223,114,139,.27)}
+    .anim-stage{margin:1rem;padding:clamp(.85rem,2vw,1.25rem);min-height:330px;border-radius:1.5rem;border:1px solid #f2dce2;background:rgba(255,255,255,.88);position:relative;overflow:hidden}
+    .anim-title{font-size:1.03rem;font-weight:900;color:#263244}.anim-sub{font-size:.76rem;color:#667085;margin-top:.18rem;line-height:1.55}.anim-hint{font-size:.69rem;font-weight:800;color:#a04d63;background:#fff1f4;border:1px solid #ffd6df;border-radius:.75rem;padding:.4rem .65rem}
+    .anim-controls{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.8rem}.anim-btn{padding:.52rem .78rem;border-radius:.85rem;border:1px solid #efc9d3;background:#fff;color:#8d4055;font-size:.72rem;font-weight:900;transition:.2s}.anim-btn:hover{transform:translateY(-1px);background:#fff1f5}.anim-btn.primary{color:#fff;border:0;background:linear-gradient(135deg,#ec8ba2,#d96682);box-shadow:0 5px 14px rgba(217,102,130,.24)}.anim-btn.active{background:#334155;color:#fff;border-color:#334155}
+    .anim-board{margin-top:.85rem;border-radius:1.25rem;min-height:210px;background:linear-gradient(145deg,#f8fbff,#fff7fa);border:1px solid #e5eaf1;position:relative;overflow:hidden;padding:1rem}.anim-note{margin-top:.7rem;border-radius:.85rem;padding:.62rem .78rem;background:#fffbeb;border:1px solid #fde68a;color:#7c4a12;font-size:.74rem;font-weight:800;line-height:1.5}
+    .anim-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:.65rem}.anim-card{border:1px solid #e8eaf0;background:#fff;border-radius:1rem;padding:.75rem;box-shadow:0 7px 20px -17px #475569;transition:.25s}.anim-card:hover{transform:translateY(-2px);box-shadow:0 10px 22px -16px #475569}
+    .studio-pop{animation:studioPop .45s cubic-bezier(.2,1.35,.35,1)}@keyframes studioPop{from{opacity:0;transform:scale(.94) translateY(8px)}to{opacity:1;transform:none}}
+    .studio-float{animation:studioFloat 2.6s ease-in-out infinite}@keyframes studioFloat{50%{transform:translateY(-8px) rotate(2deg)}}
+    .studio-glow{animation:studioGlow 1.4s ease-in-out infinite alternate}@keyframes studioGlow{to{filter:drop-shadow(0 0 10px rgba(250,204,21,.8));transform:scale(1.04)}}
+    .mag-sort-object{font-size:2rem;cursor:pointer;transition:.65s cubic-bezier(.2,.8,.2,1);user-select:none}.mag-sort-object.hit{transform:translate(95px,-5px) rotate(15deg);filter:drop-shadow(0 0 7px #60a5fa)}.mag-sort-object.miss{animation:sortBounce .65s}@keyframes sortBounce{35%{transform:translateX(35px) rotate(10deg)}65%{transform:translateX(-8px) rotate(-4deg)}}
+    .bar-magnet{display:flex;width:150px;height:54px;border-radius:.65rem;overflow:hidden;color:#fff;font-weight:900;font-size:1.1rem;box-shadow:0 10px 20px -12px #0f172a}.bar-magnet span{flex:1;display:grid;place-items:center}.bar-magnet span:first-child{background:linear-gradient(#fb7185,#be123c)}.bar-magnet span:last-child{background:linear-gradient(#60a5fa,#2563eb)}
+    .penetration-track{height:90px;display:flex;align-items:center;justify-content:center;gap:0;position:relative}.penetration-material{width:18px;height:82px;border-radius:.4rem;border:2px solid rgba(100,116,139,.35);z-index:2;transition:.3s}.penetration-clip{font-size:2rem;transition:.8s cubic-bezier(.25,.8,.25,1)}.penetration-clip.pulled{transform:translateX(-70px) rotate(35deg)}
+    .compass{width:150px;height:150px;margin:auto;border-radius:50%;background:radial-gradient(circle,#fff 0 48%,#e4f1f8 49% 63%,#9ac8dc 64%);border:6px solid #29485f;position:relative;box-shadow:inset 0 0 18px #9fbac8,0 12px 24px -18px #0f172a}.compass:before{content:'北';position:absolute;top:9px;left:50%;transform:translateX(-50%);font-weight:900;color:#dc2626}.compass-needle{position:absolute;left:24px;right:24px;top:69px;height:8px;transform:rotate(-90deg);transition:1.4s cubic-bezier(.2,.8,.2,1)}.compass-needle:before,.compass-needle:after{content:'';position:absolute;top:-7px;border-top:11px solid transparent;border-bottom:11px solid transparent}.compass-needle:before{left:0;border-right:50px solid #2563eb}.compass-needle:after{right:0;border-left:50px solid #ef4444}.compass.spin .compass-needle{animation:needleFind 2.4s cubic-bezier(.18,.85,.22,1)}@keyframes needleFind{0%{transform:rotate(20deg)}35%{transform:rotate(580deg)}70%{transform:rotate(425deg)}100%{transform:rotate(270deg)}}
+    .seed-timeline{display:flex;align-items:end;justify-content:space-around;min-height:170px;gap:.4rem}.seed-phase{text-align:center;opacity:.28;filter:grayscale(1);transform:scale(.86);transition:.5s}.seed-phase.on{opacity:1;filter:none;transform:scale(1.12)}.seed-art{font-size:clamp(2rem,7vw,4.2rem);line-height:1}.seed-phase small{display:block;font-size:.65rem;font-weight:900;color:#386641;margin-top:.45rem}
+    .leaf-pair{display:flex;gap:1rem;justify-content:center;align-items:center;flex-wrap:wrap}.leaf{width:120px;height:72px;border-radius:100% 0 100% 0;background:linear-gradient(145deg,#86efac,#16a34a);transform:rotate(-12deg);position:relative;cursor:pointer;box-shadow:0 9px 19px -14px #166534}.leaf:before{content:'';position:absolute;left:8px;right:8px;top:35px;border-top:3px solid #dcfce7;transform:rotate(-2deg)}.leaf.net:after{content:'╱╲╱╲╱╲';position:absolute;left:21px;top:18px;color:#dcfce7;font-size:13px;letter-spacing:-2px}.leaf.parallel:after{content:'//////';position:absolute;left:29px;top:14px;color:#dcfce7;font-size:22px;letter-spacing:2px}.magnifier{width:130px;height:130px;border:9px solid #334155;border-radius:50%;background:#ecfdf5;display:grid;place-items:center;font-weight:900;color:#166534;box-shadow:0 12px 22px -17px #0f172a;animation:studioPop .45s}.magnifier:after{content:'';position:absolute;width:60px;height:12px;background:#334155;border-radius:8px;transform:translate(83px,72px) rotate(45deg)}
+    .thermo-wrap{height:220px;display:flex;align-items:center;justify-content:center;gap:1.2rem}.thermo{width:62px;height:190px;border-radius:34px;background:#fff;border:5px solid #cbd5e1;position:relative;box-shadow:inset 0 0 0 7px #f1f5f9}.thermo:after{content:'';position:absolute;width:45px;height:45px;border-radius:50%;background:#f43f5e;bottom:4px;left:4px}.mercury{position:absolute;width:13px;bottom:34px;left:19px;background:linear-gradient(90deg,#fb7185,#e11d48);border-radius:9px;transition:.55s;height:80px}.eye-line{position:absolute;height:2px;background:#0ea5e9;left:-55px;right:-55px;top:50%;box-shadow:0 0 8px #38bdf8}.eye-line:after{content:'👁️ 平視';position:absolute;left:105px;top:-22px;font-size:.68rem;font-weight:900;color:#0369a1}
+    .water-vessel{height:170px;display:flex;align-items:center;justify-content:center}.water-cup{width:160px;height:130px;border:5px solid #94a3b8;border-top:0;border-radius:0 0 24px 24px;position:relative;overflow:visible}.water-matter{position:absolute;inset:28px 8px 8px;border-radius:8px 8px 17px 17px;background:#7dd3fc;transition:.6s}.water-matter.ice{inset:30px 16px 12px;background:linear-gradient(145deg,#e0f2fe,#7dd3fc);transform:rotate(-4deg);border-radius:18px}.water-matter.steam{background:transparent;inset:-75px 0 30px}.water-matter.steam:before{content:'☁️  ☁️';font-size:2.7rem;position:absolute;animation:steamRise 2s ease-out infinite}@keyframes steamRise{from{opacity:.3;transform:translateY(45px) scale(.7)}to{opacity:0;transform:translateY(-20px) scale(1.25)}}.molecules{display:flex;flex-wrap:wrap;gap:10px;padding:8px}.molecule{width:13px;height:13px;border-radius:50%;background:#0284c7;transition:.5s}.steam .molecule{position:absolute;animation:moleculeFly 1.8s infinite alternate}@keyframes moleculeFly{to{transform:translate(var(--dx),var(--dy))}} 
+    .wind-scene{height:170px;background:linear-gradient(#bae6fd,#f0f9ff);border-radius:1rem;position:relative;overflow:hidden}.wind-lines{position:absolute;left:-120px;right:0;top:40px;font-size:2.4rem;color:#fff;letter-spacing:30px;white-space:nowrap;animation:windMove 2.3s linear infinite}@keyframes windMove{to{transform:translateX(180px)}}.wind-scene.fast .wind-lines{animation-duration:.55s}.pinwheel{position:absolute;right:38px;top:37px;font-size:4rem;transform-origin:center;animation:pinSpin 4s linear infinite}.wind-scene.fast .pinwheel{animation-duration:.45s}@keyframes pinSpin{to{transform:rotate(360deg)}}.balloon{position:absolute;left:55px;bottom:20px;font-size:2rem;transform-origin:bottom;transition:.45s}
+    .insect-stage{display:flex;justify-content:center;align-items:center;min-height:150px;gap:4px}.bug-part{opacity:.2;transform:translateY(25px) scale(.8);transition:.55s cubic-bezier(.2,1.4,.3,1)}.bug-part.on{opacity:1;transform:none}.bug-head{width:62px;height:62px;background:#f59e0b;border-radius:50%;position:relative}.bug-thorax{width:72px;height:88px;background:#ea580c;border-radius:45%;position:relative}.bug-abdomen{width:105px;height:75px;background:repeating-linear-gradient(90deg,#facc15 0 18px,#1f2937 18px 30px);border-radius:20% 55% 55% 20%}.bug-legs{position:absolute;inset:0}.bug-legs i{position:absolute;width:65px;height:4px;background:#334155;left:10px;transform-origin:left}.bug-legs i:nth-child(1){top:15px;transform:rotate(-35deg)}.bug-legs i:nth-child(2){top:40px}.bug-legs i:nth-child(3){top:65px;transform:rotate(35deg)}.bug-legs i:nth-child(4){top:15px;transform:rotate(215deg)}.bug-legs i:nth-child(5){top:40px;transform:rotate(180deg)}.bug-legs i:nth-child(6){top:65px;transform:rotate(145deg)}
+    .cut-pizza{width:190px;height:190px;border-radius:50%;background:repeating-conic-gradient(from -90deg,#f59e0b 0deg calc(var(--slice) - 2deg),#fff  calc(var(--slice) - 2deg) var(--slice));border:13px solid #d97706;box-shadow:inset 0 0 0 5px #fde68a,0 15px 24px -18px #92400e;position:relative;transition:.5s}.pizza-knife{position:absolute;font-size:3.4rem;left:50%;top:-15px;transform-origin:10px 90px;animation:pizzaCut 1.2s ease-in-out}@keyframes pizzaCut{0%{transform:translate(70px,-45px) rotate(-35deg)}45%{transform:translate(-8px,30px) rotate(15deg)}100%{transform:translate(0,0) rotate(0)}}
+    .fraction-merge{display:flex;gap:1rem;align-items:center;justify-content:center;min-height:130px}.frac-disc{width:105px;height:105px;border-radius:50%;border:4px solid #fff;outline:2px solid #e8a4b5;transition:.85s;display:grid;place-items:center;color:#4c1d2b;font-weight:900}.fraction-merge.merging .frac-disc:first-child{transform:translateX(58px) scale(.85);opacity:.35}.fraction-merge.merging .frac-disc:nth-child(2){transform:translateX(-58px) scale(.85);opacity:.35}.merge-result{opacity:0;transform:scale(.4);transition:.8s}.fraction-merge.merging .merge-result{opacity:1;transform:scale(1.2)}
+    .race-track{height:56px;background:repeating-linear-gradient(90deg,#eef2ff 0 49px,#c7d2fe 49px 51px);border:2px solid #a5b4fc;border-radius:1rem;position:relative;margin:.55rem 0}.runner{position:absolute;top:8px;font-size:2rem;left:0;transition:1.1s cubic-bezier(.2,.9,.3,1)}.race-track.go .runner{left:calc(var(--finish) - 20px)}
+    .ribbon{display:flex;height:62px;border-radius:.7rem;overflow:hidden;border:4px solid #fff;outline:2px solid #c084fc}.ribbon span{flex:1;background:linear-gradient(#e9d5ff,#c084fc);border-right:2px dashed #fff;display:grid;place-items:center;font-weight:900;color:#6b21a8;transition:.45s}.ribbon span.used{transform:translateY(18px) rotate(6deg);opacity:.25}.scissors{font-size:2.3rem;transition:.5s}
+    .person-scene{height:170px;display:grid;place-items:center;background:linear-gradient(#bae6fd 0 65%,#bbf7d0 66%);border-radius:1rem;overflow:hidden}.person-tree{font-size:5rem;transition:.7s}.person-tree.magic{animation:treeDance .8s ease-in-out 2}@keyframes treeDance{25%{transform:rotate(-10deg) scale(1.1)}75%{transform:rotate(10deg) scale(1.1)}}.person-face{opacity:0;transition:.4s}.magic .person-face{opacity:1}
+    .moon-morph{font-size:6rem;transition:.75s cubic-bezier(.2,1.4,.3,1);filter:drop-shadow(0 10px 14px rgba(50,60,100,.2))}.moon-morph.morph{transform:rotate(360deg) scale(1.18)}
+    .summary-word{cursor:pointer;padding:.28rem .42rem;border-radius:.5rem;transition:.2s;display:inline-block}.summary-word:hover{background:#fff1f4}.summary-word.picked{background:#fda4af;color:#fff;transform:translateY(-5px);box-shadow:0 7px 12px -8px #be123c}
+    .family-tree{min-height:210px;position:relative;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}.tree-trunk{width:24px;height:105px;background:#92400e;border-radius:20px 20px 4px 4px;transform-origin:bottom;transition:.7s}.tree-crown{position:absolute;bottom:72px;width:290px;height:145px;background:radial-gradient(circle at 50% 70%,#86efac,#22c55e);border-radius:50%;transform:scale(0);transition:.8s cubic-bezier(.2,1.4,.3,1)}.family-tree.level-1 .tree-trunk{height:125px}.family-tree.level-1 .tree-crown,.family-tree.level-2 .tree-crown{transform:scale(1)}.family-node{position:absolute;z-index:2;padding:.35rem .55rem;background:#fff;border:2px solid #86efac;border-radius:.7rem;font-size:.66rem;font-weight:900;opacity:0;transform:scale(.5);transition:.55s}.family-tree.level-1 .n1,.family-tree.level-2 .n1,.family-tree.level-2 .n2{opacity:1;transform:scale(1)}
+    .meeting-flow{display:flex;gap:.5rem;align-items:center;overflow-x:auto;padding:.8rem}.meeting-step{min-width:105px;padding:.75rem;border-radius:1rem;background:#f8fafc;border:2px solid #e2e8f0;text-align:center;font-size:.7rem;font-weight:900;opacity:.35;transition:.45s}.meeting-step.on{opacity:1;background:#fff1f4;border-color:#fb7185;transform:translateY(-5px);box-shadow:0 9px 18px -14px #9f1239}.meeting-arrow{color:#cbd5e1;font-weight:900}
+    .article-machine{max-width:420px;margin:auto;border-radius:1.4rem;background:linear-gradient(145deg,#334155,#0f172a);padding:1rem;color:#fff;box-shadow:0 18px 28px -20px #020617}.article-slot{height:95px;border:2px dashed #64748b;border-radius:1rem;display:grid;place-items:center;font-size:2.8rem;transition:.5s}.article-slot.drop{animation:itemDrop .7s}@keyframes itemDrop{0%{transform:translateY(-80px);opacity:0}70%{transform:translateY(8px)}100%{transform:none;opacity:1}}.article-lamps{display:flex;gap:.7rem;margin-top:.7rem}.article-lamp{flex:1;text-align:center;padding:.5rem;border-radius:.8rem;background:#1e293b;font-weight:900;opacity:.35}.article-lamp.on{opacity:1;background:#f59e0b;box-shadow:0 0 18px #fbbf24;color:#1f2937}
+    .distance-scene{height:185px;border-radius:1rem;background:linear-gradient(#dbeafe 0 72%,#d1fae5 73%);position:relative;overflow:hidden}.speaker{position:absolute;left:18px;bottom:18px;font-size:4.2rem}.distance-object{position:absolute;bottom:35px;font-size:4rem;transition:.7s;filter:drop-shadow(0 9px 8px rgba(0,0,0,.15))}.speech-bubble{position:absolute;top:15px;left:85px;padding:.55rem .75rem;border-radius:1rem 1rem 1rem .25rem;background:#fff;border:2px solid #93c5fd;font-weight:900;color:#1e3a8a;transition:.3s}
+    @media(max-width:640px){.anim-stage{margin:.7rem;min-height:300px}.anim-board{padding:.7rem}.fraction-merge{gap:.25rem}.frac-disc{width:82px;height:82px}.family-node{font-size:.58rem}.anim-tabs{padding-left:.7rem}}
+    @media(prefers-reduced-motion:reduce){.anim-studio *{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -100,6 +180,7 @@
         <div class="flex items-center gap-2">
           <h1 class="text-base sm:text-lg font-black tracking-tight text-gray-800">Dora老師的數位學習教室</h1>
           <span class="hidden md:inline-block text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-500 border border-rose-100">108課綱</span>
+          <span class="hidden md:inline-block text-[11px] font-black px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-50 to-sky-50 text-slate-600 border border-amber-200">v5 全科動畫版</span>
         </div>
       </div>
 
@@ -2120,44 +2201,137 @@
               <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
                 <div>
                   <h3 class="text-lg font-black text-gray-800">🌱 1. 植物身體五大器官點一點</h3>
-                  <p class="text-xs text-gray-500">點擊下方器官按鈕（花、葉、莖、果實、根），看看植物身體各部位的超能力！</p>
+                  <p class="text-xs text-gray-500">直接點植物圖上的部位或下方按鈕，觀看每個器官的動畫與超能力！</p>
                 </div>
+                <button id="plantTourBtn" onclick="togglePlantTour()" class="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs font-black transition">▶ 自動導覽</button>
               </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center bg-emerald-50/40 border border-emerald-200/80 rounded-2xl p-4">
-                <div class="flex justify-center">
-                  <svg viewBox="0 0 260 220" class="w-56 h-auto">
-                    <!-- Soil -->
-                    <rect x="20" y="150" width="220" height="55" rx="10" fill="#D6B89C"/>
-                    <!-- Roots -->
-                    <path d="M130 150 Q110 175 85 190 M130 150 Q130 180 130 198 M130 150 Q150 175 175 190" stroke="#78350F" stroke-width="4" fill="none" stroke-linecap="round"/>
-                    <!-- Stem -->
-                    <line x1="130" y1="60" x2="130" y2="150" stroke="#15803D" stroke-width="8" stroke-linecap="round"/>
-                    <!-- Leaves -->
-                    <ellipse cx="95" cy="115" rx="28" ry="13" transform="rotate(-20 95 115)" fill="#22C55E"/>
-                    <ellipse cx="165" cy="100" rx="28" ry="13" transform="rotate(20 165 100)" fill="#22C55E"/>
-                    <!-- Fruit -->
-                    <circle cx="155" cy="130" r="13" fill="#F43F5E"/>
-                    <!-- Flower -->
-                    <circle cx="130" cy="48" r="22" fill="#FBBF24"/>
-                    <circle cx="130" cy="48" r="10" fill="#F59E0B"/>
+              <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-stretch bg-gradient-to-br from-emerald-50 via-white to-sky-50 border border-emerald-200/80 rounded-3xl p-4 shadow-sm">
+                <div class="md:col-span-3 flex justify-center">
+                  <svg id="plantSvg" class="plant-svg w-full max-w-md h-auto rounded-2xl" viewBox="0 0 340 300">
+                    <defs>
+                      <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#BAE6FD"/><stop offset="1" stop-color="#F0F9FF"/></linearGradient>
+                      <linearGradient id="soilG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A16207"/><stop offset=".12" stop-color="#92400E"/><stop offset="1" stop-color="#5B3A1A"/></linearGradient>
+                      <linearGradient id="stemG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#15803D"/><stop offset=".5" stop-color="#4ADE80"/><stop offset="1" stop-color="#166534"/></linearGradient>
+                      <linearGradient id="leafG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#86EFAC"/><stop offset="1" stop-color="#16A34A"/></linearGradient>
+                      <radialGradient id="fruitG" cx=".35" cy=".35" r=".7"><stop offset="0" stop-color="#FDA4AF"/><stop offset=".45" stop-color="#F43F5E"/><stop offset="1" stop-color="#9F1239"/></radialGradient>
+                      <radialGradient id="sunG"><stop offset="0" stop-color="#FEF9C3"/><stop offset=".6" stop-color="#FDE047"/><stop offset="1" stop-color="#F59E0B"/></radialGradient>
+                      <radialGradient id="petalG" cx=".5" cy=".9" r=".9"><stop offset="0" stop-color="#FDF2F8"/><stop offset="1" stop-color="#F472B6"/></radialGradient>
+                      <clipPath id="soilClip"><rect x="0" y="222" width="340" height="78"/></clipPath>
+                    </defs>
+                    <rect x="0" y="0" width="340" height="300" rx="18" fill="url(#skyG)"/>
+                    <!-- sun -->
+                    <g transform="translate(46 44)">
+                      <g class="sun-rays">${Array.from({length: 12}, (_, i) => `<line x1="0" y1="-30" x2="0" y2="-40" stroke="#FBBF24" stroke-width="3.5" stroke-linecap="round" transform="rotate(${i * 30})"/>`).join('')}</g>
+                      <circle r="22" fill="url(#sunG)"/>
+                    </g>
+                    <g class="cloud" opacity=".9"><ellipse cx="250" cy="40" rx="30" ry="11" fill="#fff"/><ellipse cx="236" cy="33" rx="15" ry="11" fill="#fff"/><ellipse cx="260" cy="31" rx="16" ry="12" fill="#fff"/></g>
+                    <!-- soil -->
+                    <path d="M0 226 Q85 216 170 222 T340 224 V282 a18 18 0 0 1 -18 18 H18 a18 18 0 0 1 -18 -18 Z" fill="url(#soilG)"/>
+                    <g fill="#78350F" opacity=".55"><circle cx="40" cy="262" r="3"/><circle cx="290" cy="250" r="4"/><circle cx="230" cy="285" r="2.5"/><circle cx="95" cy="288" r="3"/><circle cx="310" cy="280" r="2"/></g>
+                    <g fill="#65A30D"><path d="M20 226 l4 -12 l3 12z"/><path d="M300 225 l3 -10 l4 10z"/><path d="M60 224 l3 -9 l3 9z"/></g>
+                    <!-- roots -->
+                    <g class="organ" data-k="root" onclick="selectPlantOrgan('root')" clip-path="url(#soilClip)">
+                      <rect x="95" y="222" width="150" height="70" fill="transparent"/>
+                      <g stroke="#FDE68A" stroke-width="4.5" fill="none" stroke-linecap="round">
+                        <path d="M170 222 Q168 250 170 286"/><path d="M170 230 Q145 248 116 262"/><path d="M170 230 Q196 248 226 262"/>
+                        <path d="M168 248 Q150 262 140 284"/><path d="M172 248 Q190 262 202 284"/>
+                      </g>
+                      <g stroke="#FEF3C7" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".9">
+                        <path d="M130 255 l-8 8"/><path d="M210 255 l8 8"/><path d="M146 275 l-8 4"/><path d="M196 275 l8 4"/><path d="M170 270 l-6 6"/>
+                      </g>
+                    </g>
+                    <!-- swaying plant -->
+                    <g class="sway">
+                      <g class="organ" data-k="stem" onclick="selectPlantOrgan('stem')">
+                        <path d="M170 224 C166 190 175 150 170 82" stroke="url(#stemG)" stroke-width="10" fill="none" stroke-linecap="round"/>
+                        <path d="M171 178 Q190 172 202 160" stroke="#16A34A" stroke-width="4" fill="none" stroke-linecap="round"/>
+                      </g>
+                      <g class="organ" data-k="leaf" onclick="selectPlantOrgan('leaf')">
+                        <path d="M169 165 C140 140 104 150 92 170 C120 186 150 182 169 165Z" fill="url(#leafG)" stroke="#15803D" stroke-width="1.5"/>
+                        <path d="M169 165 Q130 166 96 169" stroke="#DCFCE7" stroke-width="1.6" fill="none"/>
+                        <path d="M150 166 l-10 -9 M150 166 l-10 8 M128 167 l-9 -8 M128 167 l-9 7" stroke="#DCFCE7" stroke-width="1" fill="none"/>
+                        <path d="M171 128 C198 102 236 110 248 130 C222 148 190 146 171 128Z" fill="url(#leafG)" stroke="#15803D" stroke-width="1.5"/>
+                        <path d="M171 128 Q210 128 244 130" stroke="#DCFCE7" stroke-width="1.6" fill="none"/>
+                        <path d="M192 128 l10 -9 M192 128 l10 8 M216 129 l9 -8 M216 129 l9 7" stroke="#DCFCE7" stroke-width="1" fill="none"/>
+                      </g>
+                      <g class="organ" data-k="fruit" onclick="selectPlantOrgan('fruit')">
+                        <circle cx="206" cy="172" r="15" fill="url(#fruitG)"/>
+                        <path d="M204 157 q2 -6 6 -7" stroke="#78350F" stroke-width="2" fill="none"/>
+                        <path d="M207 155 q8 -6 13 0 q-7 4 -13 0z" fill="#22C55E"/>
+                        <ellipse cx="200" cy="166" rx="4" ry="2.5" fill="#fff" opacity=".7" transform="rotate(-35 200 166)"/>
+                      </g>
+                      <g class="organ" data-k="flower" onclick="selectPlantOrgan('flower')">
+                        <g transform="translate(170 66)">
+                          ${Array.from({length: 8}, (_, i) => `<ellipse cx="0" cy="-17" rx="8.5" ry="16" fill="url(#petalG)" stroke="#EC4899" stroke-width=".8" transform="rotate(${i * 45})"/>`).join('')}
+                          <circle r="11" fill="#FBBF24" stroke="#D97706" stroke-width="1.5"/>
+                          <g fill="#B45309"><circle cx="-4" cy="-3" r="1.4"/><circle cx="3" cy="-4" r="1.4"/><circle cx="4" cy="3" r="1.4"/><circle cx="-3" cy="4" r="1.4"/><circle cx="0" cy="0" r="1.4"/></g>
+                        </g>
+                      </g>
+                    </g>
+                    <!-- labels -->
+                    <g font-size="11" font-weight="900" text-anchor="middle">
+                      <g class="lbl lbl-flower"><rect x="214" y="58" width="44" height="20" rx="10" fill="#EC4899"/><text x="236" y="72" fill="#fff">花朵</text></g>
+                      <g class="lbl lbl-leaf"><rect x="70" y="128" width="44" height="20" rx="10" fill="#16A34A"/><text x="92" y="142" fill="#fff">葉子</text></g>
+                      <g class="lbl lbl-stem"><rect x="118" y="194" width="34" height="20" rx="10" fill="#15803D"/><text x="135" y="208" fill="#fff">莖</text></g>
+                      <g class="lbl lbl-fruit"><rect x="226" y="176" width="44" height="20" rx="10" fill="#E11D48"/><text x="248" y="190" fill="#fff">果實</text></g>
+                      <g class="lbl lbl-root"><rect x="238" y="258" width="34" height="20" rx="10" fill="#B45309"/><text x="255" y="272" fill="#fff">根</text></g>
+                    </g>
+                    <!-- FX: leaf photosynthesis -->
+                    <g class="fx fx-leaf" pointer-events="none">
+                      <path d="M66 62 L120 160" stroke="#FACC15" stroke-width="3" class="flow-dash"/>
+                      <path d="M66 62 L205 125" stroke="#FACC15" stroke-width="3" class="flow-dash"/>
+                      <g font-size="10" font-weight="900">
+                        <g><text fill="#0369A1">CO₂</text><animateMotion dur="2.6s" repeatCount="indefinite" path="M300 90 Q260 110 225 128"/><animate attributeName="opacity" values="0;1;1;0" dur="2.6s" repeatCount="indefinite"/></g>
+                        <g><text fill="#059669">O₂</text><animateMotion dur="2.6s" begin="1.3s" repeatCount="indefinite" path="M100 178 Q70 196 36 206"/><animate attributeName="opacity" values="0;1;1;0" dur="2.6s" begin="1.3s" repeatCount="indefinite"/></g>
+                      </g>
+                      ${[0, .7, 1.4].map(d => `<circle r="3.5" fill="#FDE047" stroke="#CA8A04"><animateMotion dur="2.1s" begin="${d}s" repeatCount="indefinite" path="M200 128 Q185 140 172 170 L170 215"/></circle>`).join('')}
+                      <rect x="230" y="150" width="96" height="22" rx="11" fill="#FEF9C3" stroke="#FACC15"/><text x="278" y="165" text-anchor="middle" font-size="11" font-weight="900" fill="#854D0E">☀️ 光合作用中</text>
+                    </g>
+                    <!-- FX: stem transport -->
+                    <g class="fx fx-stem" pointer-events="none">
+                      ${[0, .5, 1, 1.5].map(d => `<path d="M0 -6 C4 0 4 5 0 5 C-4 5 -4 0 0 -6Z" fill="#38BDF8" stroke="#0369A1" stroke-width=".8"><animateMotion dur="2s" begin="${d}s" repeatCount="indefinite" path="M170 222 C166 190 175 150 170 90"/></path>`).join('')}
+                      ${[0, 1].map(d => `<circle r="3.5" fill="#FDE047" stroke="#CA8A04"><animateMotion dur="2.4s" begin="${d}s" repeatCount="indefinite" path="M171 100 C175 150 166 190 170 220"/></circle>`).join('')}
+                      <rect x="16" y="190" width="104" height="22" rx="11" fill="#E0F2FE" stroke="#38BDF8"/><text x="68" y="205" text-anchor="middle" font-size="11" font-weight="900" fill="#075985">💧水往上・🟡養分往下</text>
+                    </g>
+                    <!-- FX: root absorb -->
+                    <g class="fx fx-root" pointer-events="none">
+                      ${[['M60 290 Q90 270 116 262', 0], ['M290 292 Q250 275 226 262', .6], ['M120 298 Q130 292 140 284', 1.2], ['M230 298 Q212 292 202 284', 1.8]].map(([p, d]) => `<path d="M0 -6 C4 0 4 5 0 5 C-4 5 -4 0 0 -6Z" fill="#38BDF8" stroke="#E0F2FE" stroke-width=".8"><animateMotion dur="2.2s" begin="${d}s" repeatCount="indefinite" path="${p}"/><animate attributeName="opacity" values="0;1;1;0" dur="2.2s" begin="${d}s" repeatCount="indefinite"/></path>`).join('')}
+                      <circle cx="170" cy="286" r="8" fill="none" stroke="#FDE68A" stroke-width="2" class="pulse-ring"/>
+                      <rect x="16" y="232" width="92" height="22" rx="11" fill="#FEF3C7" stroke="#F59E0B"/><text x="62" y="247" text-anchor="middle" font-size="11" font-weight="900" fill="#92400E">🪝 抓地＋吸水</text>
+                    </g>
+                    <!-- FX: flower pollination -->
+                    <g class="fx fx-flower" pointer-events="none">
+                      <g><text font-size="20" x="-10" y="7">🐝</text><animateMotion dur="4s" repeatCount="indefinite" rotate="0" path="M170 66 m-52 0 a52 34 0 1 0 104 0 a52 34 0 1 0 -104 0"/></g>
+                      <g><text font-size="16" x="-8" y="6">🦋</text><animateMotion dur="5.5s" repeatCount="indefinite" path="M300 120 Q260 40 200 50 Q260 90 300 120"/></g>
+                      ${[0, .5, 1].map(d => `<circle r="2.2" fill="#F59E0B"><animateMotion dur="1.5s" begin="${d}s" repeatCount="indefinite" path="M170 66 Q150 40 128 50"/><animate attributeName="opacity" values="1;0" dur="1.5s" begin="${d}s" repeatCount="indefinite"/></circle>`).join('')}
+                      <circle cx="170" cy="66" r="26" fill="none" stroke="#F9A8D4" stroke-width="2" class="pulse-ring"/>
+                    </g>
+                    <!-- FX: fruit seed -->
+                    <g class="fx fx-fruit" pointer-events="none">
+                      <g class="seed-fall"><ellipse cx="208" cy="182" rx="3.5" ry="5" fill="#78350F" stroke="#FDE68A" stroke-width=".8"/></g>
+                      <g class="sprout-grow"><path d="M222 246 q0 -12 0 -16" stroke="#22C55E" stroke-width="2.5" fill="none"/><path d="M222 232 q-9 -7 -12 0 q6 4 12 0z M222 232 q9 -7 12 0 q-6 4 -12 0z" fill="#4ADE80"/></g>
+                      <circle cx="206" cy="172" r="18" fill="none" stroke="#FDA4AF" stroke-width="2" class="pulse-ring"/>
+                      <rect x="236" y="206" width="90" height="22" rx="11" fill="#FFE4E6" stroke="#FB7185"/><text x="281" y="221" text-anchor="middle" font-size="11" font-weight="900" fill="#9F1239">🌱 種子發芽囉</text>
+                    </g>
                   </svg>
                 </div>
-                <div class="space-y-3">
-                  <div class="flex flex-wrap gap-1.5">
+                <div class="md:col-span-2 flex flex-col gap-3">
+                  <div class="grid grid-cols-5 md:grid-cols-3 lg:grid-cols-5 gap-1.5">
                     ${[
-                      { key: 'flower', label: '🌼 花朵' },
-                      { key: 'leaf', label: '🍃 葉子' },
-                      { key: 'stem', label: '🎋 莖' },
-                      { key: 'fruit', label: '🍎 果實與種子' },
-                      { key: 'root', label: '🌿 根部' }
+                      { key: 'flower', icon: '🌸', label: '花朵' },
+                      { key: 'leaf', icon: '🍃', label: '葉子' },
+                      { key: 'stem', icon: '🎋', label: '莖' },
+                      { key: 'fruit', icon: '🍎', label: '果實' },
+                      { key: 'root', icon: '🌿', label: '根' }
                     ].map(p => `
-                      <button onclick="selectPlantOrgan('${p.key}')" class="px-3 py-1.5 rounded-xl bg-white hover:bg-emerald-100 border border-emerald-300 text-emerald-900 text-xs font-black transition shadow-sm">
-                        ${p.label}
+                      <button data-organ="${p.key}" onclick="selectPlantOrgan('${p.key}')" class="organ-btn flex flex-col items-center gap-0.5 px-1 py-2 rounded-2xl bg-white hover:bg-emerald-50 border border-emerald-200 text-emerald-900 text-[11px] font-black transition-all shadow-sm">
+                        <span class="text-xl leading-none">${p.icon}</span>${p.label}
                       </button>
                     `).join('')}
                   </div>
-                  <div id="plantOrganInfoBox" class="p-4 rounded-2xl bg-white border border-emerald-200 text-sm text-gray-700 leading-relaxed">
-                    👆 點擊上方任一器官按鈕，查看它的功能與生活例子！
+                  <div id="plantOrganInfoBox" class="flex-1 p-4 rounded-2xl bg-white border border-emerald-200 text-sm text-gray-700 leading-relaxed shadow-sm flex flex-col items-center justify-center text-center gap-2">
+                    <div class="text-4xl animate-bounce">👆</div>
+                    <div class="font-bold text-gray-500">點植物圖上的任一部位<br/>看看它在做什麼！</div>
                   </div>
                 </div>
               </div>
@@ -2168,14 +2342,17 @@
               <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
                 <div>
                   <h3 class="text-lg font-black text-gray-800">🧲 2. 磁鐵兩極互動實驗室</h3>
-                  <p class="text-xs text-gray-500">切換左右磁鐵的磁極方向，即時觀察「同極相斥」與「異極相吸」現象！</p>
+                  <p class="text-xs text-gray-500">直接點磁鐵就能翻面！觀察磁力線與「同極相斥、異極相吸」的動畫。</p>
                 </div>
-                <div class="flex items-center gap-2">
-                  <button onclick="flipMagnet('left')" class="px-3 py-1.5 rounded-xl bg-rose-100/70 hover:bg-rose-200/70 text-rose-700 text-xs font-black transition">🔄 反轉左磁鐵</button>
-                  <button onclick="flipMagnet('right')" class="px-3 py-1.5 rounded-xl bg-rose-100/70 hover:bg-rose-200/70 text-rose-700 text-xs font-black transition">🔄 反轉右磁鐵</button>
+                <div class="flex flex-wrap items-center gap-2">
+                  <button onclick="flipMagnet('left')" class="px-3 py-1.5 rounded-xl bg-rose-100/70 hover:bg-rose-200/70 text-rose-700 text-xs font-black transition">🔄 翻轉左磁鐵</button>
+                  <button onclick="flipMagnet('right')" class="px-3 py-1.5 rounded-xl bg-rose-100/70 hover:bg-rose-200/70 text-rose-700 text-xs font-black transition">🔄 翻轉右磁鐵</button>
+                  <button onclick="toggleMagnetField()" id="magFieldBtn" class="px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-700 text-xs font-black transition">〰️ 隱藏磁力線</button>
                 </div>
               </div>
-              <div id="magnetLabStage" class="bg-[#332936] rounded-2xl p-5 flex flex-col items-center justify-center"></div>
+              <div class="relative rounded-3xl overflow-hidden shadow-inner border border-indigo-900/40" style="background: radial-gradient(ellipse at 50% 40%, #3B2F5C 0%, #241B3A 55%, #160F26 100%);">
+                <div id="magnetLabStage" class="p-3 sm:p-5"></div>
+              </div>
             </div>
           </div>
         `;
@@ -2331,6 +2508,11 @@
           </div>
         `;
       }
+      const studioMarkup = renderAnimationStudio(unit.id);
+      if (studioMarkup) {
+        box.insertAdjacentHTML('beforeend', studioMarkup);
+        initAnimationStudio(unit.id);
+      }
     }
 
     function updatePizza(val) {
@@ -2431,18 +2613,53 @@
       `;
     }
 
-    function selectPlantOrgan(key) {
+    const PLANT_INFO = {
+      flower: { icon: '🌸', title: '花朵', role: '繁殖器官', color: 'pink', func: '鮮豔的花瓣和香味會吸引蜜蜂、蝴蝶來幫忙傳播花粉，授粉後就會慢慢長成果實。', eg: '向日葵、玫瑰、油菜花', tip: '花香引蜂來傳粉' },
+      leaf: { icon: '🍃', title: '葉子', role: '製造養分的工廠', color: 'green', func: '利用陽光、空氣（二氧化碳）和水進行光合作用，製造養分並放出氧氣。', eg: '葉脈有「網狀脈」（榕樹）和「平行脈」（竹子、玉米）', tip: '陽光空氣水，葉子做養分' },
+      stem: { icon: '🎋', title: '莖', role: '支撐與運輸管道', color: 'emerald', func: '撐起植物的身體；把根吸收的水分往上送到葉子，也把葉子做好的養分送到全身。', eg: '甘蔗、竹子、馬鈴薯（地下莖）', tip: '水往上、養分往下' },
+      fruit: { icon: '🍎', title: '果實與種子', role: '保護與繁衍', color: 'rose', func: '果實保護裡面的種子；種子掉到泥土裡，遇到適合的水分和溫度就會發芽長成新植物。', eg: '蘋果、芒果、西瓜（種子在果實裡）', tip: '果實保護種子寶寶' },
+      root: { icon: '🌿', title: '根', role: '抓地與吸水', color: 'amber', func: '深入土壤抓緊泥土，讓植物不會被風吹倒，還會吸收土壤裡的水分和養分。', eg: '紅蘿蔔、地瓜（儲存養分的根）', tip: '根抓泥土又喝水' }
+    };
+    let plantTourTimer = null;
+    function selectPlantOrgan(key, fromTour) {
+      if (!fromTour) stopPlantTour();
+      const svg = document.getElementById('plantSvg');
       const box = document.getElementById('plantOrganInfoBox');
-      if (!box) return;
-      const info = {
-        flower: '<strong>🌼 花朵（繁殖器官）</strong>：通常有鮮豔的花瓣與香味，吸引蜜蜂、蝴蝶來幫忙傳粉，授粉後會發育成果實。',
-        leaf: '<strong>🍃 葉子（製造養分工廠）</strong>：利用陽光、空氣和水進行光合作用製造養分。葉脈分為「網狀脈」（如榕樹）與「平行脈」（如竹子、玉米）。',
-        stem: '<strong>🎋 莖（支撐與輸送管道）</strong>：支撐整個植物的身體，並把根吸收的水分往上送到葉子，也把葉子製造的養分送到全身。',
-        fruit: '<strong>🍎 果實與種子（保護與繁衍）</strong>：果實保護裡面的種子，種子掉到泥土裡發芽後，就會長出新的小苗！',
-        root: '<strong>🌿 根部（抓地與吸水）</strong>：深入土壤裡抓緊泥土，讓植物不會被風吹倒，並負責吸收土壤中的水分與養分。'
-      };
-      playTone(620, 0.1);
-      box.innerHTML = info[key];
+      if (!svg || !box) return;
+      svg.setAttribute('class', `plant-svg w-full max-w-md h-auto rounded-2xl sel-${key}`);
+      document.querySelectorAll('.organ-btn').forEach(b => b.classList.toggle('active', b.dataset.organ === key));
+      const d = PLANT_INFO[key];
+      box.className = 'flex-1 p-4 rounded-2xl bg-white border border-emerald-200 text-sm text-gray-700 leading-relaxed shadow-sm flex flex-col gap-2.5 info-pop';
+      box.innerHTML = `
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-${d.color}-100 flex items-center justify-center text-3xl shadow-inner">${d.icon}</div>
+          <div>
+            <div class="text-lg font-black text-gray-800 leading-tight">${d.title}</div>
+            <div class="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-${d.color}-100 text-${d.color}-700 text-[11px] font-black">${d.role}</div>
+          </div>
+        </div>
+        <div><span class="text-[11px] font-black text-emerald-600">⚙️ 功能</span><div class="text-gray-800 font-medium">${d.func}</div></div>
+        <div><span class="text-[11px] font-black text-sky-600">🔍 生活例子</span><div class="text-gray-700">${d.eg}</div></div>
+        <div class="mt-auto px-3 py-2 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-black">🎵 小口訣：${d.tip}</div>
+      `;
+      playTone(520 + Object.keys(PLANT_INFO).indexOf(key) * 80, 0.1);
+    }
+    function stopPlantTour() {
+      if (plantTourTimer) { clearInterval(plantTourTimer); plantTourTimer = null; }
+      const b = document.getElementById('plantTourBtn');
+      if (b) b.textContent = '▶ 自動導覽';
+    }
+    function togglePlantTour() {
+      if (plantTourTimer) { stopPlantTour(); return; }
+      const keys = ['root', 'stem', 'leaf', 'flower', 'fruit'];
+      let i = 0;
+      selectPlantOrgan(keys[i], true);
+      plantTourTimer = setInterval(() => {
+        if (!document.getElementById('plantSvg')) { stopPlantTour(); return; }
+        i = (i + 1) % keys.length;
+        selectPlantOrgan(keys[i], true);
+      }, 4500);
+      document.getElementById('plantTourBtn').textContent = '⏸ 停止導覽';
     }
 
     function voteClassTrip(choice) {
@@ -2920,11 +3137,9 @@
       });
       const totalEl = document.getElementById('siteQuizTotal');
       if (totalEl) totalEl.textContent = `全站題庫 ${CURRICULUM_DATA.reduce((a, u) => a + u.quizzes.length, 0)} 題`;
-
       const visibleQuizzes = getVisibleQuizzes(unit);
       document.getElementById('quizCountBadge').textContent = `顯示 ${visibleQuizzes.length} / ${unit.quizzes.length} 題`;
       const isElementary = unit.stage === '國小三年級';
-
       container.innerHTML = visibleQuizzes.map((q, qIdx) => {
         const assignedSeat = state.questionSeats[q.id];
         return `
@@ -2940,9 +3155,7 @@
                   <span id="qSeatBadge-${q.id}" class="${assignedSeat ? 'px-2.5 py-1 rounded-xl bg-amber-100 border border-amber-300 text-amber-900 text-xs font-black' : 'text-xs text-gray-400'}">
                     ${assignedSeat ? `🌟 請 ${assignedSeat} 號同學作答` : ''}
                   </span>
-                  <button type="button" onclick="drawSeatNumber('${q.id}')" class="px-3 py-1 rounded-xl bg-white hover:bg-rose-100/70 border border-rose-200 text-rose-500 text-xs font-black transition shadow-sm">
-                    🎲 抽座號答題
-                  </button>
+                  <button type="button" onclick="drawSeatNumber('${q.id}')" class="px-3 py-1 rounded-xl bg-white hover:bg-rose-100/70 border border-rose-200 text-rose-500 text-xs font-black transition shadow-sm">🎲 抽座號答題</button>
                 </div>
               ` : ''}
             </div>
@@ -2961,14 +3174,12 @@
       }).join('');
       updateQuizProgress();
     }
-
     function getVisibleQuizzes(unit) {
       return state.difficultyFilter === 'all' ? unit.quizzes : unit.quizzes.filter(q => q.difficulty === state.difficultyFilter);
     }
     function optBaseClass() {
       return 'w-full text-left flex items-center gap-2.5 p-3 rounded-xl bg-white border-2 border-rose-100 hover:border-rose-300 text-gray-800 cursor-pointer transition';
     }
-    // Shared: paint instant feedback on a question card
     function paintInstantFeedback(q, picked, optPrefix, fbId, tagId) {
       const ok = picked === q.answer;
       q.options.forEach((_, i) => {
@@ -3007,7 +3218,6 @@
         localStorage.setItem('dora_mistakes', JSON.stringify(state.mistakes));
       }
     }
-
     function answerUnitQuestion(qid, picked) {
       if (state.quizAnswers[qid] !== undefined) return;
       const unit = getCurrentUnit();
@@ -3018,18 +3228,15 @@
       if (!ok) addMistake(q, `${unit.semester} ${unit.subject}（${q.difficulty}）｜${unit.title}`);
       updateQuizProgress();
     }
-
     function updateQuizProgress() {
       const unit = getCurrentUnit();
       const list = getVisibleQuizzes(unit);
       const done = list.filter(q => state.quizAnswers[q.id] !== undefined);
       const correct = done.filter(q => state.quizAnswers[q.id] === q.answer).length;
       const banner = document.getElementById('quizResultBanner');
-      if (done.length === 0) {
-        banner.innerHTML = `👆 每題點選答案後會立刻顯示對錯與解析（共 ${list.length} 題）`;
-      } else if (done.length < list.length) {
-        banner.innerHTML = `已作答 <strong>${done.length} / ${list.length}</strong> 題，目前答對 <span class="text-emerald-600 font-black">${correct}</span> 題`;
-      } else {
+      if (done.length === 0) banner.innerHTML = `👆 每題點選答案後會立刻顯示對錯與解析（共 ${list.length} 題）`;
+      else if (done.length < list.length) banner.innerHTML = `已作答 <strong>${done.length} / ${list.length}</strong> 題，目前答對 <span class="text-emerald-600 font-black">${correct}</span> 題`;
+      else {
         const pct = Math.round((correct / list.length) * 100);
         state.quizScores[unit.id] = pct;
         localStorage.setItem('dora_scores', JSON.stringify(state.quizScores));
@@ -3037,7 +3244,6 @@
       }
       updateTopStats();
     }
-
     function submitQuiz() { updateQuizProgress(); }
 
     function resetQuiz() {
@@ -3122,49 +3328,130 @@
       window.speechSynthesis.speak(utter);
     }
 
-    
-    // ==================== Interactive Magnet Lab ====================
+    // ==================== Interactive Magnet Lab (animated) ====================
+    let magGap = 60, magVel = 0, magRAF = null, magShowField = true, magLastState = null;
     function flipMagnet(side) {
-      if (side === 'left') {
-        state.magnetLeftRightPole = state.magnetLeftRightPole === 'N' ? 'S' : 'N';
-      } else {
-        state.magnetRightLeftPole = state.magnetRightLeftPole === 'N' ? 'S' : 'N';
-      }
+      if (side === 'left') state.magnetLeftRightPole = state.magnetLeftRightPole === 'N' ? 'S' : 'N';
+      else state.magnetRightLeftPole = state.magnetRightLeftPole === 'N' ? 'S' : 'N';
       playTone(520, 0.12);
-      renderMagnetLab();
+      renderMagnetLab(side);
     }
-
-    function renderMagnetLab() {
+    function toggleMagnetField() {
+      magShowField = !magShowField;
+      const b = document.getElementById('magFieldBtn');
+      if (b) b.textContent = magShowField ? '〰️ 隱藏磁力線' : '〰️ 顯示磁力線';
+      const g = document.getElementById('magFieldLines');
+      if (g) g.style.display = magShowField ? '' : 'none';
+    }
+    function magnetSVG(x, poles, id, flip) {
+            const [a, b] = poles;
+      return `
+        <g id="${id}" transform="translate(${x} 0)">
+          <g class="mag-hit ${flip ? 'mag-flip' : ''}" onclick="flipMagnet('${id === 'magL' ? 'left' : 'right'}')">
+            <rect x="3" y="83" width="150" height="54" rx="9" fill="#000" opacity=".3"/>
+            <path class="body" d="M75 78 H9 a9 9 0 0 0 -9 9 V123 a9 9 0 0 0 9 9 H75 Z" fill="url(#mg${a})"/>
+            <path class="body" d="M75 78 H141 a9 9 0 0 1 9 9 V123 a9 9 0 0 1 -9 9 H75 Z" fill="url(#mg${b})"/>
+            <line x1="75" y1="78" x2="75" y2="132" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/>
+            <rect x="6" y="82" width="138" height="10" rx="5" fill="#fff" opacity=".28"/>
+            <text x="37" y="114" text-anchor="middle" fill="#fff" font-size="24" font-weight="900">${a}</text>
+            <text x="113" y="114" text-anchor="middle" fill="#fff" font-size="24" font-weight="900">${b}</text>
+          </g>
+        </g>`;
+    }
+    function renderMagnetLab(flipped) {
       const stage = document.getElementById('magnetLabStage');
       if (!stage) return;
-      const rPole = state.magnetLeftRightPole;
-      const lPole = rPole === 'N' ? 'S' : 'N';
-      const r2Left = state.magnetRightLeftPole;
-      const r2Right = r2Left === 'N' ? 'S' : 'N';
+      const rPole = state.magnetLeftRightPole, lPole = rPole === 'N' ? 'S' : 'N';
+      const r2Left = state.magnetRightLeftPole, r2Right = r2Left === 'N' ? 'S' : 'N';
       const isAttract = rPole !== r2Left;
-      const offset = isAttract ? 18 : -22;
-
       stage.innerHTML = `
-        <svg viewBox="0 0 420 150" class="w-full max-w-lg h-auto">
-          <!-- Left Magnet -->
-          <g transform="translate(${offset}, 0)">
-            <rect x="40" y="50" width="65" height="44" rx="4" fill="${lPole === 'N' ? '#E27D95' : '#60A5FA'}"/>
-            <text x="72" y="78" text-anchor="middle" fill="#FFF" font-size="18" font-weight="black">${lPole}</text>
-            <rect x="105" y="50" width="65" height="44" rx="4" fill="${rPole === 'N' ? '#E27D95' : '#60A5FA'}"/>
-            <text x="137" y="78" text-anchor="middle" fill="#FFF" font-size="18" font-weight="black">${rPole}</text>
-          </g>
-          <!-- Right Magnet -->
-          <g transform="translate(${-offset}, 0)">
-            <rect x="250" y="50" width="65" height="44" rx="4" fill="${r2Left === 'N' ? '#E27D95' : '#60A5FA'}"/>
-            <text x="282" y="78" text-anchor="middle" fill="#FFF" font-size="18" font-weight="black">${r2Left}</text>
-            <rect x="315" y="50" width="65" height="44" rx="4" fill="${r2Right === 'N' ? '#E27D95' : '#60A5FA'}"/>
-            <text x="347" y="78" text-anchor="middle" fill="#FFF" font-size="18" font-weight="black">${r2Right}</text>
-          </g>
-          <text x="210" y="132" text-anchor="middle" fill="${isAttract ? '#6EE7B7' : '#FBCFE8'}" font-size="15" font-weight="black">
-            ${isAttract ? `✨ ${rPole} 極 遇上 ${r2Left} 極 ➔ 異極相吸，緊緊吸在一起！` : `⚡ ${rPole} 極 遇上 ${r2Left} 極 ➔ 同極相斥，互相推開！`}
-          </text>
+        <svg id="magSvg" viewBox="0 0 560 230" class="w-full h-auto">
+          <defs>
+            <linearGradient id="mgN" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FDA4AF"/><stop offset=".5" stop-color="#F43F5E"/><stop offset="1" stop-color="#BE123C"/></linearGradient>
+            <linearGradient id="mgS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#93C5FD"/><stop offset=".5" stop-color="#3B82F6"/><stop offset="1" stop-color="#1D4ED8"/></linearGradient>
+            <radialGradient id="sparkG"><stop offset="0" stop-color="#FFF"/><stop offset="1" stop-color="#FDE047" stop-opacity="0"/></radialGradient>
+          </defs>
+          <g opacity=".12" stroke="#C4B5FD">${Array.from({length: 14}, (_, i) => `<line x1="${i * 40 + 20}" y1="10" x2="${i * 40 + 20}" y2="200"/>`).join('')}</g>
+          <rect x="20" y="150" width="520" height="8" rx="4" fill="#4C3D6E"/>
+          <g id="magFieldLines" style="display:${magShowField ? '' : 'none'}"></g>
+          ${magnetSVG(0, [lPole, rPole], 'magL', flipped === 'left')}
+          ${magnetSVG(0, [r2Left, r2Right], 'magR', flipped === 'right')}
+          <g id="magSpark" opacity="0"><circle cx="280" cy="105" r="30" fill="url(#sparkG)"/></g>
+          <g id="magArrows" font-size="22" font-weight="900" fill="${isAttract ? '#6EE7B7' : '#FBCFE8'}" text-anchor="middle"></g>
         </svg>
-      `;
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-2 mt-1 mb-1">
+          <div class="force-badge px-4 py-2 rounded-2xl text-sm sm:text-base font-black ${isAttract ? 'bg-emerald-400/20 text-emerald-200 border border-emerald-300/40' : 'bg-pink-400/20 text-pink-200 border border-pink-300/40'}">
+            ${isAttract ? `✨ ${rPole} 極 遇上 ${r2Left} 極 ➔ 異極相吸，緊緊吸在一起！` : `⚡ ${rPole} 極 遇上 ${r2Left} 極 ➔ 同極相斥，互相推開！`}
+          </div>
+        </div>
+        <div class="flex justify-center gap-4 text-[11px] font-bold text-indigo-200/80 pb-1">
+          <span><span class="inline-block w-3 h-3 rounded bg-rose-500 align-middle"></span> N 極</span>
+          <span><span class="inline-block w-3 h-3 rounded bg-blue-500 align-middle"></span> S 極</span>
+          <span>👆 點磁鐵可直接翻面</span>
+        </div>`;
+      const target = isAttract ? 0 : 120;
+      if (magLastState !== null && magLastState !== isAttract) {
+        if (isAttract) magVel = -1; else { magVel = 9; playTone(180, 0.18, 'sawtooth'); }
+      }
+      magLastState = isAttract;
+      let snapped = magGap <= 1;
+      if (magRAF) cancelAnimationFrame(magRAF);
+      const step = () => {
+        if (!document.getElementById('magSvg')) { magRAF = null; return; }
+        if (isAttract) {
+          magVel -= 0.55 + (120 - Math.min(magGap, 120)) * 0.004;
+          magGap += magVel;
+          if (magGap <= 0) {
+            magGap = 0;
+            if (!snapped) { snapped = true; playTone(880, 0.08); flashSpark(); }
+            magVel = Math.abs(magVel) > 2 ? Math.abs(magVel) * 0.25 : 0;
+          }
+        } else {
+          magVel += (target - magGap) * 0.05; magVel *= 0.86; magGap += magVel;
+        }
+        drawMagnetFrame(isAttract, rPole);
+        if (Math.abs(magVel) > 0.02 || Math.abs((isAttract ? 0 : target) - magGap) > 0.3) magRAF = requestAnimationFrame(step);
+        else { magGap = isAttract ? 0 : target; drawMagnetFrame(isAttract, rPole); magRAF = null; }
+      };
+      step();
+    }
+    function flashSpark() {
+      const s = document.getElementById('magSpark');
+      if (!s) return;
+      s.animate([{ opacity: 1, transform: 'scale(.6)' }, { opacity: 0, transform: 'scale(1.6)' }], { duration: 500, easing: 'ease-out' });
+      s.style.transformOrigin = '280px 105px';
+    }
+    function drawMagnetFrame(isAttract, facePole) {
+      const g = Math.max(0, magGap);
+      const lx = 280 - g / 2 - 150, rx = 280 + g / 2;
+      document.getElementById('magL').setAttribute('transform', `translate(${lx} 0)`);
+      document.getElementById('magR').setAttribute('transform', `translate(${rx} 0)`);
+      const L = 280 - g / 2, R = 280 + g / 2, cy = 105;
+      const colAttr = '#A7F3D0', colRep = '#F9A8D4';
+      let paths = '';
+      if (isAttract) {
+        [-2, -1, 0, 1, 2].forEach(k => {
+          const y = cy + k * 9;
+          const bow = cy + k * (16 + g * 0.18);
+          paths += `<path class="field-line" stroke="${colAttr}" d="M${L} ${y} Q280 ${bow} ${R} ${y}"/>`;
+        });
+        // outer loops around whole pair
+        paths += `<path class="field-line" stroke="${colAttr}" opacity=".45" d="M${lx + 8} 78 C${lx - 40} 10, ${rx + 190} 10, ${rx + 142} 78"/>`;
+        paths += `<path class="field-line" stroke="${colAttr}" opacity=".45" d="M${lx + 8} 132 C${lx - 40} 200, ${rx + 190} 200, ${rx + 142} 132"/>`;
+      } else {
+        const out = facePole === 'N';
+        [-2, -1, 1, 2].forEach(k => {
+          const y = cy + k * 9, ey = cy + Math.sign(k) * (52 + Math.abs(k) * 14);
+          paths += `<path class="field-line ${out ? '' : 'rev'}" stroke="${colRep}" d="M${L} ${y} Q${L + g * 0.45} ${y + k * 3} ${280 - 6} ${ey}"/>`;
+          paths += `<path class="field-line ${out ? '' : 'rev'}" stroke="${colRep}" d="M${R} ${y} Q${R - g * 0.45} ${y + k * 3} ${280 + 6} ${ey}"/>`;
+        });
+        paths += `<line x1="280" y1="${cy - 40}" x2="280" y2="${cy + 40}" stroke="${colRep}" stroke-width="1" stroke-dasharray="2 4" opacity=".6"/>`;
+      }
+      document.getElementById('magFieldLines').innerHTML = paths;
+      const ar = document.getElementById('magArrows');
+      ar.innerHTML = isAttract
+        ? (g > 6 ? `<text x="${L - 26}" y="66">→</text><text x="${R + 26}" y="66">←</text>` : `<text x="280" y="62" font-size="15">🤝 吸住了！</text>`)
+        : `<text x="${L - 30}" y="66">←</text><text x="${R + 30}" y="66">→</text>`;
     }
 
     // ==================== Team Scoreboard (removed) ====================
@@ -3984,7 +4271,6 @@
       }).join('');
       submitCustomExam();
     }
-
     function answerCustomQuestion(qid, picked) {
       if (state.customAnswers[qid] !== undefined) return;
       const q = state.customExamQuestions.find(x => x.id === qid);
@@ -3994,7 +4280,6 @@
       if (!ok) addMistake(q, `${q.unitLabel}（動態組卷）`);
       submitCustomExam();
     }
-
     function submitCustomExam() {
       const list = state.customExamQuestions;
       const banner = document.getElementById('customExamScoreBanner');
@@ -4146,6 +4431,158 @@
         switchTab(paramTab);
       }
     });
-  </script>
+  
+    // ===== Dora 全科動畫學院 v5 =====
+    const STUDIO_TOPICS = {
+      'e3-sci': [
+        ['🧲','磁性分類'],['🪄','磁力穿透'],['🧭','指南針'],['🌱','種子縮時'],['🍃','葉脈放大'],
+        ['🌡️','溫度計'],['💧','水的三態'],['💨','空氣與風'],['🐝','昆蟲構造']
+      ],
+      'e3-math': [['🍕','披薩切切樂'],['➕','分數合併'],['🏁','分數賽跑'],['🎀','緞帶剪剪看']],
+      'e3-chi': [['🌳','擬人變身秀'],['🌙','譬喻連連看'],['📝','大意抽取機']],
+      'e3-soc': [['🌳','家族樹長大'],['🗳️','班會流程']],
+      'e3-eng': [['⚙️','a / an 判斷機'],['📍','This / That 距離感']]
+    };
+    const studioState = {
+      active:{}, seedStage:0, temp:24, waterTemp:25, wind:1, balloon:1, insect:0,
+      denom:8, pizzaTaken:3, addA:2, addB:3, raceA:2, raceB:5, ribbonUsed:3,
+      summary:[], family:0, meeting:0, articleWord:'apple', distance:35
+    };
+
+    function renderAnimationStudio(unitId) {
+      const topics = STUDIO_TOPICS[unitId];
+      if (!topics) return '';
+      const subjectName = {'e3-sci':'自然探索館','e3-math':'分數動畫工坊','e3-chi':'語文魔法劇場','e3-soc':'生活公民劇場','e3-eng':'English Motion Lab'}[unitId];
+      const count = topics.length;
+      return `
+        <section class="anim-studio" aria-label="${subjectName}">
+          <div class="anim-studio-head">
+            <div class="anim-kicker">DORA MOTION ACADEMY · ${count} 個互動主題</div>
+            <div class="flex flex-wrap items-end justify-between gap-2 mt-1">
+              <div><h3 class="text-lg sm:text-xl font-black text-slate-800">🎬 ${subjectName}</h3><p class="text-xs text-slate-500 mt-1">點選主題，操作控制器，讓抽象觀念真的「動起來」。所有圖像由程式即時繪製。</p></div>
+              <span class="anim-hint">✨ 每個按鈕都可以試試看</span>
+            </div>
+          </div>
+          <div id="studioTabs-${unitId}" class="anim-tabs">
+            ${topics.map((t,i)=>`<button class="anim-tab ${i===0?'active':''}" onclick="switchStudioTopic('${unitId}',${i},this)">${t[0]} ${t[1]}</button>`).join('')}
+          </div>
+          <div id="studioStage-${unitId}" class="anim-stage"></div>
+        </section>`;
+    }
+
+    function initAnimationStudio(unitId) {
+      if (!STUDIO_TOPICS[unitId]) return;
+      const idx = studioState.active[unitId] || 0;
+      const tabs = document.querySelectorAll(`#studioTabs-${unitId} .anim-tab`);
+      tabs.forEach((b,i)=>b.classList.toggle('active',i===idx));
+      renderStudioTopic(unitId,idx);
+    }
+    function switchStudioTopic(unitId, idx, btn) {
+      studioState.active[unitId]=idx;
+      document.querySelectorAll(`#studioTabs-${unitId} .anim-tab`).forEach(b=>b.classList.remove('active'));
+      btn?.classList.add('active');
+      renderStudioTopic(unitId,idx);
+      playTone(520+idx*35,.08);
+    }
+    function renderStudioTopic(unitId, idx) {
+      const stage=document.getElementById(`studioStage-${unitId}`); if(!stage)return;
+      const renderers={
+        'e3-sci':[renderMagSort,renderPenetration,renderCompass,renderSeedTimeline,renderLeafLens,renderThermometer,renderWaterStates,renderAirWind,renderInsect],
+        'e3-math':[renderPizzaCutter,renderFractionMerge,renderFractionRace,renderRibbon],
+        'e3-chi':[renderPersonification,renderSimile,renderSummary],
+        'e3-soc':[renderFamilyTree,renderMeetingFlow],
+        'e3-eng':[renderArticleMachine,renderDistanceEnglish]
+      };
+      stage.innerHTML=renderers[unitId][idx]();
+      stage.classList.remove('studio-pop'); void stage.offsetWidth; stage.classList.add('studio-pop');
+    }
+    const stageEl=()=>document.querySelector('.anim-stage.studio-pop');
+
+    // ---- Science ----
+    function renderMagSort(){
+      const items=[['📎','迴紋針',1],['🔩','鐵螺絲',1],['🥫','鋼罐',1],['🪙','鋁幣',0],['🧽','橡皮擦',0],['🪵','木片',0]];
+      return `<div class="anim-title">🧲 磁鐵吸什麼？材料分類遊戲</div><div class="anim-sub">點一個物品做實驗：含鐵或鋼的物品會「咻」地吸住；其他材料會彈回。</div>
+      <div class="anim-board grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+        <div class="anim-grid">${items.map(x=>`<button class="anim-card text-center" onclick="studioMagTest(this,'${x[1]}',${x[2]})"><span class="mag-sort-object inline-block">${x[0]}</span><small class="block font-black text-slate-600 mt-1">${x[1]}</small></button>`).join('')}</div>
+        <div class="flex flex-col items-center gap-3"><div class="bar-magnet"><span>N</span><span>S</span></div><div id="magSortFeedback" class="anim-note">先猜猜看，再點物品驗證！磁鐵主要吸引鐵、鋼、鈷、鎳。</div></div>
+      </div>`;
+    }
+    function studioMagTest(btn,name,magnetic){
+      const obj=btn.querySelector('.mag-sort-object'); obj.classList.remove('hit','miss'); void obj.offsetWidth; obj.classList.add(magnetic?'hit':'miss');
+      const fb=document.getElementById('magSortFeedback');
+      fb.innerHTML=magnetic?`✅ <b>${name}</b>含有可被磁化的材料，被磁鐵吸住了！`:`↩️ <b>${name}</b>不會被這塊磁鐵吸引，彈回原位。`;
+      playTone(magnetic?760:300,.15,magnetic?'sine':'triangle'); setTimeout(()=>obj.classList.remove('hit'),1200);
+    }
+    function renderPenetration(){
+      return `<div class="anim-title">🪄 磁力穿透實驗</div><div class="anim-sub">換一種隔板，再改變厚度。薄的非磁性材料不會把磁力「關掉」，但距離變遠時吸力會變弱。</div>
+      <div class="anim-controls"><button class="anim-btn active" onclick="setPenMaterial('paper',this)">📄 薄紙</button><button class="anim-btn" onclick="setPenMaterial('plastic',this)">▱ 塑膠片</button><button class="anim-btn" onclick="setPenMaterial('wood',this)">🪵 厚木板</button></div>
+      <div class="anim-board"><div class="penetration-track"><div class="bar-magnet scale-75"><span>N</span><span>S</span></div><div id="penMaterial" class="penetration-material bg-amber-100/70"></div><div id="penClip" class="penetration-clip pulled">📎</div></div>
+      <div class="px-4"><label class="text-xs font-black text-slate-600">隔板厚度／距離</label><input id="penThickness" type="range" min="1" max="10" value="2" oninput="updatePenetration(this.value)" class="w-full accent-rose-400"><div id="penFeedback" class="anim-note">薄紙：迴紋針跟著磁鐵移動，磁力成功穿透！</div></div></div>`;
+    }
+    let penMaterial='paper';
+    function setPenMaterial(v,btn){penMaterial=v;document.querySelectorAll('#studioStage-e3-sci .anim-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');const s=document.getElementById('penThickness');s.value=v==='wood'?7:2;updatePenetration(s.value)}
+    function updatePenetration(v){const mat=document.getElementById('penMaterial'),clip=document.getElementById('penClip'),fb=document.getElementById('penFeedback');if(!mat)return;const thick=Number(v);mat.style.width=(8+thick*5)+'px';mat.className='penetration-material '+(penMaterial==='paper'?'bg-amber-100/70':penMaterial==='plastic'?'bg-sky-100/60':'bg-amber-700');const works=penMaterial!=='wood'||thick<5;clip.classList.toggle('pulled',works);fb.innerHTML=works?`✅ 磁力穿過${penMaterial==='paper'?'紙':penMaterial==='plastic'?'塑膠片':'較薄木板'}，迴紋針移動了。`:`⚠️ 距離太遠，這塊磁鐵的吸力已不足；不是木板「消滅」磁力。`;playTone(works?650:260,.09)}
+    function renderCompass(){return `<div class="anim-title">🧭 自由懸掛的磁鐵會指方向</div><div class="anim-sub">按下「放開磁針」，它會先晃動，最後沿南北方向停下；紅端指向北方。</div><div class="anim-board text-center"><div id="compassDemo" class="compass"><div class="compass-needle"></div></div><div class="anim-controls justify-center"><button class="anim-btn primary" onclick="spinCompass()">▶ 放開磁針</button></div><div id="compassFeedback" class="anim-note inline-block">磁針目前被手扶住。猜猜放開後會停在哪裡？</div></div>`}
+    function spinCompass(){const c=document.getElementById('compassDemo');c.classList.remove('spin');void c.offsetWidth;c.classList.add('spin');document.getElementById('compassFeedback').textContent='磁針左右擺動……正在尋找地球的南北方向。';playTone(420,.1);setTimeout(()=>{document.getElementById('compassFeedback').innerHTML='✅ 停在南北方向！紅色 N 端指北，藍色 S 端指南。';playTone(780,.2)},2400)}
+    function renderSeedTimeline(){const phases=[['🫘','種子'],['🌰','長出胚根'],['🌱','冒出嫩芽'],['🌿','長出葉片'],['🌼','開花'],['🍅','結果']];return `<div class="anim-title">🌱 種子發芽縮時攝影</div><div class="anim-sub">拖曳時間軸，觀察植物生命週期。最先突破種皮的通常是根，先向下尋找水分。</div><div class="anim-board"><div id="seedPhases" class="seed-timeline">${phases.map((p,i)=>`<div class="seed-phase ${i===studioState.seedStage?'on':''}"><div class="seed-art">${p[0]}</div><small>第 ${i+1} 階段<br>${p[1]}</small></div>`).join('')}</div><input type="range" min="0" max="5" value="${studioState.seedStage}" oninput="updateSeedStage(this.value)" class="w-full accent-emerald-500"><div id="seedNote" class="anim-note">${seedNote(studioState.seedStage)}</div></div>`}
+    function seedNote(i){return ['種子吸收水分，準備甦醒。','胚根先向下生長，固定並吸收水分。','嫩芽突破土壤，朝光線方向生長。','葉片展開，開始製造養分。','成熟植物開花，準備繁殖。','花謝後形成果實，種子藏在裡面。'][i]}
+    function updateSeedStage(v){studioState.seedStage=Number(v);document.querySelectorAll('#seedPhases .seed-phase').forEach((e,i)=>e.classList.toggle('on',i===studioState.seedStage));document.getElementById('seedNote').textContent=seedNote(studioState.seedStage);playTone(440+studioState.seedStage*70,.07)}
+    function renderLeafLens(){return `<div class="anim-title">🍃 葉脈放大鏡</div><div class="anim-sub">把放大鏡移到兩種葉片上，比較像漁網的「網狀脈」和像鐵軌的「平行脈」。</div><div class="anim-board"><div class="leaf-pair"><button onclick="inspectLeaf('net')" class="text-center"><div class="leaf net"></div><small class="font-black text-emerald-800">榕樹葉</small></button><div id="leafLens" class="magnifier">點葉子<br>放大</div><button onclick="inspectLeaf('parallel')" class="text-center"><div class="leaf parallel"></div><small class="font-black text-emerald-800">竹葉</small></button></div><div id="leafNote" class="anim-note">👆 點任一片葉子，放大觀察葉脈。</div></div>`}
+    function inspectLeaf(type){const lens=document.getElementById('leafLens'),note=document.getElementById('leafNote');lens.classList.remove('studio-pop');void lens.offsetWidth;lens.classList.add('studio-pop');lens.innerHTML=type==='net'?'╱╲╱╲<br>網狀脈':'//////<br>平行脈';note.innerHTML=type==='net'?'🔎 <b>網狀脈</b>：主脈分出許多支脈，彼此交織成網。':'🔎 <b>平行脈</b>：多條葉脈大致平行，從葉基延伸到葉尖。';playTone(type==='net'?590:690,.1)}
+    function renderThermometer(){return `<div class="anim-title">🌡️ 溫度計讀法：眼睛要平視</div><div class="anim-sub">調整溫度，再拖曳視線高度。視線與液柱頂端同高，讀值才不會因角度產生誤差。</div><div class="anim-board grid grid-cols-1 sm:grid-cols-2 items-center"><div class="thermo-wrap"><div class="thermo"><div id="mercury" class="mercury"></div><div id="eyeLine" class="eye-line"></div></div><div><div id="tempRead" class="text-3xl font-black text-rose-600">24°C</div><small class="font-bold text-slate-500">每小格 1°C</small></div></div><div class="space-y-4"><label class="text-xs font-black">液體溫度</label><input type="range" min="0" max="50" value="24" oninput="setTemperature(this.value)" class="w-full accent-rose-500"><label class="text-xs font-black">視線高度</label><input id="eyeRange" type="range" min="0" max="50" value="24" oninput="setEyeLevel(this.value)" class="w-full accent-sky-500"><div id="thermoNote" class="anim-note">✅ 現在是平視，讀值最準確。</div></div></div>`}
+    function setTemperature(v){studioState.temp=Number(v);document.getElementById('mercury').style.height=(36+studioState.temp*2.5)+'px';document.getElementById('tempRead').textContent=studioState.temp+'°C';checkEye();}
+    function setEyeLevel(v){const line=document.getElementById('eyeLine');line.style.top=(86-Number(v)*1.35)+'%';checkEye(Number(v))}
+    function checkEye(v=Number(document.getElementById('eyeRange')?.value||24)){const d=Math.abs(v-studioState.temp);document.getElementById('thermoNote').innerHTML=d<3?'✅ 視線與液柱頂端同高，讀值最準確。':v>studioState.temp?'↘️ 視線太高，請把眼睛往下移到液柱頂端。':'↗️ 視線太低，請把眼睛往上移到液柱頂端。'}
+    function renderWaterStates(){return `<div class="anim-title">💧 水的三態與粒子動畫</div><div class="anim-sub">改變溫度，觀察冰融化、水沸騰，以及粒子從緊密排列到快速散開的過程。</div><div class="anim-board grid grid-cols-1 sm:grid-cols-2 items-center"><div class="water-vessel"><div class="water-cup"><div id="waterMatter" class="water-matter"><div class="molecules">${Array.from({length:12},(_,i)=>`<i class="molecule" style="--dx:${(i%4-1.5)*22}px;--dy:${-30-(i%3)*22}px"></i>`).join('')}</div></div></div></div><div><div class="flex justify-between font-black"><span id="waterState">💧 液態水</span><span id="waterTemp">25°C</span></div><input type="range" min="-10" max="110" value="25" oninput="setWaterTemp(this.value)" class="w-full accent-sky-500 mt-4"><div id="waterNote" class="anim-note">液態：粒子靠近但能彼此滑動，因此水會流動。</div></div></div>`}
+    function setWaterTemp(v){studioState.waterTemp=Number(v);const m=document.getElementById('waterMatter'),s=document.getElementById('waterState'),n=document.getElementById('waterNote');document.getElementById('waterTemp').textContent=v+'°C';m.className='water-matter';if(v<=0){m.classList.add('ice');s.textContent='🧊 固態冰';n.textContent='固態：粒子排列緊密，只在固定位置附近振動。'}else if(v>=100){m.classList.add('steam');s.textContent='☁️ 氣態水蒸氣';n.textContent='氣態：粒子快速運動、彼此距離大，向四周散開。'}else{s.textContent='💧 液態水';n.textContent='液態：粒子靠近但能彼此滑動，因此水會流動。'}playTone(360+Math.max(0,Number(v))*3,.05)}
+    function renderAirWind(){return `<div class="anim-title">💨 空氣會流動，也會占空間</div><div class="anim-sub">調整風速看風車；按打氣讓氣球變大，證明看不見的空氣也會占空間。</div><div class="anim-board"><div id="windScene" class="wind-scene"><div class="wind-lines">〰 〰 〰 〰</div><div class="balloon" id="balloon" style="transform:scale(${studioState.balloon})">🎈</div><div class="pinwheel">✥</div></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3"><div><label class="text-xs font-black">風速</label><input type="range" min="0" max="3" value="${studioState.wind}" oninput="setWind(this.value)" class="w-full accent-sky-500"></div><button class="anim-btn primary" onclick="pumpBalloon()">🫧 打入空氣</button></div><div id="windNote" class="anim-note">空氣流動形成風，風能推動風車。</div></div>`}
+    function setWind(v){studioState.wind=Number(v);const scene=document.getElementById('windScene');scene.classList.toggle('fast',studioState.wind>=2);scene.querySelector('.wind-lines').style.display=studioState.wind===0?'none':'block';document.getElementById('windNote').textContent=studioState.wind===0?'空氣暫時沒有明顯流動，風車慢慢停下。':studioState.wind>=2?'風越強，風車轉得越快！':'空氣流動形成風，風能推動風車。'}
+    function pumpBalloon(){studioState.balloon=Math.min(2.1,studioState.balloon+.22);document.getElementById('balloon').style.transform=`scale(${studioState.balloon})`;document.getElementById('windNote').textContent='氣球變大了：空氣雖然看不見，卻真的占有空間。';playTone(450+studioState.balloon*100,.1)}
+    function renderInsect(){return `<div class="anim-title">🐝 昆蟲身體構造組裝動畫</div><div class="anim-sub">依序組裝頭、胸、腹和六隻腳。重要線索：昆蟲的六隻腳都長在「胸部」。</div><div class="anim-board"><div class="insect-stage"><div class="bug-part bug-head ${studioState.insect>=1?'on':''}"></div><div class="bug-part bug-thorax ${studioState.insect>=2?'on':''}"><div class="bug-legs ${studioState.insect>=4?'on':''}">${Array.from({length:6},()=>'<i></i>').join('')}</div></div><div class="bug-part bug-abdomen ${studioState.insect>=3?'on':''}"></div></div><div class="anim-controls justify-center"><button class="anim-btn primary" onclick="nextInsectPart()">＋ 組裝下一部分</button><button class="anim-btn" onclick="resetInsect()">↺ 重來</button></div><div id="insectNote" class="anim-note">先裝上頭部：有觸角、眼睛與口器。</div></div>`}
+    function nextInsectPart(){studioState.insect=Math.min(4,studioState.insect+1);renderStudioTopic('e3-sci',8);playTone(480+studioState.insect*80,.09)}
+    function resetInsect(){studioState.insect=0;renderStudioTopic('e3-sci',8)}
+
+    // ---- Mathematics ----
+    function renderPizzaCutter(){const slice=360/studioState.denom;return `<div class="anim-title">🍕 披薩切切樂</div><div class="anim-sub">選擇要平分成幾份，刀子會重新切割；再調整拿走的片數，讀出分數。</div><div class="anim-board grid grid-cols-1 sm:grid-cols-2 items-center"><div class="flex justify-center"><div id="cutPizza" class="cut-pizza" style="--slice:${slice}deg"><div class="pizza-knife">🔪</div></div></div><div><div class="anim-controls">${[2,4,6,8].map(n=>`<button class="anim-btn ${n===studioState.denom?'active':''}" onclick="cutPizza(${n})">切 ${n} 份</button>`).join('')}</div><label class="text-xs font-black block mt-4">拿走幾片：<b id="takenLabel">${studioState.pizzaTaken}</b></label><input type="range" min="0" max="${studioState.denom}" value="${studioState.pizzaTaken}" oninput="setPizzaTaken(this.value)" class="w-full accent-rose-500"><div id="pizzaCutNote" class="anim-note">拿走 ${studioState.pizzaTaken} 片，就是 ${studioState.pizzaTaken}/${studioState.denom} 個披薩。分母表示「全部平分幾份」。</div></div></div>`}
+    function cutPizza(n){studioState.denom=n;studioState.pizzaTaken=Math.min(studioState.pizzaTaken,n);renderStudioTopic('e3-math',0);playTone(700,.12)}
+    function setPizzaTaken(v){studioState.pizzaTaken=Number(v);document.getElementById('takenLabel').textContent=v;document.getElementById('pizzaCutNote').textContent=`拿走 ${v} 片，就是 ${v}/${studioState.denom} 個披薩。分子表示「取其中幾份」。`}
+    function fracGradient(n,d,color){return `conic-gradient(${color} 0 ${n/d*360}deg,#f8fafc ${n/d*360}deg 360deg)`}
+    function renderFractionMerge(){const a=studioState.addA,b=studioState.addB,total=Math.min(8,a+b);return `<div class="anim-title">➕ 同分母分數合併動畫</div><div class="anim-sub">兩組都是「八分之一」這種相同大小的單位，所以可以直接合併；分母 8 不變。</div><div class="anim-board"><div id="fractionMerge" class="fraction-merge"><div class="frac-disc" style="background:${fracGradient(a,8,'#f9a8d4')}">${a}/8</div><b>＋</b><div class="frac-disc" style="background:${fracGradient(b,8,'#fde68a')}">${b}/8</div><b class="merge-result text-2xl text-emerald-600">＝ ${total}/8</b></div><div class="grid grid-cols-2 gap-3"><input type="range" min="0" max="8" value="${a}" oninput="setAddFrac('a',this.value)" class="accent-pink-400"><input type="range" min="0" max="${8-a}" value="${b}" oninput="setAddFrac('b',this.value)" class="accent-amber-400"></div><div class="anim-controls justify-center"><button class="anim-btn primary" onclick="mergeFractions()">✨ 合併色塊</button></div><div id="mergeNote" class="anim-note">${a}/8 ＋ ${b}/8：按下合併，看看結果。</div></div>`}
+    function setAddFrac(k,v){if(k==='a'){studioState.addA=Number(v);studioState.addB=Math.min(studioState.addB,8-studioState.addA)}else studioState.addB=Number(v);renderStudioTopic('e3-math',1)}
+    function mergeFractions(){document.getElementById('fractionMerge').classList.add('merging');const t=studioState.addA+studioState.addB;document.getElementById('mergeNote').innerHTML=`✅ <b>${studioState.addA}/8 ＋ ${studioState.addB}/8 ＝ ${t}/8</b>。分母代表每一份的大小，大小沒有改變，所以分母不能相加。`;playTone(820,.18)}
+    function renderFractionRace(){return `<div class="anim-title">🏁 同分母分數比大小賽跑</div><div class="anim-sub">分母同為 8，分子越大代表取得的份數越多，也就跑得越遠。</div><div class="anim-board"><div class="race-track" id="raceA" style="--finish:${studioState.raceA/8*100}%"><span class="runner">🏃‍♀️ <b class="text-sm">${studioState.raceA}/8</b></span></div><input type="range" min="0" max="8" value="${studioState.raceA}" oninput="setRace('a',this.value)" class="w-full accent-rose-500"><div class="race-track" id="raceB" style="--finish:${studioState.raceB/8*100}%"><span class="runner">🏃 <b class="text-sm">${studioState.raceB}/8</b></span></div><input type="range" min="0" max="8" value="${studioState.raceB}" oninput="setRace('b',this.value)" class="w-full accent-sky-500"><div class="anim-controls justify-center"><button class="anim-btn primary" onclick="startFractionRace()">🏁 開始比賽</button></div><div id="raceNote" class="anim-note">調整兩位選手的分數，再開始比賽。</div></div>`}
+    function setRace(k,v){studioState[k==='a'?'raceA':'raceB']=Number(v);renderStudioTopic('e3-math',2)}
+    function startFractionRace(){document.querySelectorAll('.race-track').forEach(e=>{e.classList.remove('go');void e.offsetWidth;e.classList.add('go')});const a=studioState.raceA,b=studioState.raceB;document.getElementById('raceNote').innerHTML=a===b?`🤝 ${a}/8 ＝ ${b}/8，兩人平手！`:`🏆 ${Math.max(a,b)}/8 比 ${Math.min(a,b)}/8 大，因為同分母時分子較大。`;playTone(760,.18)}
+    function renderRibbon(){return `<div class="anim-title">🎀 緞帶剪剪看</div><div class="anim-sub">一條緞帶平分成 9 段。拖曳滑桿，把用掉的部分剪下來，剩餘段落會發光。</div><div class="anim-board"><div class="flex items-center gap-3"><span class="scissors">✂️</span><div id="ribbon" class="ribbon flex-1">${Array.from({length:9},(_,i)=>`<span class="${i<studioState.ribbonUsed?'used':''}">${i+1}</span>`).join('')}</div></div><input type="range" min="0" max="9" value="${studioState.ribbonUsed}" oninput="setRibbon(this.value)" class="w-full accent-purple-500 mt-5"><div id="ribbonNote" class="anim-note">用了 ${studioState.ribbonUsed}/9，還剩 ${(9-studioState.ribbonUsed)}/9 條緞帶。</div></div>`}
+    function setRibbon(v){studioState.ribbonUsed=Number(v);document.querySelectorAll('#ribbon span').forEach((e,i)=>e.classList.toggle('used',i<studioState.ribbonUsed));document.getElementById('ribbonNote').textContent=`用了 ${v}/9，還剩 ${9-v}/9 條緞帶。`;playTone(600,.05)}
+
+    // ---- Chinese ----
+    function renderPersonification(){return `<div class="anim-title">🌳 擬人法變身秀</div><div class="anim-sub">把「風、樹」原本的自然現象，改寫成只有人才會做的動作，讓句子有畫面。</div><div class="anim-board"><div class="person-scene"><div id="personTree" class="person-tree">🌳<span class="person-face">😊</span></div></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3"><div class="anim-card"><small class="font-black text-slate-400">原句</small><div>風吹過大樹，樹枝搖動。</div></div><div class="anim-card"><small class="font-black text-rose-500">魔法句</small><div id="personSentence">按下變身，加入人的動作。</div></div></div><div class="anim-controls justify-center"><button class="anim-btn primary" onclick="personifyTree()">✨ 啟動擬人魔法</button></div></div>`}
+    function personifyTree(){document.getElementById('personTree').classList.add('magic');document.getElementById('personSentence').innerHTML='微風一來，大樹就<b class="text-rose-600">開心地揮舞雙手、跳起舞</b>。';playTone(720,.15)}
+    function renderSimile(){return `<div class="anim-title">🌙 譬喻連連看動畫</div><div class="anim-sub">選擇月亮的形狀，再挑最像的事物。好的譬喻要在形狀或特徵上有相似處。</div><div class="anim-board text-center"><div id="moonMorph" class="moon-morph">🌙</div><div class="anim-controls justify-center"><button class="anim-btn" onclick="morphMoon('banana','🍌','彎彎的月亮像一根金色香蕉。')">🍌 香蕉</button><button class="anim-btn" onclick="morphMoon('boat','⛵','彎彎的月亮像一艘小船。')">⛵ 小船</button><button class="anim-btn" onclick="morphMoon('plate','🟡','圓月像一個金色圓盤。')">🟡 圓盤</button></div><div id="simileNote" class="anim-note">「本體（月亮）」和「喻體」之間要有相似點。</div></div>`}
+    function morphMoon(type,emoji,text){const m=document.getElementById('moonMorph');m.classList.remove('morph');void m.offsetWidth;m.classList.add('morph');setTimeout(()=>m.textContent=emoji,280);document.getElementById('simileNote').innerHTML=`🌈 ${text} <b>「像」</b>是譬喻的線索。`;playTone(type==='plate'?760:640,.12)}
+    function renderSummary(){const words=[['小安','人物'],['星期六早上','時間'],['帶著雨傘','細節'],['到公園觀察蝴蝶','事件'],['看到不同花紋','細節'],['完成自然紀錄','結果']];return `<div class="anim-title">📝 段落大意抽取機</div><div class="anim-sub">點出「人物、重要事件、結果」三個核心，再按組合。時間與裝飾性細節通常可以省略。</div><div class="anim-board"><p class="leading-9 text-slate-700">${words.map((w,i)=>`<span class="summary-word" data-summary="${i}" onclick="pickSummary(${i},this)">${w[0]}</span>`).join('，')}。</p><div class="anim-controls"><button class="anim-btn primary" onclick="buildSummary()">⚙️ 抽取並組合</button><button class="anim-btn" onclick="clearSummary()">清除</button></div><div id="summaryResult" class="anim-note">建議先選「小安」「到公園觀察蝴蝶」「完成自然紀錄」。</div></div>`}
+    function pickSummary(i,el){const p=studioState.summary.indexOf(i);if(p>=0)studioState.summary.splice(p,1);else studioState.summary.push(i);el.classList.toggle('picked');playTone(520+i*30,.06)}
+    function buildSummary(){const core=[0,3,5],ok=core.every(i=>studioState.summary.includes(i));document.querySelectorAll('.summary-word').forEach((e,i)=>e.classList.toggle('picked',core.includes(i)));studioState.summary=[...core];document.getElementById('summaryResult').innerHTML=`${ok?'🎉':'💡'} <b>小安到公園觀察蝴蝶，最後完成自然紀錄。</b><br><span class="text-xs">大意保留了人物＋重要事件＋結果，刪去不影響主線的細節。</span>`;playTone(800,.16)}
+    function clearSummary(){studioState.summary=[];renderStudioTopic('e3-chi',2)}
+
+    // ---- Social studies ----
+    function renderFamilyTree(){return `<div class="anim-title">🌳 家族樹長大動畫</div><div class="anim-sub">從「我」往上生長，先找爸爸媽媽，再分出父系與母系祖父母。</div><div class="anim-board"><div id="familyTree" class="family-tree level-${studioState.family}"><div class="tree-crown"></div><div class="tree-trunk"></div><span class="family-node n1" style="bottom:64px;left:calc(50% - 100px)">👨 爸爸</span><span class="family-node n1" style="bottom:64px;right:calc(50% - 100px)">👩 媽媽</span><span class="family-node n2" style="bottom:145px;left:9%">👴 爺爺</span><span class="family-node n2" style="bottom:108px;left:27%">👵 奶奶</span><span class="family-node n2" style="bottom:108px;right:27%">👴 外公</span><span class="family-node n2" style="bottom:145px;right:9%">👵 外婆</span><span class="family-node" style="opacity:1;transform:scale(1);bottom:8px">🧒 我</span></div><div class="anim-controls justify-center"><button class="anim-btn primary" onclick="growFamilyTree()">🌱 往上長一層</button><button class="anim-btn" onclick="resetFamilyTree()">↺ 重來</button></div><div id="familyNote" class="anim-note">第一層：我是家庭關係的起點。</div></div>`}
+    function growFamilyTree(){studioState.family=Math.min(2,studioState.family+1);renderStudioTopic('e3-soc',0);const n=document.getElementById('familyNote');n.textContent=studioState.family===1?'爸爸與媽媽是我的上一代。':'爸爸這邊：爺爺、奶奶；媽媽這邊：外公、外婆。';playTone(520+studioState.family*100,.12)}
+    function resetFamilyTree(){studioState.family=0;renderStudioTopic('e3-soc',0)}
+    function renderMeetingFlow(){const steps=[['💡','提出提案'],['🙋','舉手發言'],['💬','理性討論'],['🗳️','公平表決'],['📣','公布結果']];return `<div class="anim-title">🗳️ 班級會議流程動畫</div><div class="anim-sub">一次前進一步，體驗民主會議：讓每個人有表達機會，再用公平方式做共同決定。</div><div class="anim-board"><div class="meeting-flow">${steps.map((s,i)=>`<div class="meeting-step ${i<=studioState.meeting?'on':''}"><div class="text-2xl">${s[0]}</div>${i+1}. ${s[1]}</div>${i<4?'<span class="meeting-arrow">→</span>':''}`).join('')}</div><div class="anim-controls justify-center"><button class="anim-btn primary" onclick="nextMeetingStep()">下一步 →</button><button class="anim-btn" onclick="resetMeeting()">↺ 重來</button></div><div id="meetingNote" class="anim-note">${['先清楚說明想討論的問題與理由。','想說話先舉手，等主席點名。','認真聽不同意見，不打斷、不嘲笑。','每人一票，公開且公平地表決。','少數服從多數，多數也要尊重少數。'][studioState.meeting]}</div></div>`}
+    function nextMeetingStep(){studioState.meeting=Math.min(4,studioState.meeting+1);renderStudioTopic('e3-soc',1);playTone(500+studioState.meeting*70,.08)}
+    function resetMeeting(){studioState.meeting=0;renderStudioTopic('e3-soc',1)}
+
+    // ---- English ----
+    const articleItems={apple:['🍎','an'],eraser:['🧽','an'],orange:['🍊','an'],book:['📘','a'],pen:['🖊️','a'],unicorn:['🦄','a']};
+    function renderArticleMachine(){const it=articleItems[studioState.articleWord];return `<div class="anim-title">⚙️ a / an 智慧判斷機</div><div class="anim-sub">選一個單字，送進機器聽第一個「聲音」。母音聲音用 an，子音聲音用 a；unicorn 的開頭聽起來像 /y/，所以用 a。</div><div class="anim-board"><div class="anim-controls justify-center">${Object.keys(articleItems).map(w=>`<button class="anim-btn" onclick="chooseArticleWord('${w}')">${articleItems[w][0]} ${w}</button>`).join('')}</div><div class="article-machine mt-3"><div id="articleSlot" class="article-slot">${it[0]} <span class="text-base">${studioState.articleWord}</span></div><div class="article-lamps"><div id="lampA" class="article-lamp">a</div><div id="lampAn" class="article-lamp">an</div></div><button class="w-full mt-3 py-2 rounded-xl bg-rose-500 font-black" onclick="runArticleMachine()">⬇ 送進判斷機</button></div><div id="articleNote" class="anim-note">先選單字，再啟動機器。</div></div>`}
+    function chooseArticleWord(w){studioState.articleWord=w;renderStudioTopic('e3-eng',0)}
+    function runArticleMachine(){const [emoji,a]=articleItems[studioState.articleWord],slot=document.getElementById('articleSlot');slot.classList.remove('drop');void slot.offsetWidth;slot.classList.add('drop');document.getElementById('lampA').classList.toggle('on',a==='a');document.getElementById('lampAn').classList.toggle('on',a==='an');document.getElementById('articleNote').innerHTML=`✅ <b>${a} ${studioState.articleWord}</b>。判斷重點是開頭的聲音，不只是第一個字母。`;speakEnglish(`${a} ${studioState.articleWord}`)}
+    function renderDistanceEnglish(){const near=studioState.distance<50;return `<div class="anim-title">📍 This / That 距離感動畫</div><div class="anim-sub">拖曳物品改變距離。靠近說話者用 this，遠離說話者用 that；回答都用 It’s...</div><div class="anim-board"><div class="distance-scene"><div class="speaker">🧒</div><div id="speechBubble" class="speech-bubble">What's ${near?'this':'that'}?</div><div id="distanceObject" class="distance-object" style="left:${90+studioState.distance*2.1}px;transform:scale(${1.25-studioState.distance/140})">🎒</div></div><input type="range" min="0" max="100" value="${studioState.distance}" oninput="setEnglishDistance(this.value)" class="w-full accent-blue-500 mt-4"><div id="distanceNote" class="anim-note">${near?"近處：What's this? — It's a bag.":"遠處：What's that? — It's a bag."}</div><div class="anim-controls justify-center"><button class="anim-btn primary" onclick="speakDistanceSentence()">🔊 播放句型</button></div></div>`}
+    function setEnglishDistance(v){studioState.distance=Number(v);const near=studioState.distance<50,o=document.getElementById('distanceObject');o.style.left=(90+studioState.distance*2.1)+'px';o.style.transform=`scale(${1.25-studioState.distance/140})`;document.getElementById('speechBubble').textContent=`What's ${near?'this':'that'}?`;document.getElementById('distanceNote').textContent=near?"近處：What's this? — It's a bag.":"遠處：What's that? — It's a bag."}
+    function speakDistanceSentence(){const near=studioState.distance<50;speakEnglish(`What's ${near?'this':'that'}? It's a bag.`)}
+
+</script>
 </body>
 </html>
