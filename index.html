@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dora老師的數學課｜國中數學數位學習平台</title>
+  <title>Dora老師的數位學習教室｜國小三年級全科 × 國中數學</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -43,87 +43,157 @@
       background: #E5C1CA;
       border-radius: 999px;
     }
+    @keyframes shakeHorizontal {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-6px); }
+      80% { transform: translateX(6px); }
+    }
+    .animate-shake {
+      animation: shakeHorizontal 0.4s ease-in-out;
+    }
+    @keyframes memePopIn {
+      0% { opacity: 0; transform: scale(0.75) rotate(-3deg); }
+      65% { opacity: 1; transform: scale(1.04) rotate(1deg); }
+      100% { opacity: 1; transform: scale(1) rotate(0deg); }
+    }
+    .animate-meme-pop {
+      animation: memePopIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printableWorksheetArea, #printableWorksheetArea * {
+        visibility: visible;
+      }
+      #printableWorksheetArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: #FFFFFF !important;
+        color: #000000 !important;
+        padding: 16px 24px;
+        font-size: 13pt;
+      }
+      .print-page-break {
+        page-break-before: always;
+        break-before: page;
+      }
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
 
-  <!-- Top Header -->
-  <header class="bg-white/90 backdrop-blur-md border-b border-rose-100 sticky top-0 z-30">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
-      <div class="flex items-center gap-3">
-        <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-xl bg-rose-100/70/60 text-rose-400/90 hover:bg-rose-100/70/70">
+  <!-- Compact Sticky Top Header -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-rose-100 sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2.5">
+        <button id="mobileMenuBtn" class="lg:hidden p-1.5 rounded-xl bg-rose-100/60 text-rose-500 hover:bg-rose-100">
           ☰
         </button>
-        <div class="w-11 h-11 rounded-2xl pink-gradient flex items-center justify-center text-white text-2xl shadow-md">
+        <div class="w-9 h-9 rounded-xl pink-gradient flex items-center justify-center text-white text-lg shadow-sm">
           🌸
         </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-xl font-black tracking-tight text-gray-700">Dora老師的數學課</h1>
-            <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-rose-100/70/60 text-rose-400/90 border border-rose-100">108課綱</span>
-          </div>
-          <p class="text-xs text-gray-500">Dora's Math Class · 溫暖陪伴 × 觀念動畫 × 隨堂精熟</p>
+        <div class="flex items-center gap-2">
+          <h1 class="text-base sm:text-lg font-black tracking-tight text-gray-800">Dora老師的數位學習教室</h1>
+          <span class="hidden md:inline-block text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-50 text-rose-500 border border-rose-100">108課綱</span>
         </div>
       </div>
 
-      <!-- Progress & Mistake Book -->
-      <div class="flex items-center gap-3">
-        <div class="hidden sm:flex items-center gap-4 bg-rose-50/40 border border-rose-100 px-4 py-1.5 rounded-2xl">
-          <div>
-            <div class="text-[11px] text-rose-400 font-bold">精熟進度</div>
-            <div class="flex items-center gap-2">
-              <span id="masteredCountText" class="text-sm font-black text-gray-700">0/4</span>
-              <div class="w-16 h-2 bg-rose-100/70 rounded-full overflow-hidden">
-                <div id="masteredProgressBar" class="h-full bg-rose-400 transition-all duration-300" style="width: 0%"></div>
-              </div>
-            </div>
+      <!-- Permanent Quick Classroom Toolbar -->
+      <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+        <!-- Compact Progress Pill -->
+        <div class="hidden xl:flex items-center gap-2.5 bg-rose-50/50 border border-rose-100 px-3 py-1 rounded-xl text-xs">
+          <span class="text-rose-400 font-bold">精熟 <strong id="masteredCountText" class="text-gray-700">0/9</strong></span>
+          <div class="w-12 h-1.5 bg-rose-100 rounded-full overflow-hidden">
+            <div id="masteredProgressBar" class="h-full bg-rose-400 transition-all duration-300" style="width: 0%"></div>
           </div>
-          <div class="h-7 w-px bg-rose-100/70"></div>
-          <div>
-            <div class="text-[11px] text-rose-400 font-bold">測驗平均</div>
-            <div id="avgScoreText" class="text-sm font-black text-gray-700">--%</div>
-          </div>
+          <span class="text-gray-300">|</span>
+          <span class="text-rose-400 font-bold">均分 <strong id="avgScoreText" class="text-gray-700">--%</strong></span>
         </div>
 
-        <button onclick="openMistakeModal()" class="flex items-center gap-2 px-4 py-2 rounded-2xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 font-bold text-sm transition shadow-sm">
-          <span>📒 錯題本</span>
-          <span id="mistakeBadge" class="px-2 py-0.5 text-xs rounded-full bg-rose-400 text-white font-black">0</span>
+        <!-- Floating Seat Picker Trigger -->
+        <button onclick="toggleFloatingWidget('seat')" id="btnFloatSeat" class="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 font-black text-xs transition shadow-sm">
+          <span>🎲 隨堂抽號</span>
+        </button>
+
+        <!-- Floating Team Scoreboard Trigger -->
+        <button onclick="toggleFloatingWidget('team')" id="btnFloatTeam" class="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-amber-50/80 hover:bg-amber-100 border border-amber-200 text-amber-900 font-black text-xs transition shadow-sm">
+          <span>🏆 小組計分</span>
+        </button>
+
+        <!-- Multi-Unit Dynamic Exam Builder -->
+        <button onclick="openCustomExamModal()" class="flex items-center gap-1 px-3 py-1.5 rounded-xl pink-gradient text-white font-black text-xs transition shadow-sm hover:opacity-95">
+          <span>✨ 改數字出題</span>
+        </button>
+
+        <!-- Mistake Book -->
+        <button onclick="openMistakeModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-rose-50 border border-rose-200 text-gray-700 font-bold text-xs transition">
+          <span>📒 錯題</span>
+          <span id="mistakeBadge" class="px-1.5 py-0.2 text-[11px] rounded-full bg-rose-400 text-white font-black">0</span>
+        </button>
+
+        <!-- Collapse / Expand Filter Bar Toggle -->
+        <button onclick="toggleFilterCollapse()" id="filterCollapseBtn" title="收合/展開年級篩選列" class="px-2.5 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold text-xs transition">
+          🔼 收合篩選
         </button>
       </div>
     </div>
 
-    <!-- Grade Filter Pills -->
-    <div class="max-w-7xl mx-auto px-4 pb-3">
-      <div class="grid grid-cols-4 gap-2 bg-rose-50/50 p-1.5 rounded-2xl border border-rose-100/80">
-        <button onclick="filterGrade('all')" data-grade="all" class="grade-btn py-1.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition bg-white text-rose-400/90 shadow-sm border border-rose-200">全部年級</button>
-        <button onclick="filterGrade('七年級')" data-grade="七年級" class="grade-btn py-1.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition text-gray-500 hover:text-gray-700">國七（七年級）</button>
-        <button onclick="filterGrade('八年級')" data-grade="八年級" class="grade-btn py-1.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition text-gray-500 hover:text-gray-700">國八（八年級）</button>
-        <button onclick="filterGrade('九年級')" data-grade="九年級" class="grade-btn py-1.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition text-gray-500 hover:text-gray-700">國九（九年級）</button>
+    <!-- Collapsible Slim Filter Bar -->
+    <div id="headerFilterWrapper" class="max-w-7xl mx-auto px-4 pb-2 pt-0.5 border-t border-rose-50">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <!-- Grade Pills -->
+        <div class="flex flex-wrap items-center gap-1">
+          <button onclick="filterGrade('all')" data-grade="all" class="grade-btn py-1 px-2.5 rounded-lg text-xs font-bold transition bg-rose-400 text-white shadow-sm">全部課程</button>
+          <button onclick="filterGrade('國小三年級')" data-grade="國小三年級" class="grade-btn py-1 px-2.5 rounded-lg text-xs font-bold transition bg-rose-50/60 text-gray-600 hover:bg-rose-100/70">🎒 國小三年級</button>
+          <button onclick="filterGrade('國中數學')" data-grade="國中數學" class="grade-btn py-1 px-2.5 rounded-lg text-xs font-bold transition bg-rose-50/60 text-gray-600 hover:bg-rose-100/70">📐 國中數學</button>
+          <button onclick="filterGrade('七年級')" data-grade="七年級" class="grade-btn py-1 px-2.5 rounded-lg text-xs font-bold transition bg-rose-50/60 text-gray-600 hover:bg-rose-100/70">國七</button>
+          <button onclick="filterGrade('八年級')" data-grade="八年級" class="grade-btn py-1 px-2.5 rounded-lg text-xs font-bold transition bg-rose-50/60 text-gray-600 hover:bg-rose-100/70">國八</button>
+          <button onclick="filterGrade('九年級')" data-grade="九年級" class="grade-btn py-1 px-2.5 rounded-lg text-xs font-bold transition bg-rose-50/60 text-gray-600 hover:bg-rose-100/70">國九</button>
+        </div>
+
+        <!-- Subject Pills (Auto-hidden when Junior High Math is selected) -->
+        <div id="subjectFilterBar" class="flex flex-wrap items-center gap-1">
+          <span class="text-[11px] font-bold text-gray-400 mr-0.5">科目：</span>
+          <button onclick="filterSubject('all')" data-subject="all" class="subject-btn px-2 py-0.5 rounded-md text-[11px] font-bold bg-rose-400 text-white transition">全部</button>
+          <button onclick="filterSubject('國語')" data-subject="國語" class="subject-btn px-2 py-0.5 rounded-md text-[11px] font-bold bg-white border border-rose-100 text-gray-600 hover:bg-rose-50 transition">📖 國語</button>
+          <button onclick="filterSubject('數學')" data-subject="數學" class="subject-btn px-2 py-0.5 rounded-md text-[11px] font-bold bg-white border border-rose-100 text-gray-600 hover:bg-rose-50 transition">🔢 數學</button>
+          <button onclick="filterSubject('自然科學')" data-subject="自然科學" class="subject-btn px-2 py-0.5 rounded-md text-[11px] font-bold bg-white border border-rose-100 text-gray-600 hover:bg-rose-50 transition">🔬 自然</button>
+          <button onclick="filterSubject('社會')" data-subject="社會" class="subject-btn px-2 py-0.5 rounded-md text-[11px] font-bold bg-white border border-rose-100 text-gray-600 hover:bg-rose-50 transition">🌏 社會</button>
+          <button onclick="filterSubject('英語')" data-subject="英語" class="subject-btn px-2 py-0.5 rounded-md text-[11px] font-bold bg-white border border-rose-100 text-gray-600 hover:bg-rose-50 transition">🔤 英語</button>
+        </div>
       </div>
     </div>
   </header>
 
   <!-- Main Content Layout -->
   <div class="max-w-7xl w-full mx-auto px-4 py-6 flex-1 flex flex-col lg:flex-row gap-6">
+    <!-- Mobile Backdrop Overlay -->
+    <div id="mobileBackdrop" onclick="closeMobileDrawer()" class="hidden fixed inset-0 z-30 bg-gray-900/40 backdrop-blur-xs lg:hidden"></div>
+
     <!-- Left Sidebar -->
-    <aside id="sidebarDrawer" class="hidden lg:block w-full lg:w-80 shrink-0">
-      <div class="soft-pink-card rounded-3xl p-4 sticky top-36">
+    <aside id="sidebarDrawer" class="hidden lg:block fixed lg:static inset-y-0 left-0 z-40 lg:z-auto w-80 max-w-[85vw] bg-[#FCF9FA] lg:bg-transparent p-4 lg:p-0 overflow-y-auto lg:overflow-visible shadow-2xl lg:shadow-none shrink-0">
+      <div class="soft-pink-card rounded-3xl p-4 sticky top-24">
         <div class="flex items-center justify-between mb-3 px-1">
           <h2 class="font-black text-gray-700 text-base flex items-center gap-2">
             <span>📚 課程單元地圖</span>
           </h2>
-          <span class="text-xs text-rose-400 font-medium">點擊切換單元</span>
+          <span id="unitCountHint" class="text-xs text-rose-400 font-medium">共 9 個單元</span>
         </div>
-        <div id="unitListContainer" class="space-y-2.5"></div>
+        <div id="unitListContainer" class="space-y-2.5 max-h-[56vh] overflow-y-auto pr-1"></div>
 
         <!-- Dora Teacher Encouragement Box -->
-        <div class="mt-5 p-3.5 rounded-2xl bg-gradient-to-br from-rose-50/60 to-pink-50/60 border border-rose-100">
+        <div class="mt-4 p-3.5 rounded-2xl bg-gradient-to-br from-rose-50/60 to-pink-50/60 border border-rose-100">
           <div class="flex items-center gap-2 mb-1">
             <span class="text-lg">👩‍🏫</span>
-            <span class="text-xs font-black text-rose-400/90/90">Dora老師的學習小語</span>
+            <span class="text-xs font-black text-rose-500">Dora老師的學習小語</span>
           </div>
           <p class="text-xs text-gray-600 leading-relaxed">
-            數學不是死背公式，而是把題目變成看得見的圖形與故事。每天弄懂一個小觀念，你就比昨天的自己更強一點點！
+            國小題庫特別加入「課堂幸運抽號碼機」，老師上課投影時可以一鍵抽出座號請小朋友上台回答問題喔！
           </p>
         </div>
       </div>
@@ -136,17 +206,23 @@
         <div class="flex flex-wrap items-start justify-between gap-4">
           <div>
             <div class="flex flex-wrap items-center gap-2 mb-2">
-              <span id="unitGradeTag" class="px-3 py-0.5 rounded-full text-xs font-black bg-rose-100/70 text-rose-400/90">國七上</span>
-              <span id="unitChapterTag" class="px-3 py-0.5 rounded-full text-xs font-bold bg-rose-50/50 text-rose-600/80 border border-rose-100">第三章 一元一次方程式</span>
-              <span id="unitStatusTag" class="px-3 py-0.5 rounded-full text-xs font-bold bg-gray-100 text-gray-600">⚪ 未開始</span>
+              <span id="unitGradeTag" class="px-3 py-0.5 rounded-full text-xs font-black bg-rose-100/70 text-rose-500">國小三上</span>
+              <span id="unitSubjectTag" class="px-3 py-0.5 rounded-full text-xs font-black bg-amber-100/70 text-amber-800">📖 國語</span>
+              <span id="unitChapterTag" class="px-3 py-0.5 rounded-full text-xs font-bold bg-rose-50/50 text-rose-600/80 border border-rose-100">第一單元 閱讀與寫作</span>
+              <span id="unitStatusTag" class="px-3 py-0.5 rounded-full text-xs font-bold bg-gray-100 text-gray-600">🌸 學習中</span>
             </div>
-            <h2 id="unitTitle" class="text-2xl sm:text-3xl font-black text-gray-800 tracking-tight">3-1 一元一次方程式的列式與求解</h2>
-            <p id="unitSubtitle" class="text-sm text-gray-500 mt-1">掌握等量公理與移項法則，將生活中的文字敘述轉化為數學方程式。</p>
+            <h2 id="unitTitle" class="text-2xl sm:text-3xl font-black text-gray-800 tracking-tight">課文大意摘要與修辭魔法（擬人與譬喻）</h2>
+            <p id="unitSubtitle" class="text-sm text-gray-500 mt-1">學會抓出「誰、在什麼時候、做了什麼事、結果如何」，並運用擬人與譬喻讓作文更生動。</p>
           </div>
 
-          <button id="toggleMasterBtn" onclick="toggleMastered()" class="px-4 py-2 rounded-2xl border-2 border-rose-200 bg-white hover:bg-rose-50/50 text-rose-400/90 font-bold text-sm transition flex items-center gap-1.5 shrink-0">
-            <span>✓ 標記為已精熟</span>
-          </button>
+          <div class="flex flex-wrap items-center gap-2 shrink-0">
+            <button onclick="copyDirectUnitLink()" id="copyLinkBtn" title="複製此單元的專屬連結，貼給學生點開直接進入本單元" class="px-3.5 py-2 rounded-2xl border border-rose-200 bg-rose-50/60 hover:bg-rose-100/70 text-rose-600 font-bold text-xs sm:text-sm transition flex items-center gap-1.5">
+              <span>🔗 複製學生直達連結</span>
+            </button>
+            <button id="toggleMasterBtn" onclick="toggleMastered()" class="px-4 py-2 rounded-2xl border-2 border-rose-200 bg-white hover:bg-rose-50/50 text-rose-500 font-bold text-sm transition flex items-center gap-1.5">
+              <span>✓ 標記為已精熟</span>
+            </button>
+          </div>
         </div>
 
         <!-- Workspace Tabs -->
@@ -166,28 +242,26 @@
       <!-- TAB A: Video & Notes -->
       <section id="panel-video" class="space-y-6">
         <div class="soft-pink-card rounded-3xl p-5 sm:p-6">
-          <!-- Player Mode Switcher -->
           <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
             <div class="flex items-center gap-2">
               <button onclick="setPlayerMode('youtube')" id="modeBtn-youtube" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-rose-400 text-white shadow-sm transition">
                 📺 YouTube 教學影片
               </button>
-              <button onclick="setPlayerMode('board')" id="modeBtn-board" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-rose-100/70/60 text-rose-400/90/90 hover:bg-rose-100/70/70 transition">
+              <button onclick="setPlayerMode('board')" id="modeBtn-board" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-rose-100/60 text-rose-600 hover:bg-rose-100 transition">
                 🎨 Dora老師互動動畫黑板
               </button>
             </div>
-            <a id="externalYtLink" href="#" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-rose-400 hover:text-rose-400/90/90 underline flex items-center gap-1">
+            <a id="externalYtLink" href="#" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-rose-500 hover:text-rose-700 underline flex items-center gap-1">
               <span>在 YouTube 新分頁開啟 ↗</span>
             </a>
           </div>
 
-          <!-- Mode 1: Embedded YouTube Player (Optimized with origin for GitHub Pages) -->
           <div id="youtubePlayerBox" class="relative w-full aspect-video rounded-2xl overflow-hidden bg-gray-900 border-2 border-rose-100 shadow-inner">
             <iframe
               id="ytIframe"
               class="w-full h-full"
               src=""
-              title="Dora老師推薦數學教學影片"
+              title="Dora老師推薦教學影片"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerpolicy="strict-origin-when-cross-origin"
@@ -195,15 +269,14 @@
             </iframe>
           </div>
 
-          <!-- Mode 2: Built-in Interactive Animated Chalkboard -->
           <div id="boardPlayerBox" class="hidden rounded-2xl overflow-hidden border-2 border-rose-200 bg-gradient-to-b from-[#332936] to-[#241D26] text-white shadow-lg">
             <div class="px-4 py-2.5 bg-white/10 flex flex-wrap items-center justify-between gap-2 border-b border-white/10">
               <div class="flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-pink-400 animate-pulse"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-pink-300 animate-pulse"></span>
                 <span id="boardStageTitle" class="text-xs sm:text-sm font-bold text-pink-200">步驟 1：觀念建立</span>
               </div>
               <div class="flex items-center gap-2">
-                <button onclick="toggleSpeech()" id="ttsToggleBtn" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-50/500/30 hover:bg-rose-50/500/50 text-pink-100 border border-pink-400/40 transition">
+                <button onclick="toggleSpeech()" id="ttsToggleBtn" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-400/30 hover:bg-rose-400/50 text-pink-100 border border-pink-300/40 transition">
                   🔇 語音朗讀：關
                 </button>
                 <button onclick="cycleSpeed()" id="speedBtn" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white/10 hover:bg-white/20 text-white transition">
@@ -212,46 +285,40 @@
               </div>
             </div>
 
-            <!-- SVG Animation Canvas -->
             <div id="boardSvgContainer" class="w-full h-64 sm:h-72 flex items-center justify-center p-4"></div>
 
-            <!-- Subtitle Banner -->
             <div class="px-5 py-3 bg-black/35 text-center border-t border-white/10">
               <p id="boardSubtitleText" class="text-sm sm:text-base font-medium text-pink-100">點擊下方播放鍵，跟著 Dora 老師一起看動畫學觀念！</p>
             </div>
 
-            <!-- Controls Bar -->
             <div class="px-4 py-3 bg-white/5 flex items-center gap-3">
               <button onclick="toggleBoardPlay()" id="boardPlayBtn" class="w-10 h-10 rounded-full pink-gradient flex items-center justify-center text-white font-bold shadow hover:scale-105 transition shrink-0">
                 ▶
               </button>
               <div class="flex-1">
                 <div onclick="seekBoard(event)" class="w-full h-2.5 bg-white/20 rounded-full cursor-pointer overflow-hidden">
-                  <div id="boardProgressFill" class="h-full bg-gradient-to-r from-pink-400 to-rose-500 transition-all duration-150" style="width: 0%"></div>
+                  <div id="boardProgressFill" class="h-full bg-gradient-to-r from-pink-300 to-rose-400 transition-all duration-150" style="width: 0%"></div>
                 </div>
               </div>
               <span id="boardTimeLabel" class="text-xs font-mono text-pink-200 shrink-0">00:00 / 00:30</span>
             </div>
           </div>
 
-          <!-- Video Chapter Timestamps -->
           <div class="mt-4 pt-4 border-t border-rose-100/70">
-            <div class="text-xs font-black text-rose-400/90/90 mb-2 flex items-center gap-1.5">
+            <div class="text-xs font-black text-rose-500 mb-2 flex items-center gap-1.5">
               <span>⏱️ 重點時間軸書籤（點擊直接跳轉該段教學）：</span>
             </div>
             <div id="timestampContainer" class="flex flex-wrap gap-2"></div>
           </div>
 
-          <!-- Custom YouTube URL Replacer -->
           <div class="mt-4 pt-4 border-t border-rose-100/70 flex flex-col sm:flex-row gap-2">
-            <input id="customYtInput" type="text" placeholder="貼上其他 YouTube 教學影片網址或影片 ID（例如：FILM2ZJ-ScM）..." class="flex-1 px-3.5 py-2 rounded-xl border border-rose-100 bg-rose-50/30 text-xs sm:text-sm focus:outline-none focus:border-rose-300" />
-            <button onclick="applyCustomYoutube()" class="px-4 py-2 rounded-xl bg-rose-100/70 hover:bg-rose-200 text-rose-400/90/90 font-bold text-xs sm:text-sm transition shrink-0">
+            <input id="customYtInput" type="text" placeholder="貼上其他 YouTube 教學影片網址或影片 ID 即可替換..." class="flex-1 px-3.5 py-2 rounded-xl border border-rose-100 bg-rose-50/30 text-xs sm:text-sm focus:outline-none focus:border-rose-300" />
+            <button onclick="applyCustomYoutube()" class="px-4 py-2 rounded-xl bg-rose-100/70 hover:bg-rose-200/70 text-rose-600 font-bold text-xs sm:text-sm transition shrink-0">
               替換此單元影片
             </button>
           </div>
         </div>
 
-        <!-- Key Notes Grid -->
         <div class="soft-pink-card rounded-3xl p-5 sm:p-6">
           <h3 class="text-lg font-black text-gray-800 mb-4 flex items-center gap-2">
             <span>📖 Dora老師的重點筆記卡</span>
@@ -268,22 +335,99 @@
           <h3 class="text-lg font-black text-gray-800 mb-1 flex items-center gap-2">
             <span>🪜 階梯式例題演練</span>
           </h3>
-          <p class="text-xs text-rose-400/90/80 mb-4">卡關時先按「顯示提示」，試著自己算出下一步再核對完整解析喔！</p>
+          <p class="text-xs text-gray-500 mb-4">卡關時先按「顯示提示」，試著自己想出下一步再核對完整解析喔！</p>
           <div id="examplesContainer" class="space-y-4"></div>
         </div>
       </section>
 
-      <!-- TAB C: Unit Quiz -->
+      <!-- TAB C: Unit Quiz + Elementary Seat Number Picker -->
       <section id="panel-quiz" class="hidden space-y-6">
-        <div class="soft-pink-card rounded-3xl p-5 sm:p-6">
-          <div class="flex flex-wrap items-center justify-between gap-3 mb-5 pb-4 border-b border-rose-100/70">
-            <div>
-              <h3 class="text-lg font-black text-gray-800">✍️ 單元隨堂小考</h3>
-              <p class="text-xs text-rose-400/90/80">完成作答後點擊交卷，系統將自動批改並將錯題收錄至右上角「錯題本」。</p>
+        <!-- Elementary Seat Number Lucky Draw Box (Shown for Elementary Grade 3 units) -->
+        <div id="seatPickerCard" class="hidden soft-pink-card rounded-3xl p-5 sm:p-6 bg-gradient-to-r from-rose-50/70 via-white to-amber-50/50 border-rose-200">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-rose-400 text-white">🎲 國小課堂互動神器</span>
+                <h3 class="text-lg font-black text-gray-800">幸運座號抽籤機</h3>
+              </div>
+              <p class="text-xs text-gray-500">設定全班最大座號，點擊抽號即可幫全體或單一題目抽出答題小幫手（自動避開已抽過的座號）！</p>
             </div>
-            <button onclick="resetQuiz()" class="px-3.5 py-1.5 rounded-xl bg-rose-100/70/60 hover:bg-rose-100/70/70 text-rose-400/90/90 text-xs font-bold transition">
+
+            <div class="flex flex-wrap items-center gap-3">
+              <div class="flex items-center gap-1.5 bg-white px-3 py-2 rounded-2xl border border-rose-200">
+                <span class="text-xs font-bold text-gray-600">班級座號 1 ～</span>
+                <input id="maxSeatInput" type="number" min="1" max="60" value="30" onchange="updateMaxSeat(this.value)" class="w-14 text-center font-black text-rose-500 border-b-2 border-rose-200 focus:outline-none text-sm" />
+                <span class="text-xs font-bold text-gray-600">號</span>
+              </div>
+
+              <button onclick="drawSeatNumber('global')" id="globalDrawBtn" class="px-5 py-2.5 rounded-2xl pink-gradient text-white font-black text-sm shadow-md hover:scale-105 transition flex items-center gap-1.5">
+                <span>🎯 抽一位同學</span>
+              </button>
+
+              <button onclick="resetSeatHistory()" class="px-3 py-2.5 rounded-2xl bg-white hover:bg-rose-50 border border-rose-200 text-gray-600 text-xs font-bold transition">
+                重置已抽名單
+              </button>
+            </div>
+          </div>
+
+          <!-- Drawn Result & History -->
+          <div class="mt-4 pt-3 border-t border-rose-100/80 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-bold text-gray-500">目前抽出幸運星：</span>
+              <div id="globalSeatDisplay" class="px-4 py-1.5 rounded-2xl bg-amber-100 border border-amber-300 text-amber-900 font-black text-base min-w-[110px] text-center">
+                尚未抽號
+              </div>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-xs font-bold text-gray-400">已抽過座號：</span>
+              <div id="drawnSeatHistoryList" class="flex flex-wrap gap-1.5 text-xs font-bold text-rose-500">
+                <span class="text-gray-400 font-normal">（無）</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quiz Questions Card -->
+        <div class="soft-pink-card rounded-3xl p-5 sm:p-6">
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-4 pb-4 border-b border-rose-100/70">
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-lg font-black text-gray-800">✍️ 單元隨堂小考</h3>
+                <span id="quizCountBadge" class="px-2.5 py-0.5 rounded-full text-xs font-black bg-rose-100 text-rose-600">共 6 題</span>
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-pink-50 text-rose-500 border border-rose-100">全站題庫 54 題</span>
+              </div>
+              <p class="text-xs text-gray-500 mt-0.5">可依「基礎 / 進階 / 挑戰素養」分級練習，交卷後自動批改並收錄錯題。</p>
+            </div>
+            <button onclick="resetQuiz()" class="px-3.5 py-1.5 rounded-xl bg-rose-100/60 hover:bg-rose-100 text-rose-600 text-xs font-bold transition">
               🔄 重新作答
             </button>
+          </div>
+
+          <!-- Classroom Tools Bar: Difficulty Filter + Fullscreen Projection Mode -->
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4 bg-rose-50/40 p-2.5 rounded-2xl border border-rose-100/80">
+            <div class="flex flex-wrap items-center gap-1.5">
+              <span class="text-xs font-bold text-gray-500 px-1">難度分級：</span>
+              <button onclick="filterDifficulty('all')" data-diff="all" class="diff-btn px-3 py-1.5 rounded-xl text-xs font-black bg-rose-400 text-white shadow-sm transition">全部難度 (6題)</button>
+              <button onclick="filterDifficulty('基礎')" data-diff="基礎" class="diff-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-rose-100 text-emerald-700 hover:bg-emerald-50 transition">🌱 基礎觀念 (2題)</button>
+              <button onclick="filterDifficulty('進階')" data-diff="進階" class="diff-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-rose-100 text-amber-700 hover:bg-amber-50 transition">🔥 進階應用 (2題)</button>
+              <button onclick="filterDifficulty('挑戰素養')" data-diff="挑戰素養" class="diff-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-rose-100 text-rose-600 hover:bg-rose-50 transition">🏆 挑戰素養 (2題)</button>
+            </div>
+
+            <button onclick="openProjectionModal()" class="px-4 py-2 rounded-xl pink-gradient text-white text-xs font-black shadow-sm hover:opacity-95 transition flex items-center gap-1.5">
+              <span>📽️ 教室大螢幕單題投影搶答</span>
+            </button>
+          </div>
+
+          <!-- Team Scoreboard (Groups 1-6) -->
+          <div class="mb-5 p-3.5 rounded-2xl bg-gradient-to-r from-amber-50/60 via-rose-50/40 to-pink-50/50 border border-rose-100">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+              <div class="flex items-center gap-2">
+                <span class="text-sm">🏆</span>
+                <span class="text-xs font-black text-gray-700">小組榮譽榜計分板（答對點擊 +1 顆星）</span>
+              </div>
+              <button onclick="resetTeamScores()" class="text-[11px] font-bold text-rose-500 hover:text-rose-700 underline">歸零重計</button>
+            </div>
+            <div id="teamScoreboardGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2"></div>
           </div>
 
           <div id="quizQuestionsContainer" class="space-y-5"></div>
@@ -299,6 +443,184 @@
     </main>
   </div>
 
+  <!-- Classroom Single-Question Projection Modal (Focus Mode) -->
+  <div id="projectionModal" class="hidden fixed inset-0 z-50 bg-[#FCF9FA] flex flex-col">
+    <!-- Top Control Bar -->
+    <div class="px-5 py-3 bg-white border-b border-rose-100 flex flex-wrap items-center justify-between gap-3 shadow-sm">
+      <div class="flex items-center gap-3">
+        <span class="px-3 py-1 rounded-full text-xs font-black bg-rose-400 text-white">📽️ 教室投影搶答模式</span>
+        <span id="projUnitTitle" class="text-sm font-black text-gray-700 hidden sm:inline"></span>
+        <span id="projProgressBadge" class="px-3 py-1 rounded-xl bg-rose-50 border border-rose-100 text-rose-600 text-xs font-black">第 1 / 6 題</span>
+      </div>
+
+      <!-- Countdown Timer Controls -->
+      <div class="flex flex-wrap items-center gap-2">
+        <div class="flex items-center gap-1.5 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-2xl">
+          <span class="text-xs font-bold text-amber-900">⏱️ 思考倒數：</span>
+          <span id="projTimerDisplay" class="font-mono font-black text-lg text-rose-500 w-10 text-center">15s</span>
+          <button onclick="startProjTimer(15)" class="px-2 py-0.5 rounded-lg bg-white border border-amber-300 text-[11px] font-bold text-amber-900 hover:bg-amber-100">15秒</button>
+          <button onclick="startProjTimer(30)" class="px-2 py-0.5 rounded-lg bg-white border border-amber-300 text-[11px] font-bold text-amber-900 hover:bg-amber-100">30秒</button>
+          <button onclick="stopProjTimer()" class="px-2 py-0.5 rounded-lg bg-white border border-gray-200 text-[11px] font-bold text-gray-600 hover:bg-gray-100">暫停</button>
+        </div>
+
+        <button onclick="drawSeatForProjection()" class="px-4 py-2 rounded-2xl pink-gradient text-white text-xs font-black shadow hover:scale-105 transition">
+          🎲 抽答題座號
+        </button>
+
+        <button onclick="closeProjectionModal()" class="px-4 py-2 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-black transition">
+          ✕ 離開投影
+        </button>
+      </div>
+    </div>
+
+    <!-- Center Big Question Stage -->
+    <div class="flex-1 overflow-y-auto flex items-center justify-center p-4 sm:p-8">
+      <div class="max-w-4xl w-full soft-pink-card rounded-3xl p-6 sm:p-10 space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex flex-wrap items-center gap-2">
+            <span id="projDiffBadge" class="px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-800">🌱 基礎</span>
+            <span id="projSeatBanner" class="px-3.5 py-1 rounded-full text-xs font-black bg-amber-100 border border-amber-300 text-amber-900">💡 點擊右上角「抽答題座號」選出幸運星</span>
+            <span id="projGuessStatusBanner" class="hidden px-3.5 py-1 rounded-full text-xs font-black"></span>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button onclick="resetCurrentProjQuestion()" class="px-3 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-bold transition">
+              🔄 重設本題點選
+            </button>
+            <button onclick="toggleProjAnswer()" id="projRevealBtn" class="px-4 py-2 rounded-xl bg-rose-100/80 hover:bg-rose-200 text-rose-700 text-xs sm:text-sm font-black transition">
+              👀 揭曉標準答案與解析
+            </button>
+          </div>
+        </div>
+
+        <div id="projQuestionText" class="text-xl sm:text-3xl font-black text-gray-800 leading-relaxed"></div>
+
+        <div id="projOptionsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+
+        <div id="projExplanationBox" class="hidden p-5 rounded-2xl bg-emerald-50 border-2 border-emerald-300 text-emerald-950 text-base sm:text-lg leading-relaxed"></div>
+        <div class="text-center text-[11px] text-gray-400">👆 學生喊出選項時可直接點擊該選項卡片判定對錯｜支援簡報筆 ⬅ / ➡ 換題、空白鍵揭曉解析</div>
+      </div>
+    </div>
+
+    <!-- Bottom Mini Team Scoreboard & Navigation -->
+    <div class="px-5 py-3 bg-white border-t border-rose-100 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <button onclick="prevProjQuestion()" class="px-4 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 text-xs sm:text-sm font-black transition">
+          ⬅ 上一題
+        </button>
+        <button onclick="nextProjQuestion()" class="px-4 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 text-xs sm:text-sm font-black transition">
+          下一題 ➡
+        </button>
+      </div>
+
+      <div id="projMiniScoreboard" class="flex flex-wrap items-center gap-1.5"></div>
+    </div>
+  </div>
+
+  <!-- Custom Multi-Unit Dynamic Exam Builder Modal -->
+  <div id="customExamModal" class="hidden fixed inset-0 z-50 bg-gray-900/45 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5">
+    <div class="bg-[#FCF9FA] border-2 border-rose-200 rounded-3xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+      <!-- Modal Header -->
+      <div class="px-6 py-4 bg-white border-b border-rose-100 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <span class="w-9 h-9 rounded-xl pink-gradient text-white flex items-center justify-center text-lg shadow-sm">🎲</span>
+          <div>
+            <h3 class="font-black text-gray-800 text-lg">跨單元智慧組卷・動態改數字出題機</h3>
+            <p class="text-xs text-gray-500">自由勾選多個單元，系統自動依相似題型「重新變換數字與情境」，每次出題都不一樣！</p>
+          </div>
+        </div>
+        <button onclick="closeCustomExamModal()" class="w-9 h-9 rounded-full bg-rose-50 text-rose-500 font-bold hover:bg-rose-100">✕</button>
+      </div>
+
+      <!-- Modal Scrollable Body -->
+      <div class="p-5 sm:p-6 overflow-y-auto space-y-5 flex-1">
+        <!-- Step 1: Select Units -->
+        <div class="soft-pink-card rounded-2xl p-4 sm:p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <span class="text-sm font-black text-gray-800">📌 第一步：勾選要測驗的單元（可跨科、跨年級複選）</span>
+            <div class="flex flex-wrap gap-1.5">
+              <button type="button" onclick="selectCustomUnitGroup('elem')" class="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 text-xs font-bold">全選國小三年級</button>
+              <button type="button" onclick="selectCustomUnitGroup('junior')" class="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 text-xs font-bold">全選國中數學</button>
+              <button type="button" onclick="selectCustomUnitGroup('none')" class="px-2.5 py-1 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs font-bold">全部取消</button>
+            </div>
+          </div>
+
+          <div id="customUnitCheckboxGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5"></div>
+        </div>
+
+        <!-- Step 2: Options & Generate Trigger -->
+        <div class="soft-pink-card rounded-2xl p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex flex-wrap items-center gap-3">
+            <div class="flex items-center gap-1.5">
+              <label class="text-xs font-bold text-gray-600">每單元出題數：</label>
+              <select id="customPerUnitCount" class="px-2.5 py-1.5 rounded-xl bg-rose-50/50 border border-rose-200 text-xs font-black text-gray-800">
+                <option value="1">1 題</option>
+                <option value="2" selected>2 題</option>
+                <option value="3">3 題</option>
+                <option value="4">4 題</option>
+              </select>
+            </div>
+
+            <div class="flex items-center gap-1.5">
+              <label class="text-xs font-bold text-gray-600">難度範圍：</label>
+              <select id="customDiffSelect" class="px-2.5 py-1.5 rounded-xl bg-rose-50/50 border border-rose-200 text-xs font-black text-gray-800">
+                <option value="all">全部難度混合</option>
+                <option value="基礎">🌱 基礎觀念</option>
+                <option value="進階">🔥 進階應用</option>
+                <option value="挑戰素養">🏆 挑戰素養</option>
+              </select>
+            </div>
+
+            <label class="flex items-center gap-2 cursor-pointer bg-amber-50/80 border border-amber-200 px-3 py-1.5 rounded-xl">
+              <input id="dynamicMutateToggle" type="checkbox" checked class="accent-rose-400 w-4 h-4" />
+              <span class="text-xs font-black text-amber-900">✨ 動態改數字／變換題目（與原題不同）</span>
+            </label>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" onclick="generateCustomExam()" class="px-5 py-2.5 rounded-2xl pink-gradient text-white font-black text-xs sm:text-sm shadow-md hover:opacity-95 transition">
+              🎯 產生新考卷（換新數字）
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 3: Generated Exam Paper Area -->
+        <div id="customExamPaperCard" class="hidden soft-pink-card rounded-2xl p-5 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-rose-100">
+            <div>
+              <div class="flex items-center gap-2">
+                <h4 class="font-black text-gray-800 text-base">📝 專屬動態生成考卷</h4>
+                <span id="customExamTotalBadge" class="px-2.5 py-0.5 rounded-full text-xs font-black bg-rose-100 text-rose-600">共 0 題</span>
+                <span id="customExamSeedBadge" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-900">動態變換版</span>
+              </div>
+              <p class="text-xs text-gray-500 mt-0.5">題目數字與情境皆已重新隨機生成，可直接線上作答或投影到教室大螢幕！</p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+              <button type="button" onclick="generateCustomExam()" class="px-3.5 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 text-xs font-black transition">
+                🔄 再換一組新數字
+              </button>
+              <button type="button" onclick="printCustomWorksheet()" class="px-3.5 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs font-black transition">
+                🖨️ 列印 A4 紙本考卷
+              </button>
+              <button type="button" onclick="projectCustomExam()" class="px-3.5 py-1.5 rounded-xl bg-amber-100 hover:bg-amber-200 border border-amber-300 text-amber-950 text-xs font-black transition">
+                📽️ 投影此份考卷搶答
+              </button>
+            </div>
+          </div>
+
+          <div id="customExamQuestionsList" class="space-y-4"></div>
+
+          <div class="pt-4 border-t border-rose-100 flex flex-wrap items-center justify-between gap-3">
+            <div id="customExamScoreBanner" class="text-sm font-bold text-gray-700"></div>
+            <button type="button" onclick="submitCustomExam()" class="px-6 py-2.5 rounded-2xl pink-gradient text-white font-black text-sm shadow hover:opacity-95 transition">
+              ✨ 送出這份考卷並批改
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Mistake Book Modal -->
   <div id="mistakeModal" class="hidden fixed inset-0 z-50 bg-gray-900/40 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white border-2 border-rose-100 rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
@@ -307,21 +629,569 @@
           <span class="text-xl">📒</span>
           <h3 class="font-black text-gray-800 text-lg">個人專屬錯題本</h3>
         </div>
-        <button onclick="closeMistakeModal()" class="w-8 h-8 rounded-full bg-white text-rose-400/90 font-bold hover:bg-rose-100/70/70">✕</button>
+        <button onclick="closeMistakeModal()" class="w-8 h-8 rounded-full bg-white text-rose-500 font-bold hover:bg-rose-100/70">✕</button>
       </div>
       <div id="mistakeListBody" class="p-6 overflow-y-auto space-y-4 flex-1"></div>
       <div class="px-6 py-3 bg-rose-50/40 border-t border-rose-100 flex justify-between items-center">
-        <button onclick="clearMistakes()" class="text-xs font-bold text-rose-400 hover:text-rose-400/90/90 underline">清空所有錯題紀錄</button>
+        <button onclick="clearMistakes()" class="text-xs font-bold text-rose-500 hover:text-rose-700 underline">清空所有錯題紀錄</button>
         <button onclick="closeMistakeModal()" class="px-5 py-2 rounded-xl bg-rose-400 text-white text-xs font-bold">關閉視窗</button>
       </div>
     </div>
   </div>
 
+  <!-- Floating Classroom Corner Widgets (Always accessible on any tab/grade) -->
+  <div class="fixed bottom-4 right-4 z-40 flex flex-col items-end gap-3 pointer-events-none">
+    <!-- Floating Seat Picker Window -->
+    <div id="floatingSeatWidget" class="hidden pointer-events-auto w-80 bg-white/95 backdrop-blur-md border-2 border-rose-200 rounded-3xl p-4 shadow-2xl">
+      <div class="flex items-center justify-between pb-2.5 mb-3 border-b border-rose-100">
+        <div class="flex items-center gap-1.5">
+          <span class="text-base">🎲</span>
+          <h4 class="font-black text-gray-800 text-sm">隨堂幸運抽號機</h4>
+        </div>
+        <button onclick="toggleFloatingWidget('seat')" class="w-6 h-6 rounded-full bg-rose-50 text-rose-500 text-xs font-bold hover:bg-rose-100">✕</button>
+      </div>
+
+      <div class="flex items-center justify-between gap-2 mb-3">
+        <div class="flex items-center gap-1 text-xs font-bold text-gray-600">
+          <span>座號 1～</span>
+          <input id="floatMaxSeatInput" type="number" min="1" max="60" value="30" onchange="updateMaxSeat(this.value)" class="w-12 text-center font-black text-rose-500 border-b-2 border-rose-200 focus:outline-none" />
+          <span>號</span>
+        </div>
+        <button onclick="resetSeatHistory()" class="text-[11px] font-bold text-gray-400 hover:text-rose-500 underline">重置已抽</button>
+      </div>
+
+      <div id="floatSeatResultBox" class="py-3 px-4 rounded-2xl bg-gradient-to-r from-amber-50 to-rose-50 border border-amber-200 text-center font-black text-xl text-amber-900 mb-3">
+        點擊下方抽號
+      </div>
+
+      <button onclick="drawSeatFloating()" class="w-full py-2.5 rounded-2xl pink-gradient text-white font-black text-sm shadow hover:opacity-95 transition">
+        🎯 立即抽出幸運星
+      </button>
+
+      <div class="mt-2.5 pt-2 border-t border-rose-100">
+        <div class="text-[11px] font-bold text-gray-400 mb-1">本輪已抽過：</div>
+        <div id="floatDrawnHistory" class="flex flex-wrap gap-1 max-h-16 overflow-y-auto text-[11px] font-bold text-rose-500">
+          <span class="text-gray-400 font-normal">（尚無）</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating Team Scoreboard Window -->
+    <div id="floatingTeamWidget" class="hidden pointer-events-auto w-80 bg-white/95 backdrop-blur-md border-2 border-amber-200 rounded-3xl p-4 shadow-2xl">
+      <div class="flex items-center justify-between pb-2.5 mb-3 border-b border-amber-100">
+        <div class="flex items-center gap-1.5">
+          <span class="text-base">🏆</span>
+          <h4 class="font-black text-gray-800 text-sm">小組榮譽計分板</h4>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="resetTeamScores()" class="text-[11px] font-bold text-rose-500 hover:underline">歸零</button>
+          <button onclick="toggleFloatingWidget('team')" class="w-6 h-6 rounded-full bg-amber-50 text-amber-800 text-xs font-bold hover:bg-amber-100">✕</button>
+        </div>
+      </div>
+
+      <div id="floatTeamGrid" class="grid grid-cols-2 gap-2"></div>
+    </div>
+  </div>
+
+  <!-- Hidden A4 Printable Worksheet Container -->
+  <div id="printableWorksheetArea" class="hidden print:block"></div>
+
   <script>
     const CURRICULUM_DATA = [
+      // ==================== 國小三年級全科（每科 6 題：基礎 2 ＋ 進階 2 ＋ 挑戰素養 2） ====================
+      {
+        id: 'e3-chi',
+        stage: '國小三年級',
+        grade: '國小三年級',
+        subject: '國語',
+        subjectIcon: '📖',
+        semester: '國小三上',
+        chapter: '國語文 · 閱讀理解與修辭',
+        title: '課文大意摘要與修辭魔法（擬人與譬喻）',
+        subtitle: '學會抓出「誰、在什麼時候、做了什麼事、結果如何」，並運用擬人與譬喻讓作文更生動。',
+        youtubeId: 'ryCrzU-D9P4',
+        timestamps: [
+          { time: 10, label: '00:10 什麼是擬人法？' },
+          { time: 85, label: '01:25 譬喻法（明喻與暗喻）' },
+          { time: 160, label: '02:40 段落大意摘要三步驟' }
+        ],
+        notes: [
+          { tag: '修辭魔法一', title: '擬人法（轉化）', body: '把動物、植物或沒有生命的東西，當作「人」一樣寫出動作或心情。例如：「風兒輕輕**唱歌**」、「小草伸了個**懶腰**」。' },
+          { tag: '修辭魔法二', title: '譬喻法（打比方）', body: '用「像、好像、彷彿、如同」把兩件不同的事物連起來。例如：「彎彎的月亮**像**一艘金色的小船」。' },
+          { tag: 'Dora老師小叮嚀', title: '區分擬人與譬喻的秘訣', body: '看到「像、好像」通常是**譬喻**；如果沒有「像」，而是直接讓物品做出「人的動作或表情」（如太陽公公微笑），就是**擬人**喔！' },
+          { tag: '閱讀策略', title: '抓出課文大意四要素', body: '讀完一段課文後，試著找出：**1. 主角是誰？ 2. 遇到什麼事？ 3. 怎麼解決？ 4. 最後結果？** 串起來就是最棒的大意！' }
+        ],
+        boardStages: [
+          { title: '步驟 1：認識擬人修辭', subtitle: '把沒有生命的物品當作人：「微風輕輕撫摸著我的臉頰」，這就是擬人法！' },
+          { title: '步驟 2：認識譬喻修辭', subtitle: '用「像、彷彿」打比方：「紅通通的蘋果像小燈籠一樣掛在樹上」。' },
+          { title: '步驟 3：段落大意濃縮術', subtitle: '刪掉修飾的形容詞，保留「主角＋重要事件＋結果」，就能寫出精準大意！' }
+        ],
+        visualType: 'chinese',
+        examples: [
+          {
+            question: '請判斷下列句子使用了哪一種修辭法？<br/>「下課鐘聲一響，操場上的大樹開心地拍拍手，歡迎小朋友出來玩。」',
+            hints: [
+              '提示 1：找找看句子裡的主角是誰？（操場上的大樹）',
+              '提示 2：大樹做了什麼只有「人」才會做的動作？（開心地拍拍手、歡迎）',
+              '解答：使用了「擬人法」（把大樹當作人來寫）。'
+            ]
+          },
+          {
+            question: '請把下面這句平淡的句子，用「譬喻法」改寫得更生動：<br/>「天上的白雲飄來飄去。」',
+            hints: [
+              '提示 1：白雲軟綿綿、白白胖胖的，跟什麼食物或物品很像？（棉花糖、綿羊、羽毛）',
+              '提示 2：加上連接詞「像」或「彷彿」。',
+              '參考解答：天上的白雲「像」一團團軟綿綿的棉花糖，在藍天中飄來飄去。'
+            ]
+          }
+        ],
+        quizzes: [
+          {
+            id: 'qe3-chi-1',
+            difficulty: '基礎',
+            question: '「夜空中的星星對著我眨眼睛。」這句話運用了哪一種修辭技巧？',
+            options: ['擬人法', '排比法', '設問法', '誇飾法'],
+            answer: 0,
+            explanation: '星星本來不會眨眼睛，作者賦予星星人的動作「眨眼睛」，屬於擬人法。'
+          },
+          {
+            id: 'qe3-chi-2',
+            difficulty: '基礎',
+            question: '「妹妹紅通通的臉蛋，好像一顆熟透的蘋果。」這句話運用了哪一種修辭？',
+            options: ['設問法', '譬喻法', '擬人法', '對偶法'],
+            answer: 1,
+            explanation: '句中使用了「好像」把妹妹的臉蛋比喻成紅蘋果，屬於譬喻法。'
+          },
+          {
+            id: 'qe3-chi-3',
+            difficulty: '進階',
+            question: '下列哪一組語詞的用字「完全正確」？',
+            options: ['迫不急待', '專心致志', '再接再勵', '一愁莫展'],
+            answer: 1,
+            explanation: '正確寫法分別為：迫不「及」待、專心致志、再接再「厲」、一「籌」莫展。'
+          },
+          {
+            id: 'qe3-chi-4',
+            difficulty: '進階',
+            question: '「只要我們不放棄，______ 一定能找到解決的方法。」空格中填入哪個關聯詞最通順？',
+            options: ['因為', '就', '雖然', '但是'],
+            answer: 1,
+            explanation: '「只要……就……」是條件複句，表示有了前面的條件，就會產生後面的結果。'
+          },
+          {
+            id: 'qe3-chi-5',
+            difficulty: '挑戰素養',
+            question: '整理課文「段落大意」時，下列哪一個做法最正確？',
+            options: ['把整段課文一字不漏抄下來', '只挑出最長的成語背起來', '找出主角、重要事件與結果並串成通順短句', '只看第一句話就好'],
+            answer: 2,
+            explanation: '摘要大意應刪除次要細節，保留「主角＋經過＋結果」並用通順語句連貫。'
+          },
+          {
+            id: 'qe3-chi-6',
+            difficulty: '挑戰素養',
+            question: '「秋風吹過金黃色的稻田，稻穗紛紛彎下腰向農夫敬禮。」這句話同時描寫了視覺與哪一種修辭？',
+            options: ['設問法（自問自答）', '擬人法（彎下腰敬禮）', '回文法（倒過來念）', '頂真法（頭尾相接）'],
+            answer: 1,
+            explanation: '「金黃色」是視覺摹寫，「彎下腰向農夫敬禮」賦予稻穗人的禮貌動作，屬於擬人法。'
+          }
+        ]
+      },
+      {
+        id: 'e3-math',
+        stage: '國小三年級',
+        grade: '國小三年級',
+        subject: '數學',
+        subjectIcon: '🔢',
+        semester: '國小三上',
+        chapter: '國小數學 · 分數與除法入門',
+        title: '幾分之幾的認識與同分母分數加減',
+        subtitle: '透過披薩平分圖解，看懂分子、分母的意義與同分母分數的加減計算。',
+        youtubeId: 'IO5_07lhSQY',
+        timestamps: [
+          { time: 15, label: '00:15 什麼是「平分」？' },
+          { time: 90, label: '01:30 分母與分子的位置口訣' },
+          { time: 180, label: '03:00 同分母分數加法與減法' }
+        ],
+        notes: [
+          { tag: '核心概念', title: '分母與分子的意義', body: '一個披薩**平分**成 $8$ 片，拿走其中的 $3$ 片，叫做「八分之三」，記作 $\\frac{3}{8}$。<br>• **分母（下面）**：全部平分成幾份。<br>• **分子（上面）**：拿了其中的幾份。' },
+          { tag: '重要性質', title: '「1」等於分子分母相同', body: '一整塊完整的披薩是 $1$，如果平分成 $6$ 片全部都在，就是 $\\frac{6}{6} = 1$；平分成 $10$ 份全部都在，就是 $\\frac{10}{10} = 1$。' },
+          { tag: 'Dora老師小叮嚀', title: '分母千萬不能相加減！', body: '計算 $\\frac{2}{7} + \\frac{3}{7}$ 時，分母都是「平分成 7 份」，單位大小沒有變，所以**分母不變，只要分子相加**：$\\frac{2+3}{7} = \\frac{5}{7}$！' },
+          { tag: '前提條件', title: '一定要「平分」才算分數', body: '如果把蛋糕隨便切成一大一小兩塊，其中一塊「不是」$\\frac{1}{2}$ 喔！每一份必須一樣大才叫做平分。' }
+        ],
+        boardStages: [
+          { title: '步驟 1：把圓形披薩平分成 8 份', subtitle: '分母是 8，代表一整塊披薩被平均切成 8 等份。' },
+          { title: '步驟 2：先吃掉 2/8，再吃掉 3/8', subtitle: '粉紅色代表 2 片，黃色代表 3 片，合起來一共拿了 5 片！' },
+          { title: '步驟 3：同分母加法規則', subtitle: '2/8 + 3/8 = 5/8。分母維持 8 不變，分子 2 + 3 = 5！' }
+        ],
+        visualType: 'fraction',
+        examples: [
+          {
+            question: '一盒鳳梨酥有 $10$ 個，弟弟吃了 $\\frac{3}{10}$ 盒，妹妹吃了 $\\frac{4}{10}$ 盒，兩人一共吃了幾盒？還剩下幾盒？',
+            hints: [
+              '提示 1：兩人一共吃了多少，把兩個分數相加：$\\frac{3}{10} + \\frac{4}{10}$。',
+              '提示 2：一盒完整的鳳梨酥是 $1 = \\frac{10}{10}$ 盒，減掉吃掉的 $\\frac{7}{10}$ 盒。',
+              '解答：一共吃了 $\\frac{7}{10}$ 盒；還剩下 $\\frac{10}{10} - \\frac{7}{10} = \\frac{3}{10}$ 盒。'
+            ]
+          },
+          {
+            question: '一瓶果汁平分成 $7$ 杯，哥哥喝了 $3$ 杯，弟弟喝了 $\\frac{2}{7}$ 瓶，請問誰喝得比較多？多幾瓶？',
+            hints: [
+              '提示 1：一瓶平分成 $7$ 杯，所以 $1$ 杯就是 $\\frac{1}{7}$ 瓶，哥哥喝了 $3$ 杯就是 $\\frac{3}{7}$ 瓶。',
+              '提示 2：比較 $\\frac{3}{7}$ 瓶和 $\\frac{2}{7}$ 瓶的大小，再相減。',
+              '解答：哥哥喝得比較多，多了 $\\frac{3}{7} - \\frac{2}{7} = \\frac{1}{7}$ 瓶。'
+            ]
+          }
+        ],
+        quizzes: [
+          {
+            id: 'qe3-math-1',
+            difficulty: '基礎',
+            question: '計算 $\\frac{3}{9} + \\frac{4}{9} = ?$',
+            options: ['$\\frac{7}{18}$', '$\\frac{7}{9}$', '$\\frac{1}{9}$', '$\\frac{12}{9}$'],
+            answer: 1,
+            explanation: '同分母分數相加時，分母保持 $9$ 不變，分子相加 $3 + 4 = 7$，答案為 $\\frac{7}{9}$。'
+          },
+          {
+            id: 'qe3-math-2',
+            difficulty: '基礎',
+            question: '一條彩帶平分成 $6$ 段，用掉 $\\frac{2}{6}$ 條後，還剩下幾條彩帶？',
+            options: ['$\\frac{4}{6}$ 條', '$\\frac{2}{6}$ 條', '$\\frac{4}{12}$ 條', '$4$ 條'],
+            answer: 0,
+            explanation: '原本有 $1$ 條彩帶 $= \\frac{6}{6}$ 條，減去用掉的 $\\frac{2}{6}$ 條，剩下 $\\frac{6 - 2}{6} = \\frac{4}{6}$ 條。'
+          },
+          {
+            id: 'qe3-math-3',
+            difficulty: '進階',
+            question: '下列哪一個分數剛好等於「$1$」？',
+            options: ['$\\frac{1}{5}$', '$\\frac{5}{1}$', '$\\frac{5}{5}$', '$\\frac{0}{5}$'],
+            answer: 2,
+            explanation: '把一個物品平分成 $5$ 份，全部 $5$ 份都在就是 $\\frac{5}{5} = 1$。'
+          },
+          {
+            id: 'qe3-math-4',
+            difficulty: '進階',
+            question: '一盒雞蛋有 $12$ 顆，媽媽煮菜用掉 $5$ 顆，請問媽媽用掉了幾盒雞蛋？',
+            options: ['$\\frac{5}{12}$ 盒', '$\\frac{7}{12}$ 盒', '$\\frac{12}{5}$ 盒', '$5$ 盒'],
+            answer: 0,
+            explanation: '一盒平分成 $12$ 顆，每 $1$ 顆是 $\\frac{1}{12}$ 盒，用掉 $5$ 顆就是 $\\frac{5}{12}$ 盒。'
+          },
+          {
+            id: 'qe3-math-5',
+            difficulty: '挑戰素養',
+            question: '一塊大餅平分成 $8$ 份，小美吃了 $\\frac{2}{8}$ 塊，小華吃了 $3$ 份，兩人合起來一共吃了幾塊大餅？',
+            options: ['$\\frac{5}{16}$ 塊', '$\\frac{5}{8}$ 塊', '$\\frac{3}{8}$ 塊', '$\\frac{6}{8}$ 塊'],
+            answer: 1,
+            explanation: '小華吃的 $3$ 份就是 $\\frac{3}{8}$ 塊，兩人合計 $\\frac{2}{8} + \\frac{3}{8} = \\frac{5}{8}$ 塊。'
+          },
+          {
+            id: 'qe3-math-6',
+            difficulty: '挑戰素養',
+            question: '一瓶鮮奶可以倒滿 $10$ 杯。爸爸喝了 $\\frac{3}{10}$ 瓶，媽媽喝了 $4$ 杯，請問這瓶鮮奶還剩下幾分之幾瓶？',
+            options: ['$\\frac{7}{10}$ 瓶', '$\\frac{3}{10}$ 瓶', '$\\frac{4}{10}$ 瓶', '$\\frac{6}{10}$ 瓶'],
+            answer: 1,
+            explanation: '媽媽喝的 $4$ 杯是 $\\frac{4}{10}$ 瓶，爸媽共喝 $\\frac{3}{10} + \\frac{4}{10} = \\frac{7}{10}$ 瓶；整瓶 $1 = \\frac{10}{10}$ 瓶，剩下 $\\frac{10}{10} - \\frac{7}{10} = \\frac{3}{10}$ 瓶。'
+          }
+        ]
+      },
+      {
+        id: 'e3-sci',
+        stage: '國小三年級',
+        grade: '國小三年級',
+        subject: '自然科學',
+        subjectIcon: '🔬',
+        semester: '國小三上',
+        chapter: '自然科學 · 植物的身體與磁鐵力量',
+        title: '植物的五大器官與磁鐵的同極相斥、異極相吸',
+        subtitle: '認識根、莖、葉、花、果實的功能，並探索磁鐵 N 極與 S 極的神奇磁力。',
+        youtubeId: '_vpZXNY20PI',
+        timestamps: [
+          { time: 15, label: '00:15 植物的根、莖、葉功能' },
+          { time: 105, label: '01:45 葉脈：平行脈 vs 網狀脈' },
+          { time: 195, label: '03:15 磁鐵 N 極與 S 極特性' }
+        ],
+        notes: [
+          { tag: '植物觀察', title: '植物身體的五大部位', body: '1. **根**：抓緊土壤、吸收水分與養分。<br>2. **莖**：支撐植物、輸送水分。<br>3. **葉**：製造養分（葉脈分為網狀脈與平行脈）。<br>4. **花與果實（含種子）**：繁殖下一代。' },
+          { tag: '磁力法則', title: '同極相斥、異極相吸', body: '磁鐵有 **N 極（指北極）**與 **S 極（指南極）**：<br>• 相同磁極靠近會互相推開（N 碰 N、S 碰 S ➔ **相斥**）。<br>• 不同磁極靠近會吸在一起（N 碰 S ➔ **相吸**）。' },
+          { tag: 'Dora老師小叮嚀', title: '磁鐵哪裡磁力最強？', body: '長條形或 U 形磁鐵，**兩端（磁極）吸起的迴紋針最多**，代表兩端磁力最強，中間最弱喔！' },
+          { tag: '生活科學', title: '磁鐵能隔著紙板吸鐵嗎？', body: '可以！磁力可以穿透紙張、塑膠尺、玻璃等非磁性薄物品，只要距離不要太遠就能吸住鐵製品。' }
+        ],
+        boardStages: [
+          { title: '步驟 1：植物的五大好幫手', subtitle: '根抓地吸水、莖負責輸送、葉子曬太陽製造養分，花和果實負責繁殖！' },
+          { title: '步驟 2：磁鐵的兩端磁力最強', subtitle: '磁鐵有 N 極和 S 極，兩端能吸起最多的迴紋針。' },
+          { title: '步驟 3：同極相斥、異極相吸', subtitle: 'N 極遇到 S 極會緊緊吸在一起；N 極遇到 N 極則會互相推開喔！' }
+        ],
+        visualType: 'science',
+        examples: [
+          {
+            question: '小華拿兩塊長條形磁鐵靠近，發現兩塊磁鐵互相推開。如果左邊磁鐵靠近的那一端是「N 極」，請問右邊磁鐵靠近的那一端是什麼極？',
+            hints: [
+              '提示 1：回憶磁鐵口訣：「同極相斥、異極相吸」。',
+              '提示 2：兩塊磁鐵互相推開，代表是「同極」靠近。',
+              '解答：因為左邊是 N 極且互相排斥，所以右邊靠近的那一端也是「N 極」。'
+            ]
+          },
+          {
+            question: '請分類下列葉子的葉脈形狀：「榕樹葉、百合花葉子、朱槿（扶桑花）葉、玉米葉」，哪些是網狀脈？哪些是平行脈？',
+            hints: [
+              '提示 1：像漁網一樣交錯細密的是「網狀脈」；像鐵軌一樣直直平行排列的是「平行脈」。',
+              '提示 2：雙子葉木本植物（如榕樹、朱槿）多為網狀脈；禾本科或單子葉植物（如百合、玉米、竹子）多為平行脈。',
+              '解答：網狀脈：榕樹葉、朱槿葉；平行脈：百合花葉子、玉米葉。'
+            ]
+          }
+        ],
+        quizzes: [
+          {
+            id: 'qe3-sci-1',
+            difficulty: '基礎',
+            question: '植物體中，主要負責「抓緊土壤並吸收水分」的是哪一個部位？',
+            options: ['根', '莖', '葉', '花'],
+            answer: 0,
+            explanation: '植物的「根」深入土壤中，負責固定植物並吸收水分與礦物質。'
+          },
+          {
+            id: 'qe3-sci-2',
+            difficulty: '基礎',
+            question: '下列哪一種物品可以被磁鐵吸引？',
+            options: ['塑膠尺', '橡皮擦', '鐵製迴紋針', '木頭鉛筆'],
+            answer: 2,
+            explanation: '磁鐵只能吸引含有鐵、鈷、鎳成分的物品，塑膠、橡皮、木頭都不會被吸引。'
+          },
+          {
+            id: 'qe3-sci-3',
+            difficulty: '進階',
+            question: '下列哪一種植物的葉脈屬於「平行脈」？',
+            options: ['榕樹葉', '楓葉', '竹子葉', '番薯葉'],
+            answer: 2,
+            explanation: '竹子、水稻、玉米、百合等植物的葉脈呈直線平行排列，屬於平行脈。'
+          },
+          {
+            id: 'qe3-sci-4',
+            difficulty: '進階',
+            question: '把一根長條形磁鐵放進迴紋針盒裡再拿起來，哪個部位吸起的迴紋針數量最多？',
+            options: ['正中間', '只有 N 極那一端', 'N 極和 S 極兩端都最多', '整根磁鐵吸起的一樣多'],
+            answer: 2,
+            explanation: '磁鐵兩端（N 極與 S 極）的磁力最強，因此吸起的迴紋針數量最多。'
+          },
+          {
+            id: 'qe3-sci-5',
+            difficulty: '挑戰素養',
+            question: '將兩塊磁鐵的 S 極和 N 極互相靠近時，會發生什麼現象？',
+            options: ['互相推開（相斥）', '緊緊吸在一起（相吸）', '完全沒有反應', '磁力會消失'],
+            answer: 1,
+            explanation: '根據「異極相吸」原理，不同的磁極（S 極與 N 極）靠近時會互相吸引。'
+          },
+          {
+            id: 'qe3-sci-6',
+            difficulty: '挑戰素養',
+            question: '小明不小心把長條形磁鐵摔斷成兩截，請問斷掉後的每一截磁鐵會變成什麼樣子？',
+            options: ['失去所有磁力', '一截只有 N 極，另一截只有 S 極', '每一截都同時保有 N 極和 S 極', '變成只能吸塑膠'],
+            answer: 2,
+            explanation: '磁鐵無論斷成幾段，每一小段磁鐵都會重新形成完整的「N 極與 S 極」兩極。'
+          }
+        ]
+      },
+      {
+        id: 'e3-soc',
+        stage: '國小三年級',
+        grade: '國小三年級',
+        subject: '社會',
+        subjectIcon: '🌏',
+        semester: '國小三上',
+        chapter: '社會領域 · 家庭與學校自治',
+        title: '家庭倫理稱謂與班級會議民主規範',
+        subtitle: '認識親屬稱謂、家庭功能，並學會班級開會時的表決與尊重少數精神。',
+        youtubeId: 'EWJhg4vWw8I',
+        timestamps: [
+          { time: 15, label: '00:15 認識家庭成員與親屬稱謂' },
+          { time: 95, label: '01:35 班級會議四個角色（主席、司儀、紀錄、提案人）' },
+          { time: 175, label: '02:55 多數決與尊重少數' }
+        ],
+        notes: [
+          { tag: '家庭生活', title: '家庭的四大功能', body: '家庭提供我們：**1. 生育與養育照顧、2. 經濟支持、3. 情感關懷與保護、4. 學習生活規範（教育）**。' },
+          { tag: '親屬稱謂', title: '爸爸與媽媽的家人怎麼叫？', body: '• 爸爸的父母：爺爺（祖父）、奶奶（祖母）。<br>• 媽媽的父母：外公（外祖父）、外婆（外祖母）。<br>• 爸爸的兄弟：伯父（哥哥）、叔叔（弟弟）。<br>• 媽媽的兄弟：舅舅。' },
+          { tag: 'Dora老師小叮嚀', title: '開班會的民主精神', body: '班級討論事情時，要遵守「**少數服從多數，多數尊重少數**」的原則！舉手投票表決時，每人一票、公平公開。' },
+          { tag: '班會流程', title: '開會發言有禮貌', body: '想發表意見時要先**舉手**，等**主席**點到名字再站起來說話，不隨便插嘴打斷同學發言。' }
+        ],
+        boardStages: [
+          { title: '步驟 1：溫暖的家庭成員', subtitle: '爸爸那邊稱祖父祖母，媽媽那邊稱外公外婆，媽媽的兄弟叫舅舅！' },
+          { title: '步驟 2：班級會議小民主', subtitle: '開班會時有主席主持、司儀報告流程、紀錄寫下決議，大家舉手發言。' },
+          { title: '步驟 3：少數服從多數、多數尊重少數', subtitle: '投票決定班級活動後，即使自己的意見沒通過，也要一起合作完成！' }
+        ],
+        visualType: 'social',
+        examples: [
+          {
+            question: '三年甲班正在開班會討論校外教學地點，票數結果是「動物園 18 票、科博館 8 票」。請問投給科博館的同學應該怎麼做才符合民主精神？',
+            hints: [
+              '提示 1：想想看開班會最重要的表決原則是什麼？（少數服從多數）',
+              '提示 2：少數服從多數的意思是：接受大家共同表決出來的結果。',
+              '解答：遵守「少數服從多數」的原則，開心地和全班一起去動物園，不生氣或拒絕參加。'
+            ]
+          },
+          {
+            question: '大雄的爸爸有一個哥哥和一個弟弟，媽媽有一個哥哥和一個妹妹。請問大雄應該怎麼稱呼這四位長輩？',
+            hints: [
+              '提示 1：爸爸的哥哥叫「伯父」、爸爸的弟弟叫「叔叔」。',
+              '提示 2：媽媽的兄弟都叫「舅舅」、媽媽的姊妹都叫「阿姨」。',
+              '解答：依序稱為「伯父、叔叔、舅舅、阿姨」。'
+            ]
+          }
+        ],
+        quizzes: [
+          {
+            id: 'qe3-soc-1',
+            difficulty: '基礎',
+            question: '媽媽的弟弟或哥哥，我們應該稱呼他為什麼？',
+            options: ['叔叔', '伯父', '舅舅', '姑丈'],
+            answer: 2,
+            explanation: '媽媽的兄弟稱為「舅舅」；爸爸的哥哥稱為伯父、弟弟稱為叔叔。'
+          },
+          {
+            id: 'qe3-soc-2',
+            difficulty: '基礎',
+            question: '爸爸的姊姊或妹妹，我們應該稱呼她為什麼？',
+            options: ['阿姨', '姑姑', '舅媽', '嬸嬸'],
+            answer: 1,
+            explanation: '爸爸的姊妹稱為「姑姑」；媽媽的姊妹稱為「阿姨」。'
+          },
+          {
+            id: 'qe3-soc-3',
+            difficulty: '進階',
+            question: '在班級會議中，負責「維持秩序並請舉手的同學發言」的是哪一個角色？',
+            options: ['主席', '紀錄', '衛生股長', '體育股長'],
+            answer: 0,
+            explanation: '班會「主席」負責主持會議、維持討論秩序並點名同學發言。'
+          },
+          {
+            id: 'qe3-soc-4',
+            difficulty: '進階',
+            question: '在班級會議中，負責「把大家討論的重點和投票結果寫下來」的是誰？',
+            options: ['司儀', '紀錄', '風紀股長', '班長'],
+            answer: 1,
+            explanation: '「紀錄」負責將會議過程、提案內容與表決結果完整記錄下來。'
+          },
+          {
+            id: 'qe3-soc-5',
+            difficulty: '挑戰素養',
+            question: '為了維持良好的家庭關係，下列哪一種行為最值得鼓勵？',
+            options: ['把家事全部推給媽媽做', '主動分擔力所能及的家事並關心家人', '對長輩說話不禮貌', '只顧著玩手機不跟家人聊天'],
+            answer: 1,
+            explanation: '家庭成員之間應該互相體諒、主動分擔家事並表達關懷。'
+          },
+          {
+            id: 'qe3-soc-6',
+            difficulty: '挑戰素養',
+            question: '班會投票決定園遊會要賣「紅茶（19票）」而不是「汽水（7票）」。投給紅茶的同學應該抱持什麼態度？',
+            options: ['嘲笑投給汽水的同學', '尊重少數同學的想法，並邀請大家一起合作準備', '不讓投給汽水的同學參加活動', '要求重新投票到全班都投紅茶為止'],
+            answer: 1,
+            explanation: '民主精神除了「少數服從多數」，更重要的是「多數尊重少數」，包容不同意見。'
+          }
+        ]
+      },
+      {
+        id: 'e3-eng',
+        stage: '國小三年級',
+        grade: '國小三年級',
+        subject: '英語',
+        subjectIcon: '🔤',
+        semester: '國小三上',
+        chapter: '英語領域 · 日常問候與文具單字',
+        title: 'What’s this? 文具單字與指示代名詞問答',
+        subtitle: '學會用 What’s this? / What’s that? 詢問物品名稱，並用 It’s a/an... 正確回答。',
+        youtubeId: 'MgaaPYtpc8A',
+        timestamps: [
+          { time: 10, label: '00:10 文具單字發音（pen, pencil, ruler, eraser）' },
+          { time: 80, label: '01:20 this（這個）與 that（那個）的距離差別' },
+          { time: 150, label: '02:30 a 與 an 的使用規則' }
+        ],
+        notes: [
+          { tag: '核心句型', title: '詢問遠近物品句型', body: '• 問近處物品：**What’s this?**（這是什麼？）<br>• 問遠處物品：**What’s that?**（那是什麼？）<br>• 統一回答：**It’s a pencil.** / **It’s an eraser.**' },
+          { tag: '必背單字', title: '教室文具六大單字', body: '• **pen** 原子筆　• **pencil** 鉛筆<br>• **ruler** 直尺　• **eraser** 橡皮擦<br>• **book** 書本　• **bag** 書包' },
+          { tag: 'Dora老師小叮嚀', title: '什麼時候要用 an？', body: '單字開頭如果是母音發音（**a, e, i, o, u**），前面要放 **an**！例如：**an** eraser（一個橡皮擦）、**an** apple（一顆蘋果）。' },
+          { tag: '縮寫小知識', title: 'What’s 與 It’s 的還原', body: '• **What’s** = What is（是什麼）<br>• **It’s** = It is（它是）' }
+        ],
+        boardStages: [
+          { title: 'Step 1: 近處用 this，遠處用 that', subtitle: '手拿著鉛筆問：What’s this? 指著遠方的書包問：What’s that?' },
+          { title: 'Step 2: 回答一律用 It’s...', subtitle: '不管是問 this 還是 that，回答都用 It’s a pen. 或 It’s a bag.' },
+          { title: 'Step 3: 母音開頭加 an！', subtitle: 'eraser 是 e 開頭，所以要說 It’s an eraser! 記住 a, e, i, o, u 用 an！' }
+        ],
+        visualType: 'english',
+        examples: [
+          {
+            question: '請完成對話填空：<br/>A: What’s ______?（指著遠處桌子上的橡皮擦）<br/>B: It’s ______ eraser.',
+            hints: [
+              '提示 1：「遠處」的物品要用 that 還是 this？（that）',
+              '提示 2：eraser 第一個字母是母音 e，前面要填 a 還是 an？（an）',
+              '解答：第一格填 that；第二格填 an（It’s an eraser.）。'
+            ]
+          },
+          {
+            question: '請翻譯下面的英語句子：<br/>「It’s a yellow ruler.」',
+            hints: [
+              '提示 1：It’s = 它是；yellow = 黃色的；ruler = 直尺。',
+              '提示 2：把詞語連成通順中文。',
+              '解答：「它是一把黃色的直尺。」'
+            ]
+          }
+        ],
+        quizzes: [
+          {
+            id: 'qe3-eng-1',
+            difficulty: '基礎',
+            question: 'A: What’s this?　B: It’s ______ eraser.',
+            options: ['a', 'an', 'two', 'is'],
+            answer: 1,
+            explanation: 'eraser 以母音字母 e 開頭，表示「一個橡皮擦」時冠詞須使用 an。'
+          },
+          {
+            id: 'qe3-eng-2',
+            difficulty: '基礎',
+            question: '請問「直尺」的英文單字是哪一個？',
+            options: ['pencil', 'bag', 'ruler', 'book'],
+            answer: 2,
+            explanation: 'ruler 是直尺；pencil 是鉛筆；bag 是書包；book 是書本。'
+          },
+          {
+            id: 'qe3-eng-3',
+            difficulty: '進階',
+            question: '當你想詢問「遠方牆壁上的那本書是什麼？」，應該怎麼問？',
+            options: ['What’s this?', 'What’s that?', 'How are you?', 'Who are you?'],
+            answer: 1,
+            explanation: '詢問距離說話者較遠的單數物品，應使用指示代名詞 that：「What’s that?」。'
+          },
+          {
+            id: 'qe3-eng-4',
+            difficulty: '進階',
+            question: '「It’s a pen.」裡面的「It’s」是哪兩個字的縮寫？',
+            options: ['It is', 'It are', 'I am', 'Is it'],
+            answer: 0,
+            explanation: 'It’s 是 It is 的縮寫，意思是「它是」。'
+          },
+          {
+            id: 'qe3-eng-5',
+            difficulty: '挑戰素養',
+            question: '早上進教室遇到 Dora 老師時，應該怎麼向老師問好？',
+            options: ['Good night, Miss Dora.', 'Good morning, Miss Dora.', 'Goodbye, Miss Dora.', 'Thank you, Miss Dora.'],
+            answer: 1,
+            explanation: '早上見面打招呼要說「Good morning!（早安！）」。'
+          },
+          {
+            id: 'qe3-eng-6',
+            difficulty: '挑戰素養',
+            question: 'A: Is it a book?（拿著一支原子筆問）　B: No, it isn’t. ______',
+            options: ['It’s a pen.', 'It’s a book.', 'I’m fine.', 'Thank you.'],
+            answer: 0,
+            explanation: '對方否認這是一本書（No, it isn’t.），接著應說出正確物品：「It’s a pen.（它是一支原子筆）」。'
+          }
+        ]
+      },
+
+      // ==================== 國中數學（每單元 6 題：基礎 2 ＋ 進階 2 ＋ 挑戰素養 2） ====================
       {
         id: 'g7-u1',
+        stage: '國中數學',
         grade: '七年級',
+        subject: '數學',
+        subjectIcon: '📐',
         semester: '國七上',
         chapter: '第三章 一元一次方程式',
         title: '3-1 一元一次方程式的列式與求解',
@@ -334,7 +1204,7 @@
         ],
         notes: [
           { tag: '核心公式', title: '等量公理', body: '等號兩邊同時加、減、乘、除同一個不為 $0$ 的數，等號依然成立。就像天平兩邊放上或拿走相同重量的砝碼一樣平衡！' },
-          { tag: '快速技巧', title: '移項法則', body: '把某個數從等號的一邊移到另一邊時要變號：「$+$ 變 $-$」、「$-$ 變 $+$」、「$\times$ 變 $\div$」、「$\div$ 變 $\times$」。' },
+          { tag: '快速技巧', title: '移項法則', body: '把某個數從等號的一邊移到另一邊時要變號：「$+$ 變 $-$」、「$-$ 變 $+$」、「$\\times$ 變 $\\div$」、「$\\div$ 變 $\\times$」。' },
           { tag: 'Dora老師小叮嚀', title: '去括號變號陷阱', body: '括號前面如果是「負號（$-$）」時，拆掉括號後裡面每一項都要變號！例如：$-(2x - 3) = -2x + 3$，千萬別忘記 $+3$ 喔！' },
           { tag: '解題步驟', title: '標準求解四步驟', body: '1. 去分母（同乘最小公倍數）➔ 2. 去括號 ➔ 3. 移項合併同類項 ➔ 4. 兩邊同除以 $x$ 的係數。' }
         ],
@@ -350,7 +1220,7 @@
             hints: [
               '提示 1：先分配律去括號，注意第二個括號前面是負號！',
               '提示 2：展開後變成 $4x - 8 - x + 5 = 12$，接著合併同類項。',
-              '解答：$3x - 3 = 12 \Rightarrow 3x = 15 \Rightarrow x = 5$。'
+              '解答：$3x - 3 = 12 \\Rightarrow 3x = 15 \\Rightarrow x = 5$。'
             ]
           }
         ],
@@ -364,18 +1234,53 @@
             explanation: '將 $-5$ 移項至等號右邊變成 $+5$，得 $3x = 16 + 5 = 21$，兩邊同除以 $3$ 得 $x = 7$。'
           },
           {
+            id: 'q7-1b',
+            difficulty: '基礎',
+            question: '若 $\\frac{x}{4} + 3 = 8$，則 $x$ 的值為何？',
+            options: ['$x = 5$', '$x = 11$', '$x = 20$', '$x = 44$'],
+            answer: 2,
+            explanation: '先移項得 $\\frac{x}{4} = 8 - 3 = 5$，兩邊同乘以 $4$ 得 $x = 20$。'
+          },
+          {
             id: 'q7-2',
             difficulty: '進階',
             question: '若 $2(x - 3) = 5x + 9$，則 $x = ?$',
             options: ['$x = -5$', '$x = -1$', '$x = 1$', '$x = 5$'],
             answer: 0,
             explanation: '先去括號得 $2x - 6 = 5x + 9$；移項得 $2x - 5x = 9 + 6$，即 $-3x = 15$，兩邊同除以 $-3$ 得 $x = -5$。'
+          },
+          {
+            id: 'q7-3a',
+            difficulty: '進階',
+            question: '化簡並求解：$5x - (2x - 7) = 19$，則 $x = ?$',
+            options: ['$x = 4$', '$x = 8$', '$x = \\frac{26}{3}$', '$x = 12$'],
+            answer: 0,
+            explanation: '去括號注意變號：$5x - 2x + 7 = 19 \\Rightarrow 3x = 12 \\Rightarrow x = 4$。'
+          },
+          {
+            id: 'q7-4a',
+            difficulty: '挑戰素養',
+            question: '三個連續奇數的和為 $57$，請問這三個奇數中「最大」的數是多少？',
+            options: ['$17$', '$19$', '$21$', '$23$'],
+            answer: 2,
+            explanation: '設中間的奇數為 $x$，則三數為 $(x-2) + x + (x+2) = 57 \\Rightarrow 3x = 57 \\Rightarrow x = 19$，最大的數為 $19 + 2 = 21$。'
+          },
+          {
+            id: 'q7-4b',
+            difficulty: '挑戰素養',
+            question: '若 $x = 3$ 是方程式 $2ax - 5 = a + 10$ 的解，請問 $a$ 的值為何？',
+            options: ['$a = 2$', '$a = 3$', '$a = 5$', '$a = -3$'],
+            answer: 1,
+            explanation: '將 $x = 3$ 代入原式得 $6a - 5 = a + 10 \\Rightarrow 5a = 15 \\Rightarrow a = 3$。'
           }
         ]
       },
       {
         id: 'g7-u2',
+        stage: '國中數學',
         grade: '七年級',
+        subject: '數學',
+        subjectIcon: '📐',
         semester: '國七下',
         chapter: '第二章 直角坐標平面',
         title: '2-1 直角坐標與象限判別',
@@ -418,18 +1323,53 @@
             explanation: '$x = 5 > 0$（向右），$y = -2 < 0$（向下），符號為 $(+, -)$，位於第四象限。'
           },
           {
+            id: 'q7-5',
+            difficulty: '基礎',
+            question: '點 $K(0, -7)$ 位於直角坐標平面的哪裡？',
+            options: ['第二象限', '第三象限', '$x$ 軸上', '$y$ 軸上'],
+            answer: 3,
+            explanation: '當 $x$ 坐標為 $0$ 時，該點必落在 $y$ 軸上，不屬於任何象限。'
+          },
+          {
+            id: 'q7-6',
+            difficulty: '進階',
+            question: '點 $Q(-6, 8)$ 到 $x$ 軸的距離與到 $y$ 軸的距離總和是多少？',
+            options: ['$2$', '$10$', '$14$', '$-2$'],
+            answer: 2,
+            explanation: '到 $x$ 軸距離 $= |8| = 8$，到 $y$ 軸距離 $= |-6| = 6$，總和為 $8 + 6 = 14$。'
+          },
+          {
+            id: 'q7-7',
+            difficulty: '進階',
+            question: '將點 $A(-2, 4)$ 向右平移 $5$ 單位，再向下平移 $7$ 單位後到達點 $B$，則 $B$ 點坐標為何？',
+            options: ['$(3, -3)$', '$(-7, 11)$', '$(3, 11)$', '$(-7, -3)$'],
+            answer: 0,
+            explanation: '向右移 $x$ 加 $5$：$-2 + 5 = 3$；向下移 $y$ 減 $7$：$4 - 7 = -3$，故 $B(3, -3)$。'
+          },
+          {
             id: 'q7-4',
-            difficulty: '會考素養',
+            difficulty: '挑戰素養',
             question: '若點 $M(a, b)$ 在第二象限，則點 $N(-b, a)$ 在第幾象限？',
             options: ['第一象限', '第二象限', '第三象限', '第四象限'],
             answer: 2,
             explanation: '因為 $M(a, b)$ 在第二象限，所以 $a < 0$ 且 $b > 0$。因此 $-b < 0$ 且 $a < 0$，點 $N(-b, a)$ 為 $(-, -)$，在第三象限。'
+          },
+          {
+            id: 'q7-8',
+            difficulty: '挑戰素養',
+            question: '若點 $P(2k - 6, k + 4)$ 落在 $x$ 軸上，則點 $P$ 的坐標為何？',
+            options: ['$(-14, 0)$', '$(0, 7)$', '$(-2, 0)$', '$(0, -4)$'],
+            answer: 0,
+            explanation: '點在 $x$ 軸上代表 $y$ 坐標為 $0$，即 $k + 4 = 0 \\Rightarrow k = -4$；代入 $x$ 坐標得 $2(-4) - 6 = -14$，故 $P(-14, 0)$。'
           }
         ]
       },
       {
         id: 'g8-u1',
+        stage: '國中數學',
         grade: '八年級',
+        subject: '數學',
+        subjectIcon: '📐',
         semester: '國八上',
         chapter: '第二章 平方根與畢氏定理',
         title: '2-3 畢氏定理（勾股定理）',
@@ -444,7 +1384,7 @@
           { tag: '核心定理', title: '畢氏定理公式', body: '任意直角三角形中，兩股長的平方和等於斜邊長的平方：$$a^2 + b^2 = c^2$$（其中 $c$ 為直角對面的最長邊「斜邊」）。' },
           { tag: '秒殺常客', title: '必背畢氏數組合', body: '熟記這四組直角三角形邊長比例：$(3, 4, 5)$、$(5, 12, 13)$、$(7, 24, 25)$、$(8, 15, 17)$，段考計算速度提升 3 倍！' },
           { tag: 'Dora老師小叮嚀', title: '看清楚求「斜邊」還是「股」', body: '很多同學看到兩個數字就直接平方相加！請先確認直角在哪裡：求斜邊用「相加開根號」，求股長要用「斜邊平方減另一股平方」喔！' },
-          { tag: '幾何應用', title: '坐標平面兩點距離', body: '平面上兩點 $A(x_1, y_1)$ 與 $B(x_2, y_2)$ 的距離為：$$\overline{AB} = \sqrt{(x_1 - x_2)^2 + (y_1 - y_2)^2}$$' }
+          { tag: '幾何應用', title: '坐標平面兩點距離', body: '平面上兩點 $A(x_1, y_1)$ 與 $B(x_2, y_2)$ 的距離為：$$\\overline{AB} = \\sqrt{(x_1 - x_2)^2 + (y_1 - y_2)^2}$$' }
         ],
         boardStages: [
           { title: '步驟 1：認識直角三角形三邊', subtitle: '兩條夾直角的邊叫「股（3 與 4）」，直角對面最長的邊叫「斜邊（5）」。' },
@@ -456,9 +1396,9 @@
           {
             question: '一直角三角形的斜邊長為 $13$ 公分，其中一股長為 $5$ 公分，求另一股長與三角形面積？',
             hints: [
-              '提示 1：已知斜邊 $c = 13$，一股 $a = 5$，求另一股 $b$ 要用減法：$b = \sqrt{13^2 - 5^2}$。',
+              '提示 1：已知斜邊 $c = 13$，一股 $a = 5$，求另一股 $b$ 要用減法：$b = \\sqrt{13^2 - 5^2}$。',
               '提示 2：$169 - 25 = 144$，所以另一股 $b = 12$ 公分。',
-              '解答：另一股為 $12$ 公分；三角形面積 $= \frac{5 \times 12}{2} = 30$ 平方公分。'
+              '解答：另一股為 $12$ 公分；三角形面積 $= \\frac{5 \\times 12}{2} = 30$ 平方公分。'
             ]
           }
         ],
@@ -469,21 +1409,56 @@
             question: '一直角三角形的兩股長分別為 $6$ 和 $8$，則斜邊長為何？',
             options: ['$10$', '$12$', '$14$', '$100$'],
             answer: 0,
-            explanation: '由畢氏定理得斜邊 $= \sqrt{6^2 + 8^2} = \sqrt{36 + 64} = \sqrt{100} = 10$（亦為 $3:4:5$ 的 2 倍）。'
+            explanation: '由畢氏定理得斜邊 $= \\sqrt{6^2 + 8^2} = \\sqrt{36 + 64} = \\sqrt{100} = 10$（亦為 $3:4:5$ 的 2 倍）。'
+          },
+          {
+            id: 'q8-1b',
+            difficulty: '基礎',
+            question: '下列哪一組長度「可以」圍成一個直角三角形？',
+            options: ['$2, 3, 4$', '$5, 12, 13$', '$6, 7, 8$', '$4, 5, 6$'],
+            answer: 1,
+            explanation: '檢驗 $5^2 + 12^2 = 25 + 144 = 169 = 13^2$，符合畢氏定理。'
           },
           {
             id: 'q8-2',
             difficulty: '進階',
             question: '若直角三角形的兩邊長為 $3$ 與 $4$，則第三邊長可能為何？',
-            options: ['只有 $5$', '只有 $\sqrt{7}$', '$5$ 或 $\sqrt{7}$', '$7$'],
+            options: ['只有 $5$', '只有 $\\sqrt{7}$', '$5$ 或 $\\sqrt{7}$', '$7$'],
             answer: 2,
-            explanation: '題目未說明 $4$ 是否為斜邊：若 $4$ 為股，第三邊為斜邊 $\sqrt{3^2+4^2}=5$；若 $4$ 為斜邊，第三邊為股 $\sqrt{4^2-3^2}=\sqrt{7}$。'
+            explanation: '題目未說明 $4$ 是否為斜邊：若 $4$ 為股，第三邊為斜邊 $\\sqrt{3^2+4^2}=5$；若 $4$ 為斜邊，第三邊為股 $\\sqrt{4^2-3^2}=\\sqrt{7}$。'
+          },
+          {
+            id: 'q8-3',
+            difficulty: '進階',
+            question: '坐標平面上兩點 $A(1, 2)$ 與 $B(4, 6)$ 的距離 $\\overline{AB}$ 為何？',
+            options: ['$3$', '$4$', '$5$', '$7$'],
+            answer: 2,
+            explanation: '$\\overline{AB} = \\sqrt{(4-1)^2 + (6-2)^2} = \\sqrt{3^2 + 4^2} = \\sqrt{25} = 5$。'
+          },
+          {
+            id: 'q8-4',
+            difficulty: '挑戰素養',
+            question: '一把長 $25$ 公尺的梯子斜靠在垂直牆壁上，梯腳距離牆底 $7$ 公尺，請問梯頂距離地面幾公尺？',
+            options: ['$18$ 公尺', '$20$ 公尺', '$24$ 公尺', '$32$ 公尺'],
+            answer: 2,
+            explanation: '梯長為斜邊 $25$，梯腳距牆底為一股 $7$，利用畢氏數 $(7, 24, 25)$ 或 $\\sqrt{25^2 - 7^2} = \\sqrt{576} = 24$ 公尺。'
+          },
+          {
+            id: 'q8-5',
+            difficulty: '挑戰素養',
+            question: '一個長方形的長為 $15$ 公分、寬為 $8$ 公分，則此長方形的對角線長度為多少公分？',
+            options: ['$17$ 公分', '$23$ 公分', '$13$ 公分', '$19$ 公分'],
+            answer: 0,
+            explanation: '長方形的長、寬與對角線構成直角三角形，對角線 $= \\sqrt{15^2 + 8^2} = \\sqrt{225 + 64} = \\sqrt{289} = 17$ 公分。'
           }
         ]
       },
       {
         id: 'g9-u1',
+        stage: '國中數學',
         grade: '九年級',
+        subject: '數學',
+        subjectIcon: '📐',
         semester: '國九下',
         chapter: '第一章 二次函數',
         title: '1-2 二次函數的圖形與頂點平移',
@@ -495,7 +1470,7 @@
           { time: 290, label: '04:50 頂點式平移法則' }
         ],
         notes: [
-          { tag: '頂點式核心', title: '標準頂點式結構', body: '$$y = a(x - h)^2 + k \quad (a \neq 0)$$ 頂點坐標為 $(h, k)$，對稱軸方程式為直線 $x = h$。' },
+          { tag: '頂點式核心', title: '標準頂點式結構', body: '$$y = a(x - h)^2 + k \\quad (a \\neq 0)$$ 頂點坐標為 $(h, k)$，對稱軸方程式為直線 $x = h$。' },
           { tag: '開口密碼', title: '係數 $a$ 的兩大任務', body: '1. **正負看方向**：$a > 0$ 開口向上（有最低點）；$a < 0$ 開口向下（有最高點）。<br>2. **大小看寬窄**：$|a|$ 越大，開口越窄（越瘦）；$|a|$ 越小，開口越寬（越胖）。' },
           { tag: 'Dora老師小叮嚀', title: '左右平移要變號！', body: '在 $y = a(x - h)^2 + k$ 中，括號裡是「減 $h$」喔！例如 $y = 2(x + 3)^2 - 1$ 的頂點是 $(-3, -1)$，不是 $(3, -1)$！' },
           { tag: '圖形全等', title: '平移不改變形狀', body: '只要二次項係數 $a$ 相同，兩個拋物線的開口方向與寬窄就完全一樣，可以透過上下左右平移完全疊合！' }
@@ -526,27 +1501,60 @@
             explanation: '將式子寫為 $y = 3[x - (-2)]^2 + (-5)$，對照 $y = a(x - h)^2 + k$ 可得頂點 $(h, k) = (-2, -5)$。'
           },
           {
+            id: 'q9-1b',
+            difficulty: '基礎',
+            question: '二次函數 $y = 4(x - 6)^2 + 1$ 的對稱軸方程式為何？',
+            options: ['直線 $x = 6$', '直線 $x = -6$', '直線 $y = 1$', '直線 $x = 1$'],
+            answer: 0,
+            explanation: '頂點為 $(6, 1)$，對稱軸為通過頂點的鉛直線 $x = 6$。'
+          },
+          {
+            id: 'q9-3',
+            difficulty: '進階',
+            question: '二次函數 $y = -2(x - 4)^2 + 7$ 的圖形有最大值還是最小值？其值為多少？',
+            options: ['最大值 $7$', '最小值 $7$', '最大值 $4$', '最小值 $-2$'],
+            answer: 0,
+            explanation: '因為 $a = -2 < 0$，拋物線開口向下，頂點 $(4, 7)$ 為最高點，故有最大值 $7$。'
+          },
+          {
+            id: 'q9-4',
+            difficulty: '進階',
+            question: '將 $y = 5x^2$ 的圖形向右平移 $3$ 單位，再向上平移 $2$ 單位，可得哪一個二次函數？',
+            options: ['$y = 5(x + 3)^2 + 2$', '$y = 5(x - 3)^2 + 2$', '$y = 5(x - 3)^2 - 2$', '$y = 5(x + 3)^2 - 2$'],
+            answer: 1,
+            explanation: '頂點從 $(0, 0)$ 向右移 $3$、向上移 $2$ 變成 $(3, 2)$，代入頂點式得 $y = 5(x - 3)^2 + 2$。'
+          },
+          {
             id: 'q9-2',
-            difficulty: '會考素養',
+            difficulty: '挑戰素養',
             question: '下列哪一個二次函數的圖形開口「向下」，且開口「最窄」？',
-            options: ['$y = 4x^2$', '$y = -\frac{1}{2}x^2 + 3$', '$y = -3(x - 1)^2$', '$y = -x^2 - 4$'],
+            options: ['$y = 4x^2$', '$y = -\\frac{1}{2}x^2 + 3$', '$y = -3(x - 1)^2$', '$y = -x^2 - 4$'],
             answer: 2,
             explanation: '開口向下需滿足 $a < 0$（排除 $y=4x^2$）；在負數中 $|a|$ 越大開口越窄，$|-3| = 3$ 最大，故選 $y = -3(x - 1)^2$。'
+          },
+          {
+            id: 'q9-5',
+            difficulty: '挑戰素養',
+            question: '某拋物線與 $y = 2x^2$ 的形狀完全相同（開口方向與寬窄皆相同），且頂點為 $(-1, 4)$，則此拋物線與 $y$ 軸的交點坐標為何？',
+            options: ['$(0, 4)$', '$(0, 6)$', '$(0, 2)$', '$(0, -1)$'],
+            answer: 1,
+            explanation: '此二次函數為 $y = 2(x + 1)^2 + 4$；求與 $y$ 軸交點令 $x = 0$，得 $y = 2(1)^2 + 4 = 6$，交點為 $(0, 6)$。'
           }
         ]
       }
     ];
 
     let state = {
-      currentUnitId: 'g7-u1',
+      currentUnitId: 'e3-chi',
       gradeFilter: 'all',
+      subjectFilter: 'all',
+      difficultyFilter: 'all',
       activeTab: 'video',
       playerMode: 'youtube',
       masteredIds: JSON.parse(localStorage.getItem('dora_mastered') || '[]'),
       mistakes: JSON.parse(localStorage.getItem('dora_mistakes') || '[]'),
       quizScores: JSON.parse(localStorage.getItem('dora_scores') || '{}'),
       customVideos: JSON.parse(localStorage.getItem('dora_custom_videos') || '{}'),
-      // Board animation state
       boardPlaying: false,
       boardTime: 0,
       boardDuration: 30,
@@ -554,10 +1562,33 @@
       ttsEnabled: false,
       lastSpokenStage: -1,
       boardTimer: null,
-      // Parabola simulator state
       paraA: 1,
       paraH: 0,
-      paraK: 0
+      paraK: 0,
+      pizzaSlices: 3,
+      pizzaSlices2: 2,
+      voteZoo: 12,
+      voteMuseum: 8,
+      engTargetWord: 'eraser',
+      // Seat Number Lucky Draw state for Elementary School
+      maxSeat: parseInt(localStorage.getItem('dora_max_seat') || '30'),
+      drawnSeats: [],
+      globalDrawnSeat: null,
+      questionSeats: {},
+      teamScores: JSON.parse(localStorage.getItem('dora_team_scores') || '[0,0,0,0,0,0]'),
+      magnetLeftRightPole: 'N',
+      magnetRightLeftPole: 'S',
+      projIndex: 0,
+      projTimer: null,
+      projRemaining: 15,
+      projRevealed: false,
+      projPickedOptions: [],
+      projLastWrongIdx: -1,
+      filtersCollapsed: false,
+      
+      selectedCustomUnits: ['e3-math', 'g7-u1'],
+      customExamQuestions: [],
+      projModeSource: 'unit'
     };
 
     function getCurrentUnit() {
@@ -593,23 +1624,127 @@
       document.getElementById('mistakeBadge').textContent = state.mistakes.length;
     }
 
+    function getFilteredUnits() {
+      return CURRICULUM_DATA.filter(u => {
+        const matchGrade = state.gradeFilter === 'all'
+          || (state.gradeFilter === '國中數學' && u.stage === '國中數學')
+          || u.grade === state.gradeFilter;
+        const matchSubject = state.subjectFilter === 'all' || u.subject === state.subjectFilter;
+        return matchGrade && matchSubject;
+      });
+    }
+
     function filterGrade(grade) {
       state.gradeFilter = grade;
       document.querySelectorAll('.grade-btn').forEach(btn => {
         if (btn.dataset.grade === grade) {
-          btn.className = 'grade-btn py-1.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition bg-white text-rose-400/90 shadow-sm border border-rose-200';
+          btn.className = 'grade-btn py-1 px-2.5 rounded-lg text-xs font-bold transition bg-rose-400 text-white shadow-sm';
         } else {
-          btn.className = 'grade-btn py-1.5 px-3 rounded-xl text-xs sm:text-sm font-bold transition text-gray-500 hover:text-gray-700';
+          btn.className = 'grade-btn py-1 px-2.5 rounded-lg text-xs font-bold transition bg-rose-50/60 text-gray-600 hover:bg-rose-100/70';
         }
       });
-      renderSidebar();
+
+      // Auto-hide subject filter bar when Junior High Math is chosen to save vertical space
+      const subjBar = document.getElementById('subjectFilterBar');
+      if (subjBar) {
+        if (grade === '國中數學' || grade === '七年級' || grade === '八年級' || grade === '九年級') {
+          subjBar.classList.add('hidden');
+          state.subjectFilter = 'all';
+        } else {
+          subjBar.classList.remove('hidden');
+        }
+      }
+
+      const list = getFilteredUnits();
+      if (list.length > 0 && !list.some(u => u.id === state.currentUnitId)) {
+        selectUnit(list[0].id);
+      } else {
+        renderSidebar();
+      }
+    }
+
+    function toggleFilterCollapse() {
+      state.filtersCollapsed = !state.filtersCollapsed;
+      const wrapper = document.getElementById('headerFilterWrapper');
+      const btn = document.getElementById('filterCollapseBtn');
+      if (state.filtersCollapsed) {
+        wrapper.classList.add('hidden');
+        btn.textContent = '🔽 展開篩選';
+      } else {
+        wrapper.classList.remove('hidden');
+        btn.textContent = '🔼 收合篩選';
+      }
+    }
+
+    function toggleFloatingWidget(which) {
+      const seatWin = document.getElementById('floatingSeatWidget');
+      const teamWin = document.getElementById('floatingTeamWidget');
+      if (which === 'seat') {
+        seatWin.classList.toggle('hidden');
+        document.getElementById('floatMaxSeatInput').value = state.maxSeat;
+        renderSeatHistory();
+      } else if (which === 'team') {
+        teamWin.classList.toggle('hidden');
+        renderTeamScoreboard();
+      }
+    }
+
+    function drawSeatFloating() {
+      const max = state.maxSeat;
+      let pool = [];
+      for (let i = 1; i <= max; i++) {
+        if (!state.drawnSeats.includes(i)) pool.push(i);
+      }
+      if (pool.length === 0) {
+        state.drawnSeats = [];
+        for (let i = 1; i <= max; i++) pool.push(i);
+      }
+      let ticks = 0;
+      const timer = setInterval(() => {
+        ticks++;
+        const tmp = Math.floor(Math.random() * max) + 1;
+        document.getElementById('floatSeatResultBox').textContent = `🎲 ${tmp} 號...`;
+        playTone(420 + ticks * 25, 0.05);
+        if (ticks >= 10) {
+          clearInterval(timer);
+          const chosen = pool[Math.floor(Math.random() * pool.length)];
+          state.drawnSeats.push(chosen);
+          state.globalDrawnSeat = chosen;
+          document.getElementById('floatSeatResultBox').textContent = `🌟 ${chosen} 號同學`;
+          const globalEl = document.getElementById('globalSeatDisplay');
+          if (globalEl) globalEl.textContent = `🌟 ${chosen} 號同學`;
+          playTone(880, 0.22);
+          renderSeatHistory();
+        }
+      }, 45);
+    }
+
+    function filterSubject(subject) {
+      state.subjectFilter = subject;
+      document.querySelectorAll('.subject-btn').forEach(btn => {
+        if (btn.dataset.subject === subject) {
+          btn.className = 'subject-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-rose-400 text-white transition';
+        } else {
+          btn.className = 'subject-btn px-2.5 py-1 rounded-lg text-[11px] font-bold bg-white border border-rose-100 text-gray-600 hover:bg-rose-50 transition';
+        }
+      });
+      const list = getFilteredUnits();
+      if (list.length > 0 && !list.some(u => u.id === state.currentUnitId)) {
+        selectUnit(list[0].id);
+      } else {
+        renderSidebar();
+      }
     }
 
     function renderSidebar() {
       const container = document.getElementById('unitListContainer');
-      const filtered = state.gradeFilter === 'all'
-        ? CURRICULUM_DATA
-        : CURRICULUM_DATA.filter(u => u.grade === state.gradeFilter);
+      const filtered = getFilteredUnits();
+      document.getElementById('unitCountHint').textContent = `共 ${filtered.length} 個單元`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="text-center py-6 text-xs text-gray-400">此篩選條件下尚無單元，請切換其他年級或科目。</div>`;
+        return;
+      }
 
       container.innerHTML = filtered.map(u => {
         const isActive = u.id === state.currentUnitId;
@@ -623,9 +1758,9 @@
             <span class="mt-0.5 text-sm">${isMastered ? '🟢' : (isActive ? '🌸' : '⚪')}</span>
             <div class="min-w-0 flex-1">
               <div class="flex items-center gap-1.5 mb-0.5">
-                <span class="text-[11px] font-black text-rose-400">${u.semester}</span>
-                <span class="text-[11px] text-rose-400">•</span>
-                <span class="text-[11px] text-gray-500 truncate">${u.chapter}</span>
+                <span class="text-[11px] font-black text-rose-500">${u.semester}</span>
+                <span class="text-[11px] px-1.5 py-0.2 rounded bg-rose-50 text-rose-600 font-bold">${u.subjectIcon} ${u.subject}</span>
+                <span class="text-[10px] text-gray-400 ml-auto">${u.quizzes.length}題</span>
               </div>
               <div class="text-xs sm:text-sm font-bold text-gray-800 leading-snug">${u.title}</div>
             </div>
@@ -637,13 +1772,14 @@
     function selectUnit(unitId) {
       stopBoard();
       state.currentUnitId = unitId;
+      state.difficultyFilter = 'all';
       state.paraA = 1;
       state.paraH = 0;
       state.paraK = 0;
       renderSidebar();
       renderWorkspace();
       if (window.innerWidth < 1024) {
-        document.getElementById('sidebarDrawer').classList.add('hidden');
+        closeMobileDrawer();
       }
     }
 
@@ -676,12 +1812,12 @@
         ytBox.classList.remove('hidden');
         boardBox.classList.add('hidden');
         ytBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-rose-400 text-white shadow-sm transition';
-        boardBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-rose-100/70/60 text-rose-400/90/90 hover:bg-rose-100/70/70 transition';
+        boardBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-rose-100/60 text-rose-600 hover:bg-rose-100 transition';
       } else {
         ytBox.classList.add('hidden');
         boardBox.classList.remove('hidden');
         boardBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-rose-400 text-white shadow-sm transition';
-        ytBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-rose-100/70/60 text-rose-400/90/90 hover:bg-rose-100/70/70 transition';
+        ytBtn.className = 'px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-rose-100/60 text-rose-600 hover:bg-rose-100 transition';
         updateBoardFrame();
       }
     }
@@ -703,7 +1839,7 @@
           : '';
         iframe.src = `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&autoplay=1&start=${seconds}${originParam}`;
       } else {
-        state.boardTime = Math.min(state.boardDuration, Math.floor((seconds / 300) * state.boardDuration));
+        state.boardTime = Math.min(state.boardDuration, Math.floor((seconds / 250) * state.boardDuration));
         updateBoardFrame();
       }
     }
@@ -743,6 +1879,7 @@
       }
       localStorage.setItem('dora_mastered', JSON.stringify(state.masteredIds));
       updateTopStats();
+      
       renderSidebar();
       renderWorkspace();
     }
@@ -753,6 +1890,7 @@
       const videoId = state.customVideos[unit.id] || unit.youtubeId;
 
       document.getElementById('unitGradeTag').textContent = unit.semester;
+      document.getElementById('unitSubjectTag').textContent = `${unit.subjectIcon} ${unit.subject}`;
       document.getElementById('unitChapterTag').textContent = unit.chapter;
       document.getElementById('unitTitle').textContent = unit.title;
       document.getElementById('unitSubtitle').textContent = unit.subtitle;
@@ -766,23 +1904,20 @@
         masterBtn.className = 'px-4 py-2 rounded-2xl border-2 border-emerald-400 bg-emerald-50 text-emerald-800 font-bold text-sm transition flex items-center gap-1.5 shrink-0';
       } else {
         statusTag.textContent = '🌸 學習中';
-        statusTag.className = 'px-3 py-0.5 rounded-full text-xs font-bold bg-rose-100/70/60 text-rose-400/90';
+        statusTag.className = 'px-3 py-0.5 rounded-full text-xs font-bold bg-rose-100/60 text-rose-500';
         masterBtn.innerHTML = '<span>✓ 標記為已精熟</span>';
-        masterBtn.className = 'px-4 py-2 rounded-2xl border-2 border-rose-200 bg-white hover:bg-rose-50/50 text-rose-400/90 font-bold text-sm transition flex items-center gap-1.5 shrink-0';
+        masterBtn.className = 'px-4 py-2 rounded-2xl border-2 border-rose-200 bg-white hover:bg-rose-50/50 text-rose-500 font-bold text-sm transition flex items-center gap-1.5 shrink-0';
       }
 
-      // YouTube iframe & external link
       document.getElementById('ytIframe').src = getYoutubeEmbedUrl(videoId, 0);
       document.getElementById('externalYtLink').href = `https://www.youtube.com/watch?v=${videoId}`;
 
-      // Timestamps
       document.getElementById('timestampContainer').innerHTML = unit.timestamps.map(ts => `
-        <button onclick="jumpToTimestamp(${ts.time})" class="px-3 py-1.5 rounded-xl bg-rose-50/50 hover:bg-rose-100/70/70 border border-rose-100 text-rose-400/90/90 text-xs font-bold transition">
+        <button onclick="jumpToTimestamp(${ts.time})" class="px-3 py-1.5 rounded-xl bg-rose-50/50 hover:bg-rose-100/70 border border-rose-100 text-rose-600 text-xs font-bold transition">
           ▶ ${ts.label}
         </button>
       `).join('');
 
-      // Notes
       document.getElementById('notesContainer').innerHTML = unit.notes.map(note => {
         const isDoraTip = note.tag.includes('Dora');
         return `
@@ -798,7 +1933,6 @@
         `;
       }).join('');
 
-      // Interactive Visuals & Examples
       renderInteractiveVisual(unit);
       document.getElementById('examplesContainer').innerHTML = unit.examples.map((ex, idx) => `
         <div class="p-4 rounded-2xl bg-rose-50/30 border border-rose-100">
@@ -806,7 +1940,7 @@
           <div class="space-y-2">
             ${ex.hints.map((h, hIdx) => `
               <div>
-                <button onclick="this.nextElementSibling.classList.toggle('hidden')" class="px-3 py-1 rounded-lg bg-white hover:bg-rose-100/70/70/60 border border-rose-200 text-rose-400/90 text-xs font-bold transition">
+                <button onclick="this.nextElementSibling.classList.toggle('hidden')" class="px-3 py-1 rounded-lg bg-white hover:bg-rose-100/60 border border-rose-200 text-rose-500 text-xs font-bold transition">
                   ${hIdx === ex.hints.length - 1 ? '✨ 展開完整解答' : `💡 顯示提示 ${hIdx + 1}`}
                 </button>
                 <div class="hidden mt-1.5 p-3 rounded-xl bg-white border border-rose-100 text-xs sm:text-sm text-gray-700">
@@ -818,7 +1952,18 @@
         </div>
       `).join('');
 
-      // Quiz
+      // Toggle Elementary Seat Picker visibility
+      const isElementary = unit.stage === '國小三年級';
+      const seatCard = document.getElementById('seatPickerCard');
+      if (isElementary) {
+        seatCard.classList.remove('hidden');
+        document.getElementById('maxSeatInput').value = state.maxSeat;
+        renderSeatHistory();
+      } else {
+        seatCard.classList.add('hidden');
+      }
+
+      renderTeamScoreboard();
       renderQuiz(unit);
       updateBoardFrame();
       renderMath();
@@ -826,12 +1971,291 @@
 
     function renderInteractiveVisual(unit) {
       const box = document.getElementById('interactiveVisualCard');
-      if (unit.visualType === 'parabola') {
+      if (unit.visualType === 'fraction') {
+        box.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div>
+              <h3 class="text-lg font-black text-gray-800">🍕 互動式分數披薩與同分母加法實驗室</h3>
+              <p class="text-xs text-gray-500">可以直接「點擊披薩切片」吃掉或放回，也能切換「同分母加法模式」看兩個人合起來吃了幾分之幾！</p>
+            </div>
+            <div id="fractionLabelDisplay" class="px-4 py-1.5 rounded-xl bg-rose-100/70 text-gray-800 font-black text-sm">
+              已選 3 片 ➔ 八分之三（3 / 8）
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+            <div class="bg-rose-50/35 border border-rose-100 rounded-2xl p-4 flex flex-col items-center">
+              <svg id="pizzaSvg" viewBox="-115 -115 220 220" class="w-52 h-52 cursor-pointer"></svg>
+              <span class="text-[11px] text-rose-500 font-bold mt-2">👆 試著直接點一點披薩上的每一片！</span>
+            </div>
+            <div class="space-y-3">
+              <div class="p-4 rounded-2xl bg-rose-50/50 border border-rose-100 space-y-2.5">
+                <div class="flex justify-between text-xs font-bold text-gray-700">
+                  <span>🩷 弟弟拿走的片數（粉紅色）：</span>
+                  <span id="pizzaValText" class="text-rose-500 font-black">3 / 8</span>
+                </div>
+                <input type="range" min="0" max="8" step="1" value="${state.pizzaSlices}" oninput="updatePizza(this.value)" class="w-full accent-rose-400" />
+              </div>
+
+              <div class="p-4 rounded-2xl bg-amber-50/50 border border-amber-200/80 space-y-2.5">
+                <div class="flex justify-between text-xs font-bold text-amber-900">
+                  <span>💛 妹妹又拿走的片數（鵝黃色）：</span>
+                  <span id="pizzaVal2Text" class="text-amber-700 font-black">${state.pizzaSlices2} / 8</span>
+                </div>
+                <input type="range" min="0" max="${8 - state.pizzaSlices}" step="1" id="pizzaSlider2" value="${state.pizzaSlices2}" oninput="updatePizza2(this.value)" class="w-full accent-amber-500" />
+                <div id="fractionEquationBox" class="p-2.5 rounded-xl bg-white border border-amber-200 text-center font-black text-sm text-gray-800">
+                  算式：3/8 ＋ 2/8 ＝ 5/8
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        drawPizzaSvg();
+      } else if (unit.visualType === 'english') {
+        const vocabList = [
+          { word: 'pen', zh: '原子筆', article: 'a', emoji: '🖊️', sentence: "What's this? It's a pen." },
+          { word: 'pencil', zh: '鉛筆', article: 'a', emoji: '✏️', sentence: "What's this? It's a pencil." },
+          { word: 'ruler', zh: '直尺', article: 'a', emoji: '📏', sentence: "What's that? It's a ruler." },
+          { word: 'eraser', zh: '橡皮擦', article: 'an', emoji: '🧽', sentence: "What's this? It's an eraser." },
+          { word: 'book', zh: '書本', article: 'a', emoji: '📘', sentence: "What's that? It's a book." },
+          { word: 'bag', zh: '書包', article: 'a', emoji: '🎒', sentence: "What's that? It's a bag." }
+        ];
+        box.innerHTML = `
+          <div class="space-y-6">
+            <div>
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div>
+                  <h3 class="text-lg font-black text-gray-800">🔊 1. 英語單字與句型發音點讀機</h3>
+                  <p class="text-xs text-gray-500">點擊單字卡聽標準英語發音，特別注意母音開頭要用 <span class="font-black text-rose-500">an</span> 喔！</p>
+                </div>
+                <span class="px-3 py-1 rounded-xl bg-rose-100/70 text-rose-600 text-xs font-black">點擊卡片發音 🔉</span>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                ${vocabList.map(v => `
+                  <div class="p-3.5 rounded-2xl bg-rose-50/40 hover:bg-rose-100/60 border border-rose-100 transition flex flex-col justify-between gap-2">
+                    <div class="flex items-center justify-between">
+                      <span class="text-2xl">${v.emoji}</span>
+                      <span class="px-2 py-0.5 rounded-md text-[11px] font-black ${v.article === 'an' ? 'bg-amber-100 text-amber-800' : 'bg-white text-rose-500'}">${v.article} ${v.word}</span>
+                    </div>
+                    <div>
+                      <div class="text-base font-black text-gray-800">${v.word} <span class="text-xs font-medium text-gray-500">${v.zh}</span></div>
+                      <div class="text-[11px] text-gray-500 mt-0.5">${v.sentence}</div>
+                    </div>
+                    <div class="flex gap-1.5 pt-1">
+                      <button onclick="speakEnglish('${v.article} ${v.word}')" class="flex-1 py-1.5 rounded-xl bg-white hover:bg-rose-50 border border-rose-200 text-rose-600 text-xs font-bold transition">
+                        🔈 單字
+                      </button>
+                      <button onclick="speakEnglish('${v.sentence.replace(/'/g, "\'")}')" class="flex-1 py-1.5 rounded-xl bg-rose-400 text-white text-xs font-bold hover:opacity-90 transition">
+                        🗣️ 句型
+                      </button>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Interactive Listening Challenge -->
+            <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-50/70 to-rose-50/60 border border-rose-200">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div>
+                  <h4 class="font-black text-gray-800 text-base">🎧 2. 聽音辨字小挑戰（聽聽看老師念哪一個文具？）</h4>
+                  <p class="text-xs text-gray-500">先按「播放題目語音」，再點選正確的圖片卡片！</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button onclick="playEngListeningPrompt()" class="px-4 py-2 rounded-xl pink-gradient text-white text-xs font-black shadow-sm hover:scale-105 transition">
+                    🔊 播放題目語音
+                  </button>
+                  <button onclick="nextEngListeningRound()" class="px-3 py-2 rounded-xl bg-white border border-rose-200 text-rose-600 text-xs font-bold hover:bg-rose-50">
+                    換一題 ↻
+                  </button>
+                </div>
+              </div>
+              <div id="engListeningOptions" class="grid grid-cols-3 sm:grid-cols-6 gap-2"></div>
+              <div id="engListeningFeedback" class="mt-2.5 text-xs font-black text-rose-600"></div>
+            </div>
+          </div>
+        `;
+        renderEngListeningGame();
+      } else if (unit.visualType === 'science') {
+        box.innerHTML = `
+          <div class="space-y-6">
+            <!-- Part 1: Plant Organ Interactive Explorer -->
+            <div>
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div>
+                  <h3 class="text-lg font-black text-gray-800">🌱 1. 植物身體五大器官點一點</h3>
+                  <p class="text-xs text-gray-500">點擊下方器官按鈕（花、葉、莖、果實、根），看看植物身體各部位的超能力！</p>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center bg-emerald-50/40 border border-emerald-200/80 rounded-2xl p-4">
+                <div class="flex justify-center">
+                  <svg viewBox="0 0 260 220" class="w-56 h-auto">
+                    <!-- Soil -->
+                    <rect x="20" y="150" width="220" height="55" rx="10" fill="#D6B89C"/>
+                    <!-- Roots -->
+                    <path d="M130 150 Q110 175 85 190 M130 150 Q130 180 130 198 M130 150 Q150 175 175 190" stroke="#78350F" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <!-- Stem -->
+                    <line x1="130" y1="60" x2="130" y2="150" stroke="#15803D" stroke-width="8" stroke-linecap="round"/>
+                    <!-- Leaves -->
+                    <ellipse cx="95" cy="115" rx="28" ry="13" transform="rotate(-20 95 115)" fill="#22C55E"/>
+                    <ellipse cx="165" cy="100" rx="28" ry="13" transform="rotate(20 165 100)" fill="#22C55E"/>
+                    <!-- Fruit -->
+                    <circle cx="155" cy="130" r="13" fill="#F43F5E"/>
+                    <!-- Flower -->
+                    <circle cx="130" cy="48" r="22" fill="#FBBF24"/>
+                    <circle cx="130" cy="48" r="10" fill="#F59E0B"/>
+                  </svg>
+                </div>
+                <div class="space-y-3">
+                  <div class="flex flex-wrap gap-1.5">
+                    ${[
+                      { key: 'flower', label: '🌼 花朵' },
+                      { key: 'leaf', label: '🍃 葉子' },
+                      { key: 'stem', label: '🎋 莖' },
+                      { key: 'fruit', label: '🍎 果實與種子' },
+                      { key: 'root', label: '🌿 根部' }
+                    ].map(p => `
+                      <button onclick="selectPlantOrgan('${p.key}')" class="px-3 py-1.5 rounded-xl bg-white hover:bg-emerald-100 border border-emerald-300 text-emerald-900 text-xs font-black transition shadow-sm">
+                        ${p.label}
+                      </button>
+                    `).join('')}
+                  </div>
+                  <div id="plantOrganInfoBox" class="p-4 rounded-2xl bg-white border border-emerald-200 text-sm text-gray-700 leading-relaxed">
+                    👆 點擊上方任一器官按鈕，查看它的功能與生活例子！
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Part 2: Magnet Lab -->
+            <div>
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div>
+                  <h3 class="text-lg font-black text-gray-800">🧲 2. 磁鐵兩極互動實驗室</h3>
+                  <p class="text-xs text-gray-500">切換左右磁鐵的磁極方向，即時觀察「同極相斥」與「異極相吸」現象！</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button onclick="flipMagnet('left')" class="px-3 py-1.5 rounded-xl bg-rose-100/70 hover:bg-rose-200/70 text-rose-700 text-xs font-black transition">🔄 反轉左磁鐵</button>
+                  <button onclick="flipMagnet('right')" class="px-3 py-1.5 rounded-xl bg-rose-100/70 hover:bg-rose-200/70 text-rose-700 text-xs font-black transition">🔄 反轉右磁鐵</button>
+                </div>
+              </div>
+              <div id="magnetLabStage" class="bg-[#332936] rounded-2xl p-5 flex flex-col items-center justify-center"></div>
+            </div>
+          </div>
+        `;
+        renderMagnetLab();
+      } else if (unit.visualType === 'chinese') {
+        box.innerHTML = `
+          <div class="space-y-6">
+            <!-- Part 1: Interactive Metaphor / Personification Sentence Builder -->
+            <div>
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div>
+                  <h3 class="text-lg font-black text-gray-800">🪄 1. 修辭魔法造句機（動手拼出擬人與譬喻句）</h3>
+                  <p class="text-xs text-gray-500">選擇主角與魔法動詞，看看平淡的句子怎麼變成生動的修辭佳句！</p>
+                </div>
+              </div>
+              <div class="p-4 rounded-2xl bg-rose-50/40 border border-rose-100 space-y-3">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label class="text-xs font-bold text-gray-600 block mb-1">第一步：選一個主角</label>
+                    <select id="rhetoricSubject" onchange="updateRhetoricBuilder()" class="w-full px-3 py-2 rounded-xl bg-white border border-rose-200 text-sm font-bold text-gray-800">
+                      <option value="太陽公公">☀️ 太陽公公</option>
+                      <option value="路邊的小花">🌸 路邊的小花</option>
+                      <option value="天上的白雲">☁️ 天上的白雲</option>
+                      <option value="秋天的落葉">🍂 秋天的落葉</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-gray-600 block mb-1">第二步：加上修辭魔法</label>
+                    <select id="rhetoricStyle" onchange="updateRhetoricBuilder()" class="w-full px-3 py-2 rounded-xl bg-white border border-rose-200 text-sm font-bold text-gray-800">
+                      <option value="personify">✨ 擬人法（賦予人的動作心情）</option>
+                      <option value="simile">🌈 譬喻法（用「像、彷彿」打比方）</option>
+                    </select>
+                  </div>
+                </div>
+                <div id="rhetoricOutputBox" class="p-4 rounded-2xl bg-white border-2 border-rose-200 text-center space-y-1"></div>
+              </div>
+            </div>
+
+            <!-- Part 2: MOE Stroke Order & Dictionary -->
+            <div>
+              <h3 class="text-lg font-black text-gray-800 mb-1">✍️ 2. 國語生字筆順與成語查詢小幫手</h3>
+              <p class="text-xs text-gray-500 mb-3">輸入不會寫的國字或語詞，一鍵開啟教育部「國字標準字體筆順學習網」查看動態筆畫！</p>
+              <div class="flex flex-col sm:flex-row gap-2.5">
+                <input id="strokeCharInput" type="text" maxlength="4" placeholder="請輸入想查詢筆順的國字（例如：風、樹、專、致）" class="flex-1 px-4 py-2.5 rounded-2xl border border-rose-200 bg-rose-50/30 text-sm focus:outline-none focus:border-rose-400" />
+                <button onclick="openMoeStroke()" class="px-5 py-2.5 rounded-2xl pink-gradient text-white text-xs sm:text-sm font-black shadow-sm hover:opacity-95 transition shrink-0">
+                  🖌️ 查看教育部動態筆順 ↗
+                </button>
+                <button onclick="openMoeDict()" class="px-4 py-2.5 rounded-2xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 text-xs sm:text-sm font-black transition shrink-0">
+                  📖 查國語辭典 ↗
+                </button>
+              </div>
+              <div class="mt-3 flex flex-wrap items-center gap-2 text-xs text-gray-500">
+                <span>本課熱門生字快點：</span>
+                ${['專', '致', '厲', '籌', '及', '稻'].map(ch => `
+                  <button onclick="document.getElementById('strokeCharInput').value='${ch}'; openMoeStroke();" class="w-8 h-8 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 font-black text-gray-800 transition">${ch}</button>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+        updateRhetoricBuilder();
+      } else if (unit.visualType === 'social') {
+        box.innerHTML = `
+          <div class="space-y-6">
+            <!-- Part 1: Interactive Family Tree Explorer -->
+            <div>
+              <h3 class="text-lg font-black text-gray-800 mb-1">👨‍👩‍👧‍👦 1. 親屬稱謂大挑戰（點點看怎麼稱呼長輩！）</h3>
+              <p class="text-xs text-gray-500 mb-3">點擊下方親屬關係按鈕，立刻顯示正確的稱呼與記憶口訣：</p>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                ${[
+                  { rel: '爸爸的哥哥', ans: '伯父（伯伯）', tip: '爸爸的兄長叫伯父' },
+                  { rel: '爸爸的弟弟', ans: '叔叔', tip: '爸爸的弟弟叫叔叔' },
+                  { rel: '爸爸的姊妹', ans: '姑姑', tip: '爸爸的姊妹都叫姑姑' },
+                  { rel: '媽媽的兄弟', ans: '舅舅', tip: '媽媽的哥哥和弟弟都叫舅舅' },
+                  { rel: '媽媽的姊妹', ans: '阿姨', tip: '媽媽的姊妹都叫阿姨' },
+                  { rel: '爸爸的父母', ans: '爺爺、奶奶', tip: '又稱祖父、祖母' },
+                  { rel: '媽媽的父母', ans: '外公、外婆', tip: '又稱外祖父、外祖母' },
+                  { rel: '姑姑的丈夫', ans: '姑丈', tip: '姑姑的先生稱為姑丈' }
+                ].map(item => `
+                  <button onclick="this.querySelector('.ans-box').classList.toggle('hidden'); playTone(600, 0.1);" class="p-3 rounded-2xl bg-rose-50/45 hover:bg-rose-100/60 border border-rose-200 text-left transition">
+                    <div class="text-xs font-bold text-gray-500">${item.rel}</div>
+                    <div class="text-sm font-black text-rose-600 mt-1">👆 點擊看稱呼</div>
+                    <div class="ans-box hidden mt-1.5 pt-1.5 border-t border-rose-200">
+                      <div class="text-base font-black text-emerald-700">${item.ans}</div>
+                      <div class="text-[11px] text-gray-500">${item.tip}</div>
+                    </div>
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Part 2: Class Meeting Role Matcher -->
+            <div class="p-4 rounded-2xl bg-amber-50/50 border border-amber-200">
+              <h4 class="font-black text-gray-800 text-base mb-1">🗳️ 2. 班級會議小民主互動模擬</h4>
+              <p class="text-xs text-gray-600 mb-3">試著幫班會選出校外教學地點，體驗「少數服從多數」的投票過程：</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button onclick="voteClassTrip('zoo')" class="p-3.5 rounded-2xl bg-white hover:bg-rose-50 border border-rose-200 flex items-center justify-between transition">
+                  <span class="font-black text-gray-800 text-sm">🦁 方案一：市立動物園</span>
+                  <span id="voteZooCount" class="px-3 py-1 rounded-full bg-rose-100 text-rose-600 font-black text-xs">${state.voteZoo} 票（+1票）</span>
+                </button>
+                <button onclick="voteClassTrip('museum')" class="p-3.5 rounded-2xl bg-white hover:bg-amber-50 border border-amber-200 flex items-center justify-between transition">
+                  <span class="font-black text-gray-800 text-sm">🦕 方案二：自然科學博物館</span>
+                  <span id="voteMuseumCount" class="px-3 py-1 rounded-full bg-amber-100 text-amber-800 font-black text-xs">${state.voteMuseum} 票（+1票）</span>
+                </button>
+              </div>
+              <div id="voteResultSummary" class="mt-3 text-xs font-bold text-gray-700 bg-white p-3 rounded-xl border border-amber-200">
+                目前票數：動物園 ${state.voteZoo} 票 vs 科博館 ${state.voteMuseum} 票。無論哪一項勝出，大家都要互相尊重喔！
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (unit.visualType === 'parabola') {
         box.innerHTML = `
           <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
             <div>
               <h3 class="text-lg font-black text-gray-800">🎛️ 互動式二次函數拋物線實驗室</h3>
-              <p class="text-xs text-rose-400/90">拖曳下方滑桿，即時觀察 $y = a(x - h)^2 + k$ 的圖形變化！</p>
+              <p class="text-xs text-gray-500">拖曳下方滑桿，即時觀察 $y = a(x - h)^2 + k$ 的圖形變化！</p>
             </div>
             <div id="parabolaFormulaDisplay" class="px-4 py-1.5 rounded-xl bg-rose-100/70 text-gray-700 font-black text-sm">
               y = 1(x - 0)² + 0 ｜ 頂點 (0, 0)
@@ -845,21 +2269,21 @@
               <div class="p-3.5 rounded-2xl bg-rose-50/50 border border-rose-100">
                 <div class="flex justify-between text-xs font-bold text-gray-700 mb-1">
                   <span>開口方向與寬窄 ($a$)</span>
-                  <span id="valA" class="text-rose-400 font-black">1</span>
+                  <span id="valA" class="text-rose-500 font-black">1</span>
                 </div>
                 <input type="range" min="-3" max="3" step="0.5" value="1" oninput="updateParabola('a', this.value)" class="w-full accent-rose-400" />
               </div>
               <div class="p-3.5 rounded-2xl bg-rose-50/50 border border-rose-100">
                 <div class="flex justify-between text-xs font-bold text-gray-700 mb-1">
                   <span>左右平移頂點 ($h$)</span>
-                  <span id="valH" class="text-rose-400 font-black">0</span>
+                  <span id="valH" class="text-rose-500 font-black">0</span>
                 </div>
                 <input type="range" min="-5" max="5" step="1" value="0" oninput="updateParabola('h', this.value)" class="w-full accent-rose-400" />
               </div>
               <div class="p-3.5 rounded-2xl bg-rose-50/50 border border-rose-100">
                 <div class="flex justify-between text-xs font-bold text-gray-700 mb-1">
                   <span>上下平移頂點 ($k$)</span>
-                  <span id="valK" class="text-rose-400 font-black">0</span>
+                  <span id="valK" class="text-rose-500 font-black">0</span>
                 </div>
                 <input type="range" min="-5" max="5" step="1" value="0" oninput="updateParabola('k', this.value)" class="w-full accent-rose-400" />
               </div>
@@ -867,14 +2291,251 @@
           </div>
         `;
         drawParabolaSvg();
+      } else if (unit.visualType === 'coordinate') {
+        box.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <div>
+              <h3 class="text-lg font-black text-gray-800">🎯 互動式直角坐標點點看</h3>
+              <p class="text-xs text-gray-500">直接點擊下方坐標平面的任意格子，系統會立刻告訴你該點的 $(x, y)$ 坐標與所在象限！</p>
+            </div>
+            <div id="coordClickDisplay" class="px-4 py-1.5 rounded-xl bg-rose-100/70 text-rose-700 font-black text-sm">
+              點擊坐標平面上的任意位置試試看！
+            </div>
+          </div>
+          <div class="flex justify-center bg-rose-50/35 border border-rose-100 rounded-2xl p-4">
+            <svg id="interactiveCoordSvg" onclick="handleCoordPlaneClick(event)" viewBox="-150 -150 300 300" class="w-full max-w-[320px] h-auto bg-white rounded-xl border border-rose-200 cursor-crosshair"></svg>
+          </div>
+        `;
+        drawInteractiveCoordSvg(3, -2);
       } else {
         box.innerHTML = `
-          <h3 class="text-lg font-black text-gray-800 mb-2">🎨 本單元核心視覺圖解</h3>
-          <div class="bg-[#2A1B2E] rounded-2xl p-4 flex items-center justify-center">
+          <h3 class="text-lg font-black text-gray-800 mb-2">🎨 本單元核心觀念圖解</h3>
+          <div class="bg-[#332936] rounded-2xl p-4 flex items-center justify-center">
             ${getUnitStaticSvg(unit.id, 2)}
           </div>
         `;
       }
+    }
+
+    function updatePizza(val) {
+      state.pizzaSlices = parseInt(val);
+      if (state.pizzaSlices + state.pizzaSlices2 > 8) {
+        state.pizzaSlices2 = 8 - state.pizzaSlices;
+      }
+      const s2 = document.getElementById('pizzaSlider2');
+      if (s2) {
+        s2.max = 8 - state.pizzaSlices;
+        s2.value = state.pizzaSlices2;
+      }
+      drawPizzaSvg();
+    }
+
+    function updatePizza2(val) {
+      state.pizzaSlices2 = parseInt(val);
+      drawPizzaSvg();
+    }
+
+    function togglePizzaSlice(idx) {
+      if (idx < state.pizzaSlices) {
+        state.pizzaSlices = idx;
+      } else if (idx < state.pizzaSlices + state.pizzaSlices2) {
+        state.pizzaSlices2 = idx - state.pizzaSlices;
+      } else {
+        state.pizzaSlices = Math.min(8, idx + 1);
+        if (state.pizzaSlices + state.pizzaSlices2 > 8) {
+          state.pizzaSlices2 = 8 - state.pizzaSlices;
+        }
+      }
+      playTone(580, 0.08);
+      renderInteractiveVisual(getCurrentUnit());
+    }
+
+    function drawPizzaSvg() {
+      const svg = document.getElementById('pizzaSvg');
+      if (!svg) return;
+      const n = 8;
+      const k1 = state.pizzaSlices;
+      const k2 = state.pizzaSlices2;
+      let paths = '';
+      for (let i = 0; i < n; i++) {
+        const a1 = (i * 2 * Math.PI) / n - Math.PI / 2;
+        const a2 = ((i + 1) * 2 * Math.PI) / n - Math.PI / 2;
+        const x1 = 92 * Math.cos(a1);
+        const y1 = 92 * Math.sin(a1);
+        const x2 = 92 * Math.cos(a2);
+        const y2 = 92 * Math.sin(a2);
+        let fill = '#FFF8F9';
+        if (i < k1) fill = '#F4A7B9';
+        else if (i < k1 + k2) fill = '#FDE68A';
+        paths += `<path onclick="togglePizzaSlice(${i})" d="M 0 0 L ${x1.toFixed(1)} ${y1.toFixed(1)} A 92 92 0 0 1 ${x2.toFixed(1)} ${y2.toFixed(1)} Z" fill="${fill}" stroke="#E27D95" stroke-width="2"/>`;
+      }
+      svg.innerHTML = paths;
+      const total = k1 + k2;
+      const zhNums = ['零', '一', '二', '三', '四', '五', '六', '七', '八'];
+      document.getElementById('pizzaValText').textContent = `${k1} / 8`;
+      const v2 = document.getElementById('pizzaVal2Text');
+      if (v2) v2.textContent = `${k2} / 8`;
+      document.getElementById('fractionLabelDisplay').textContent = total === 8
+        ? '合起來 8 片 ➔ 八分之八（8 / 8 = 1 整塊！）'
+        : `合起來 ${total} 片 ➔ 八分之${zhNums[total]}（${total} / 8）`;
+      const eqBox = document.getElementById('fractionEquationBox');
+      if (eqBox) {
+        eqBox.textContent = `算式：${k1}/8 ＋ ${k2}/8 ＝ ${total}/8 ${total === 8 ? '（＝ 1 整塊披薩！）' : ''}`;
+      }
+    }
+
+    // Interactive Helpers for Grade 3 Chinese, Science, Social Studies, English & Junior High Coordinate
+    function updateRhetoricBuilder() {
+      const subj = document.getElementById('rhetoricSubject')?.value || '太陽公公';
+      const style = document.getElementById('rhetoricStyle')?.value || 'personify';
+      const box = document.getElementById('rhetoricOutputBox');
+      if (!box) return;
+      const map = {
+        '太陽公公': {
+          personify: '「早上起床時，太陽公公露出了溫暖的微笑，溫柔地叫醒大家。」',
+          simile: '「天上的太陽像一顆又大又圓的火紅氣球，照亮了整個大地。」'
+        },
+        '路邊的小花': {
+          personify: '「微風吹來，路邊的小花開心地點點頭，好像在跟我們打招呼。」',
+          simile: '「草地上的小花像五顏六色的小星星，點綴著綠油油的草皮。」'
+        },
+        '天上的白雲': {
+          personify: '「調皮的白雲在藍天裡追逐嬉戲，一會兒變成小狗，一會兒變成綿羊。」',
+          simile: '「天上的白雲像一團團軟綿綿的棉花糖，讓人好想咬一口。」'
+        },
+        '秋天的落葉': {
+          personify: '「秋風吹過，樹葉離開了大樹媽媽的懷抱，在空中跳起優雅的華爾滋。」',
+          simile: '「飄落的黃葉像一隻隻金色的蝴蝶，在風中翩翩起舞。」'
+        }
+      };
+      const tag = style === 'personify' ? '✨ 擬人法佳句（把物品當作人）' : '🌈 譬喻法佳句（用「像」打比方）';
+      box.innerHTML = `
+        <div class="text-xs font-black text-rose-500">${tag}</div>
+        <div class="text-base sm:text-lg font-black text-gray-800">${map[subj][style]}</div>
+      `;
+    }
+
+    function selectPlantOrgan(key) {
+      const box = document.getElementById('plantOrganInfoBox');
+      if (!box) return;
+      const info = {
+        flower: '<strong>🌼 花朵（繁殖器官）</strong>：通常有鮮豔的花瓣與香味，吸引蜜蜂、蝴蝶來幫忙傳粉，授粉後會發育成果實。',
+        leaf: '<strong>🍃 葉子（製造養分工廠）</strong>：利用陽光、空氣和水進行光合作用製造養分。葉脈分為「網狀脈」（如榕樹）與「平行脈」（如竹子、玉米）。',
+        stem: '<strong>🎋 莖（支撐與輸送管道）</strong>：支撐整個植物的身體，並把根吸收的水分往上送到葉子，也把葉子製造的養分送到全身。',
+        fruit: '<strong>🍎 果實與種子（保護與繁衍）</strong>：果實保護裡面的種子，種子掉到泥土裡發芽後，就會長出新的小苗！',
+        root: '<strong>🌿 根部（抓地與吸水）</strong>：深入土壤裡抓緊泥土，讓植物不會被風吹倒，並負責吸收土壤中的水分與養分。'
+      };
+      playTone(620, 0.1);
+      box.innerHTML = info[key];
+    }
+
+    function voteClassTrip(choice) {
+      if (choice === 'zoo') state.voteZoo++;
+      else state.voteMuseum++;
+      playTone(660, 0.12);
+      const zEl = document.getElementById('voteZooCount');
+      const mEl = document.getElementById('voteMuseumCount');
+      const sEl = document.getElementById('voteResultSummary');
+      if (zEl) zEl.textContent = `${state.voteZoo} 票（+1票）`;
+      if (mEl) mEl.textContent = `${state.voteMuseum} 票（+1票）`;
+      if (sEl) {
+        const winner = state.voteZoo > state.voteMuseum ? '市立動物園' : (state.voteMuseum > state.voteZoo ? '自然科學博物館' : '目前平手');
+        sEl.textContent = `目前票數：動物園 ${state.voteZoo} 票 vs 科博館 ${state.voteMuseum} 票 ➔ 領先方案：「${winner}」（記得少數服從多數、多數尊重少數喔！）`;
+      }
+    }
+
+    const ENG_ITEMS = [
+      { word: 'pen', article: 'a', emoji: '🖊️', zh: '原子筆' },
+      { word: 'pencil', article: 'a', emoji: '✏️', zh: '鉛筆' },
+      { word: 'ruler', article: 'a', emoji: '📏', zh: '直尺' },
+      { word: 'eraser', article: 'an', emoji: '🧽', zh: '橡皮擦' },
+      { word: 'book', article: 'a', emoji: '📘', zh: '書本' },
+      { word: 'bag', article: 'a', emoji: '🎒', zh: '書包' }
+    ];
+
+    function renderEngListeningGame() {
+      const container = document.getElementById('engListeningOptions');
+      if (!container) return;
+      container.innerHTML = ENG_ITEMS.map(item => `
+        <button onclick="checkEngListening('${item.word}')" class="p-2.5 rounded-2xl bg-white hover:bg-rose-100/70 border border-rose-200 flex flex-col items-center gap-1 transition shadow-sm">
+          <span class="text-2xl">${item.emoji}</span>
+          <span class="text-xs font-black text-gray-800">${item.word}</span>
+          <span class="text-[10px] text-gray-400">${item.zh}</span>
+        </button>
+      `).join('');
+    }
+
+    function playEngListeningPrompt() {
+      const target = ENG_ITEMS.find(i => i.word === state.engTargetWord) || ENG_ITEMS[3];
+      speakEnglish(`It's ${target.article} ${target.word}.`);
+      const fb = document.getElementById('engListeningFeedback');
+      if (fb) fb.textContent = '👂 仔細聽喔！老師剛剛念的是哪一個文具呢？請點選上方圖卡！';
+    }
+
+    function nextEngListeningRound() {
+      const others = ENG_ITEMS.filter(i => i.word !== state.engTargetWord);
+      const next = others[Math.floor(Math.random() * others.length)];
+      state.engTargetWord = next.word;
+      playEngListeningPrompt();
+    }
+
+    function checkEngListening(pickedWord) {
+      const fb = document.getElementById('engListeningFeedback');
+      const target = ENG_ITEMS.find(i => i.word === state.engTargetWord);
+      if (pickedWord === state.engTargetWord) {
+        playTone(784, 0.2);
+        if (fb) fb.innerHTML = `🎉 答對了！就是 <span class="underline">${target.article} ${target.word}（${target.zh}）</span>！按「換一題」繼續挑戰！`;
+      } else {
+        playTone(330, 0.25, 'triangle');
+        if (fb) fb.textContent = `❌ 不是 ${pickedWord} 喔，再按一次「播放題目語音」聽聽看！`;
+      }
+    }
+
+    function drawInteractiveCoordSvg(px, py) {
+      const svg = document.getElementById('interactiveCoordSvg');
+      if (!svg) return;
+      const scale = 25;
+      let grid = '';
+      for (let i = -125; i <= 125; i += scale) {
+        grid += `<line x1="${i}" y1="-140" x2="${i}" y2="140" stroke="#F7ECF0" stroke-width="1"/>`;
+        grid += `<line x1="-140" y1="${i}" x2="140" y2="${i}" stroke="#F7ECF0" stroke-width="1"/>`;
+      }
+      const sx = px * scale;
+      const sy = -py * scale;
+      svg.innerHTML = `
+        ${grid}
+        <line x1="-140" y1="0" x2="140" y2="0" stroke="#8E4A5B" stroke-width="1.5"/>
+        <line x1="0" y1="-140" x2="0" y2="140" stroke="#8E4A5B" stroke-width="1.5"/>
+        <text x="65" y="-65" fill="#E5C1CA" font-size="11" font-weight="bold">第一象限 (+,+)</text>
+        <text x="-125" y="-65" fill="#E5C1CA" font-size="11" font-weight="bold">第二象限 (-,+)</text>
+        <text x="-125" y="75" fill="#E5C1CA" font-size="11" font-weight="bold">第三象限 (-,-)</text>
+        <text x="65" y="75" fill="#E5C1CA" font-size="11" font-weight="bold">第四象限 (+,-)</text>
+        <line x1="${sx}" y1="0" x2="${sx}" y2="${sy}" stroke="#FBBF24" stroke-width="1.5" stroke-dasharray="4"/>
+        <line x1="0" y1="${sy}" x2="${sx}" y2="${sy}" stroke="#FBBF24" stroke-width="1.5" stroke-dasharray="4"/>
+        <circle cx="${sx}" cy="${sy}" r="6" fill="#E27D95" stroke="#FFF" stroke-width="2"/>
+        <text x="${sx + 8}" y="${sy - 8}" fill="#6B3A48" font-size="12" font-weight="black">(${px}, ${py})</text>
+      `;
+      let loc = '';
+      if (px === 0 && py === 0) loc = '原點 (0, 0)';
+      else if (px === 0) loc = 'y 軸上（不屬於任何象限）';
+      else if (py === 0) loc = 'x 軸上（不屬於任何象限）';
+      else if (px > 0 && py > 0) loc = '第一象限 (+, +)';
+      else if (px < 0 && py > 0) loc = '第二象限 (-, +)';
+      else if (px < 0 && py < 0) loc = '第三象限 (-, -)';
+      else loc = '第四象限 (+, -)';
+      const disp = document.getElementById('coordClickDisplay');
+      if (disp) disp.textContent = `點 (${px}, ${py}) ➔ 位於「${loc}」`;
+    }
+
+    function handleCoordPlaneClick(e) {
+      const svg = document.getElementById('interactiveCoordSvg');
+      const rect = svg.getBoundingClientRect();
+      const viewX = ((e.clientX - rect.left) / rect.width) * 300 - 150;
+      const viewY = ((e.clientY - rect.top) / rect.height) * 300 - 150;
+      const px = Math.max(-5, Math.min(5, Math.round(viewX / 25)));
+      const py = Math.max(-5, Math.min(5, Math.round(-viewY / 25)));
+      playTone(640, 0.08);
+      drawInteractiveCoordSvg(px, py);
     }
 
     function updateParabola(param, val) {
@@ -920,16 +2581,75 @@
       document.getElementById('parabolaFormulaDisplay').textContent = `y = ${a}(x ${signH})² ${signK} ｜ 頂點 (${h}, ${k})`;
     }
 
-    // Animated Blackboard Engine
     function getUnitStaticSvg(unitId, stageIdx) {
+      if (unitId === 'e3-chi') {
+        const labels = [
+          { tag: '擬人法', text: '風兒輕輕唱歌 🎶', desc: '把風當作人，會唱歌、微笑' },
+          { tag: '譬喻法', text: '月亮像金色小船 🌙', desc: '用「像、好像」打比方' },
+          { tag: '課文大意', text: '主角 ＋ 事件 ＋ 結果 📝', desc: '刪掉細節，留下核心短句' }
+        ];
+        const item = labels[stageIdx];
+        return `
+          <svg viewBox="0 0 400 180" class="w-full max-w-md h-auto">
+            <rect x="35" y="25" width="330" height="130" rx="18" fill="rgba(244,167,185,0.18)" stroke="#F4A7B9" stroke-width="2"/>
+            <rect x="145" y="40" width="110" height="28" rx="14" fill="#EA8C9E"/>
+            <text x="200" y="59" text-anchor="middle" fill="#FFF" font-size="13" font-weight="bold">${item.tag}</text>
+            <text x="200" y="102" text-anchor="middle" fill="#FFF" font-size="20" font-weight="black">${item.text}</text>
+            <text x="200" y="132" text-anchor="middle" fill="#FBCFE8" font-size="13">${item.desc}</text>
+          </svg>
+        `;
+      }
+      if (unitId === 'e3-math') {
+        const eq = stageIdx === 0 ? '平分成 8 份' : (stageIdx === 1 ? '2/8 ＋ 3/8' : '2/8 ＋ 3/8 ＝ 5/8');
+        return `
+          <svg viewBox="0 0 400 180" class="w-full max-w-md h-auto">
+            <rect x="40" y="45" width="320" height="45" rx="8" fill="#4B3B4E" stroke="#F4A7B9" stroke-width="2"/>
+            <rect x="42" y="47" width="${stageIdx >= 1 ? 80 : 0}" height="41" fill="#F4A7B9"/>
+            <rect x="122" y="47" width="${stageIdx >= 1 ? 120 : 0}" height="41" fill="#FBBF24"/>
+            <text x="200" y="135" text-anchor="middle" fill="#FFF" font-size="20" font-weight="black">${eq}</text>
+          </svg>
+        `;
+      }
+      if (unitId === 'e3-sci') {
+        const isRepel = stageIdx === 2;
+        return `
+          <svg viewBox="0 0 400 180" class="w-full max-w-md h-auto">
+            <rect x="${isRepel ? 55 : 75}" y="65" width="110" height="44" rx="6" fill="#E27D95"/>
+            <text x="${isRepel ? 145 : 165}" y="93" text-anchor="middle" fill="#FFF" font-size="16" font-weight="bold">N</text>
+            <rect x="${isRepel ? 235 : 215}" y="65" width="110" height="44" rx="6" fill="${isRepel ? '#E27D95' : '#60A5FA'}"/>
+            <text x="${isRepel ? 255 : 235}" y="93" text-anchor="middle" fill="#FFF" font-size="16" font-weight="bold">${isRepel ? 'N' : 'S'}</text>
+            <text x="200" y="145" text-anchor="middle" fill="#FBCFE8" font-size="15" font-weight="bold">${isRepel ? '⬅ N 碰 N：同極相斥推開！ ➡' : 'N ➡ ⬅ S：異極相吸靠在一起！'}</text>
+          </svg>
+        `;
+      }
+      if (unitId === 'e3-soc') {
+        return `
+          <svg viewBox="0 0 400 180" class="w-full max-w-md h-auto">
+            <circle cx="130" cy="80" r="38" fill="rgba(244,167,185,0.3)" stroke="#F4A7B9" stroke-width="2"/>
+            <text x="130" y="85" text-anchor="middle" fill="#FFF" font-size="14" font-weight="bold">多數意見</text>
+            <circle cx="270" cy="80" r="30" fill="rgba(251,191,36,0.25)" stroke="#FBBF24" stroke-width="2"/>
+            <text x="270" y="85" text-anchor="middle" fill="#FEF3C7" font-size="13" font-weight="bold">少數意見</text>
+            <text x="200" y="148" text-anchor="middle" fill="#FBCFE8" font-size="14" font-weight="bold">少數服從多數 · 多數尊重少數 🤝</text>
+          </svg>
+        `;
+      }
+      if (unitId === 'e3-eng') {
+        return `
+          <svg viewBox="0 0 400 180" class="w-full max-w-md h-auto">
+            <rect x="45" y="35" width="310" height="110" rx="16" fill="rgba(255,255,255,0.08)" stroke="#F4A7B9" stroke-width="2"/>
+            <text x="200" y="78" text-anchor="middle" fill="#FBCFE8" font-size="16" font-weight="bold">${stageIdx === 0 ? 'What’s this? / What’s that?' : 'It’s a ruler. / It’s an eraser.'}</text>
+            <text x="200" y="115" text-anchor="middle" fill="#FBBF24" font-size="14" font-weight="bold">母音 a, e, i, o, u 開頭前面用 an！</text>
+          </svg>
+        `;
+      }
       if (unitId === 'g7-u1') {
         const leftText = stageIdx === 0 ? '3x - 5' : (stageIdx === 1 ? '3x' : 'x');
         const rightText = stageIdx === 0 ? '16' : (stageIdx === 1 ? '16 + 5 = 21' : '7');
         return `
           <svg viewBox="0 0 400 180" class="w-full max-w-md h-auto">
-            <polygon points="200,115 180,155 220,155" fill="#F43F5E"/>
+            <polygon points="200,115 180,155 220,155" fill="#EA8C9E"/>
             <line x1="70" y1="115" x2="330" y2="115" stroke="#FBCFE8" stroke-width="5" stroke-linecap="round"/>
-            <rect x="65" y="65" width="110" height="42" rx="10" fill="#FB7185"/>
+            <rect x="65" y="65" width="110" height="42" rx="10" fill="#F4A7B9"/>
             <text x="120" y="92" text-anchor="middle" fill="#FFF" font-size="18" font-weight="bold">${leftText}</text>
             <rect x="225" y="65" width="110" height="42" rx="10" fill="#F59E0B"/>
             <text x="280" y="92" text-anchor="middle" fill="#FFF" font-size="18" font-weight="bold">${rightText}</text>
@@ -944,13 +2664,13 @@
             <line x1="40" y1="95" x2="320" y2="95" stroke="#FDA4AF" stroke-width="2"/>
             <line x1="180" y1="15" x2="180" y2="175" stroke="#FDA4AF" stroke-width="2"/>
             <text x="260" y="55" fill="#FBCFE8" font-size="12">第一象限 (+,+)</text>
-            <text x="70" y="55" fill="#F472B6" font-size="13" font-weight="bold">第二象限 (-,+)</text>
+            <text x="70" y="55" fill="#F4A7B9" font-size="13" font-weight="bold">第二象限 (-,+)</text>
             <text x="70" y="145" fill="#FBCFE8" font-size="12">第三象限 (-,-)</text>
             <text x="260" y="145" fill="#FBCFE8" font-size="12">第四象限 (+,-)</text>
             ${stageIdx >= 1 ? `<line x1="180" y1="95" x2="115" y2="95" stroke="#FBBF24" stroke-width="4"/>` : ''}
             ${showPoint ? `
               <line x1="115" y1="95" x2="115" y2="55" stroke="#34D399" stroke-width="4"/>
-              <circle cx="115" cy="55" r="6" fill="#F43F5E" stroke="#FFF" stroke-width="2"/>
+              <circle cx="115" cy="55" r="6" fill="#EA8C9E" stroke="#FFF" stroke-width="2"/>
               <text x="80" y="42" fill="#FFF" font-size="13" font-weight="bold">P(-3, 2)</text>
             ` : `<circle cx="180" cy="95" r="5" fill="#FBBF24"/>`}
           </svg>
@@ -959,10 +2679,10 @@
       if (unitId === 'g8-u1') {
         return `
           <svg viewBox="0 0 380 190" class="w-full max-w-md h-auto">
-            <polygon points="150,60 150,140 250,140" fill="rgba(244,63,94,0.35)" stroke="#FDA4AF" stroke-width="3"/>
+            <polygon points="150,60 150,140 250,140" fill="rgba(244,167,185,0.35)" stroke="#FDA4AF" stroke-width="3"/>
             <rect x="150" y="128" width="12" height="12" fill="none" stroke="#FBBF24" stroke-width="2"/>
             ${stageIdx >= 1 ? `
-              <rect x="70" y="60" width="80" height="80" fill="rgba(251,113,133,0.25)" stroke="#FB7185" stroke-width="2"/>
+              <rect x="70" y="60" width="80" height="80" fill="rgba(244,167,185,0.25)" stroke="#F4A7B9" stroke-width="2"/>
               <text x="110" y="105" text-anchor="middle" fill="#FFE4E6" font-size="14" font-weight="bold">a² = 9</text>
               <rect x="150" y="140" width="100" height="42" fill="rgba(245,158,11,0.25)" stroke="#FBBF24" stroke-width="2"/>
               <text x="200" y="166" text-anchor="middle" fill="#FEF3C7" font-size="14" font-weight="bold">b² = 16</text>
@@ -975,7 +2695,7 @@
         <svg viewBox="0 0 360 190" class="w-full max-w-md h-auto">
           <line x1="40" y1="145" x2="320" y2="145" stroke="#FDA4AF" stroke-width="2"/>
           <line x1="180" y1="20" x2="180" y2="170" stroke="#FDA4AF" stroke-width="2"/>
-          <path d="${stageIdx === 2 ? 'M 110 140 Q 180 25 250 140' : 'M 110 35 Q 180 165 250 35'}" fill="none" stroke="#FB7185" stroke-width="4"/>
+          <path d="${stageIdx === 2 ? 'M 110 140 Q 180 25 250 140' : 'M 110 35 Q 180 165 250 35'}" fill="none" stroke="#F4A7B9" stroke-width="4"/>
           <circle cx="180" cy="${stageIdx === 2 ? '82' : '100'}" r="6" fill="#FBBF24"/>
           <text x="192" y="${stageIdx === 2 ? '85' : '105'}" fill="#FFF" font-size="13" font-weight="bold">頂點 (h, k)</text>
         </svg>
@@ -1061,35 +2781,179 @@
       window.speechSynthesis.speak(utter);
     }
 
-    // Quiz System
+    // ==================== Seat Number Lucky Draw Functions ====================
+    function updateMaxSeat(val) {
+      const n = Math.max(1, Math.min(60, parseInt(val) || 30));
+      state.maxSeat = n;
+      localStorage.setItem('dora_max_seat', String(n));
+      resetSeatHistory();
+    }
+
+    function drawSeatNumber(targetId) {
+      const max = state.maxSeat;
+      let pool = [];
+      for (let i = 1; i <= max; i++) {
+        if (!state.drawnSeats.includes(i)) pool.push(i);
+      }
+      if (pool.length === 0) {
+        state.drawnSeats = [];
+        for (let i = 1; i <= max; i++) pool.push(i);
+      }
+
+      let ticks = 0;
+      const maxTicks = 10;
+      const timer = setInterval(() => {
+        ticks++;
+        const tempNum = Math.floor(Math.random() * max) + 1;
+        if (targetId === 'global') {
+          document.getElementById('globalSeatDisplay').textContent = `🎲 ${tempNum} 號...`;
+        } else {
+          const el = document.getElementById(`qSeatBadge-${targetId}`);
+          if (el) el.textContent = `🎲 ${tempNum} 號...`;
+        }
+
+        if (ticks >= maxTicks) {
+          clearInterval(timer);
+          const chosen = pool[Math.floor(Math.random() * pool.length)];
+          state.drawnSeats.push(chosen);
+          if (targetId === 'global') {
+            state.globalDrawnSeat = chosen;
+            document.getElementById('globalSeatDisplay').textContent = `🌟 ${chosen} 號同學`;
+          } else {
+            state.questionSeats[targetId] = chosen;
+            const el = document.getElementById(`qSeatBadge-${targetId}`);
+            if (el) {
+              el.className = 'px-2.5 py-1 rounded-xl bg-amber-100 border border-amber-300 text-amber-900 text-xs font-black';
+              el.textContent = `🌟 請 ${chosen} 號同學作答`;
+            }
+          }
+          renderSeatHistory();
+        }
+      }, 45);
+    }
+
+    function resetSeatHistory() {
+      state.drawnSeats = [];
+      state.globalDrawnSeat = null;
+      state.questionSeats = {};
+      const globalEl = document.getElementById('globalSeatDisplay');
+      if (globalEl) globalEl.textContent = '尚未抽號';
+      renderSeatHistory();
+      renderQuiz(getCurrentUnit());
+      renderMath();
+    }
+
+    function renderSeatHistory() {
+      const listEl = document.getElementById('drawnSeatHistoryList');
+      const floatListEl = document.getElementById('floatDrawnHistory');
+      const htmlChips = state.drawnSeats.length === 0
+        ? `<span class="text-gray-400 font-normal">（尚無紀錄）</span>`
+        : state.drawnSeats.map(num => `<span class="px-2 py-0.5 rounded-lg bg-rose-100/70 text-rose-600">${num}號</span>`).join('');
+      if (listEl) listEl.innerHTML = htmlChips;
+      if (floatListEl) floatListEl.innerHTML = htmlChips;
+      if (state.drawnSeats.length === 0) {
+        const fb = document.getElementById('floatSeatResultBox');
+        if (fb) fb.textContent = '點擊下方抽號';
+      }
+    }
+
+    // ==================== Quiz System (With Difficulty Classification) ====================
+    function filterDifficulty(diff) {
+      state.difficultyFilter = diff;
+      document.querySelectorAll('.diff-btn').forEach(btn => {
+        if (btn.dataset.diff === diff) {
+          btn.className = 'diff-btn px-3 py-1.5 rounded-xl text-xs font-black bg-rose-400 text-white shadow-sm transition';
+        } else {
+          const baseColor = btn.dataset.diff === '基礎' ? 'text-emerald-700 hover:bg-emerald-50'
+            : (btn.dataset.diff === '進階' ? 'text-amber-700 hover:bg-amber-50'
+            : (btn.dataset.diff === '挑戰素養' ? 'text-rose-600 hover:bg-rose-50' : 'text-gray-600 hover:bg-rose-50'));
+          btn.className = `diff-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-rose-100 ${baseColor} transition`;
+        }
+      });
+      renderQuiz(getCurrentUnit());
+      renderMath();
+    }
+
+    function getDiffBadgeStyle(diff) {
+      if (diff === '基礎') return 'bg-emerald-100/80 text-emerald-800 border border-emerald-200';
+      if (diff === '進階') return 'bg-amber-100/80 text-amber-800 border border-amber-200';
+      return 'bg-rose-100/80 text-rose-600 border border-rose-200';
+    }
+
+    function getDiffIcon(diff) {
+      if (diff === '基礎') return '🌱 ';
+      if (diff === '進階') return '🔥 ';
+      return '🏆 ';
+    }
+
     function renderQuiz(unit) {
       const container = document.getElementById('quizQuestionsContainer');
       document.getElementById('quizResultBanner').textContent = '';
-      container.innerHTML = unit.quizzes.map((q, qIdx) => `
-        <div class="p-4 sm:p-5 rounded-2xl bg-rose-50/25 border border-rose-100" id="qCard-${q.id}">
-          <div class="flex items-center gap-2 mb-2">
-            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-rose-100/70 text-rose-400/90">${q.difficulty}</span>
-            <span class="text-xs font-bold text-rose-400">第 ${qIdx + 1} 題</span>
+
+      // Sync difficulty buttons state
+      document.querySelectorAll('.diff-btn').forEach(btn => {
+        if (btn.dataset.diff === state.difficultyFilter) {
+          btn.className = 'diff-btn px-3 py-1.5 rounded-xl text-xs font-black bg-rose-400 text-white shadow-sm transition';
+        } else {
+          const baseColor = btn.dataset.diff === '基礎' ? 'text-emerald-700 hover:bg-emerald-50'
+            : (btn.dataset.diff === '進階' ? 'text-amber-700 hover:bg-amber-50'
+            : (btn.dataset.diff === '挑戰素養' ? 'text-rose-600 hover:bg-rose-50' : 'text-gray-600 hover:bg-rose-50'));
+          btn.className = `diff-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white border border-rose-100 ${baseColor} transition`;
+        }
+      });
+
+      const visibleQuizzes = state.difficultyFilter === 'all'
+        ? unit.quizzes
+        : unit.quizzes.filter(q => q.difficulty === state.difficultyFilter);
+
+      document.getElementById('quizCountBadge').textContent = `顯示 ${visibleQuizzes.length} / ${unit.quizzes.length} 題`;
+      const isElementary = unit.stage === '國小三年級';
+
+      container.innerHTML = visibleQuizzes.map((q, qIdx) => {
+        const assignedSeat = state.questionSeats[q.id];
+        return `
+          <div class="p-4 sm:p-5 rounded-2xl bg-rose-50/25 border border-rose-100" id="qCard-${q.id}">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-black ${getDiffBadgeStyle(q.difficulty)}">${getDiffIcon(q.difficulty)}${q.difficulty}</span>
+                <span class="text-xs font-bold text-rose-400">第 ${qIdx + 1} 題</span>
+              </div>
+
+              ${isElementary ? `
+                <div class="flex items-center gap-2">
+                  <span id="qSeatBadge-${q.id}" class="${assignedSeat ? 'px-2.5 py-1 rounded-xl bg-amber-100 border border-amber-300 text-amber-900 text-xs font-black' : 'text-xs text-gray-400'}">
+                    ${assignedSeat ? `🌟 請 ${assignedSeat} 號同學作答` : ''}
+                  </span>
+                  <button type="button" onclick="drawSeatNumber('${q.id}')" class="px-3 py-1 rounded-xl bg-white hover:bg-rose-100/70 border border-rose-200 text-rose-500 text-xs font-black transition shadow-sm">
+                    🎲 抽座號答題
+                  </button>
+                </div>
+              ` : ''}
+            </div>
+
+            <div class="font-bold text-gray-800 text-sm sm:text-base mb-3">${q.question}</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              ${q.options.map((opt, oIdx) => `
+                <label class="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-rose-100 hover:border-rose-300 cursor-pointer transition">
+                  <input type="radio" name="quiz-${q.id}" value="${oIdx}" class="accent-rose-400 w-4 h-4" />
+                  <span class="text-xs sm:text-sm font-medium text-gray-800">${opt}</span>
+                </label>
+              `).join('')}
+            </div>
+            <div id="qFeedback-${q.id}" class="hidden mt-3 p-3 rounded-xl text-xs sm:text-sm"></div>
           </div>
-          <div class="font-bold text-gray-800 text-sm sm:text-base mb-3">${q.question}</div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            ${q.options.map((opt, oIdx) => `
-              <label class="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-rose-100 hover:border-rose-300 cursor-pointer transition">
-                <input type="radio" name="quiz-${q.id}" value="${oIdx}" class="accent-rose-400 w-4 h-4" />
-                <span class="text-xs sm:text-sm font-medium text-gray-800">${opt}</span>
-              </label>
-            `).join('')}
-          </div>
-          <div id="qFeedback-${q.id}" class="hidden mt-3 p-3 rounded-xl text-xs sm:text-sm"></div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function submitQuiz() {
       const unit = getCurrentUnit();
+      const visibleQuizzes = state.difficultyFilter === 'all'
+        ? unit.quizzes
+        : unit.quizzes.filter(q => q.difficulty === state.difficultyFilter);
       let correctCount = 0;
 
-      unit.quizzes.forEach(q => {
+      visibleQuizzes.forEach(q => {
         const selected = document.querySelector(`input[name="quiz-${q.id}"]:checked`);
         const fb = document.getElementById(`qFeedback-${q.id}`);
         fb.classList.remove('hidden');
@@ -1105,7 +2969,7 @@
           if (!state.mistakes.some(m => m.id === q.id)) {
             state.mistakes.push({
               id: q.id,
-              unitTitle: unit.title,
+              unitTitle: `${unit.semester} ${unit.subject}（${q.difficulty}）｜${unit.title}`,
               question: q.question,
               correctOption: q.options[q.answer],
               explanation: q.explanation
@@ -1114,15 +2978,17 @@
         }
       });
 
-      const scorePct = Math.round((correctCount / unit.quizzes.length) * 100);
+      const scorePct = Math.round((correctCount / visibleQuizzes.length) * 100);
       state.quizScores[unit.id] = scorePct;
       localStorage.setItem('dora_scores', JSON.stringify(state.quizScores));
       localStorage.setItem('dora_mistakes', JSON.stringify(state.mistakes));
 
       document.getElementById('quizResultBanner').innerHTML = `
-        本次得分：<span class="text-xl font-black text-rose-400">${scorePct} 分</span>（答對 ${correctCount} / ${unit.quizzes.length} 題）
+        本次得分：<span class="text-xl font-black text-rose-500">${scorePct} 分</span>（答對 ${correctCount} / ${visibleQuizzes.length} 題）
       `;
+      
       updateTopStats();
+      
       renderMath();
     }
 
@@ -1131,7 +2997,15 @@
       renderMath();
     }
 
-    // Mistake Book Modal
+    function removeSingleMistake(index) {
+      state.mistakes.splice(index, 1);
+      localStorage.setItem('dora_mistakes', JSON.stringify(state.mistakes));
+      updateTopStats();
+      
+      playTone(660, 0.12);
+      openMistakeModal();
+    }
+
     function openMistakeModal() {
       const body = document.getElementById('mistakeListBody');
       if (state.mistakes.length === 0) {
@@ -1139,7 +3013,12 @@
       } else {
         body.innerHTML = state.mistakes.map((m, i) => `
           <div class="p-4 rounded-2xl bg-rose-50/50 border border-rose-100">
-            <div class="text-xs font-black text-rose-400 mb-1">${m.unitTitle}</div>
+            <div class="flex items-center justify-between gap-2 mb-1">
+              <div class="text-xs font-black text-rose-500">${m.unitTitle}</div>
+              <button onclick="removeSingleMistake(${i})" class="px-2.5 py-0.5 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-800 text-[11px] font-black transition">
+                ✓ 我已訂正（移除）
+              </button>
+            </div>
             <div class="font-bold text-gray-800 text-sm mb-2">${i + 1}. ${m.question}</div>
             <div class="text-xs text-emerald-800 font-bold mb-1">正確答案：${m.correctOption}</div>
             <div class="text-xs text-gray-600">解析：${m.explanation}</div>
@@ -1158,18 +3037,1143 @@
       state.mistakes = [];
       localStorage.setItem('dora_mistakes', '[]');
       updateTopStats();
+      
       openMistakeModal();
     }
 
-    document.getElementById('mobileMenuBtn').addEventListener('click', () => {
-      document.getElementById('sidebarDrawer').classList.toggle('hidden');
+
+    // ==================== Sound Effects (Web Audio API) ====================
+    function playTone(freq, duration = 0.15, type = 'sine') {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    // ==================== English TTS & Chinese MOE Helpers ====================
+    function speakEnglish(text) {
+      if (!window.speechSynthesis) {
+        alert('您的瀏覽器不支援語音朗讀功能。');
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'en-US';
+      utter.rate = 0.88;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function openMoeStroke() {
+      const val = (document.getElementById('strokeCharInput')?.value || '').trim();
+      const ch = val ? val[0] : '風';
+      window.open(`https://stroke-order.learningweb.moe.edu.tw/mobiles/stroke.jsp?word=${encodeURIComponent(ch)}`, '_blank', 'noopener,noreferrer');
+    }
+
+    function openMoeDict() {
+      const val = (document.getElementById('strokeCharInput')?.value || '').trim() || '專心致志';
+      window.open(`https://dict.mini.moe.edu.tw/Search?word=${encodeURIComponent(val)}`, '_blank', 'noopener,noreferrer');
+    }
+
+    // ==================== Interactive Magnet Lab ====================
+    function flipMagnet(side) {
+      if (side === 'left') {
+        state.magnetLeftRightPole = state.magnetLeftRightPole === 'N' ? 'S' : 'N';
+      } else {
+        state.magnetRightLeftPole = state.magnetRightLeftPole === 'N' ? 'S' : 'N';
+      }
+      playTone(520, 0.12);
+      renderMagnetLab();
+    }
+
+    function renderMagnetLab() {
+      const stage = document.getElementById('magnetLabStage');
+      if (!stage) return;
+      const rPole = state.magnetLeftRightPole;
+      const lPole = rPole === 'N' ? 'S' : 'N';
+      const r2Left = state.magnetRightLeftPole;
+      const r2Right = r2Left === 'N' ? 'S' : 'N';
+      const isAttract = rPole !== r2Left;
+      const offset = isAttract ? 18 : -22;
+
+      stage.innerHTML = `
+        <svg viewBox="0 0 420 150" class="w-full max-w-lg h-auto">
+          <!-- Left Magnet -->
+          <g transform="translate(${offset}, 0)">
+            <rect x="40" y="50" width="65" height="44" rx="4" fill="${lPole === 'N' ? '#E27D95' : '#60A5FA'}"/>
+            <text x="72" y="78" text-anchor="middle" fill="#FFF" font-size="18" font-weight="black">${lPole}</text>
+            <rect x="105" y="50" width="65" height="44" rx="4" fill="${rPole === 'N' ? '#E27D95' : '#60A5FA'}"/>
+            <text x="137" y="78" text-anchor="middle" fill="#FFF" font-size="18" font-weight="black">${rPole}</text>
+          </g>
+          <!-- Right Magnet -->
+          <g transform="translate(${-offset}, 0)">
+            <rect x="250" y="50" width="65" height="44" rx="4" fill="${r2Left === 'N' ? '#E27D95' : '#60A5FA'}"/>
+            <text x="282" y="78" text-anchor="middle" fill="#FFF" font-size="18" font-weight="black">${r2Left}</text>
+            <rect x="315" y="50" width="65" height="44" rx="4" fill="${r2Right === 'N' ? '#E27D95' : '#60A5FA'}"/>
+            <text x="347" y="78" text-anchor="middle" fill="#FFF" font-size="18" font-weight="black">${r2Right}</text>
+          </g>
+          <text x="210" y="132" text-anchor="middle" fill="${isAttract ? '#6EE7B7' : '#FBCFE8'}" font-size="15" font-weight="black">
+            ${isAttract ? `✨ ${rPole} 極 遇上 ${r2Left} 極 ➔ 異極相吸，緊緊吸在一起！` : `⚡ ${rPole} 極 遇上 ${r2Left} 極 ➔ 同極相斥，互相推開！`}
+          </text>
+        </svg>
+      `;
+    }
+
+    // ==================== Team Scoreboard ====================
+    function renderTeamScoreboard() {
+      const grid = document.getElementById('teamScoreboardGrid');
+      const mini = document.getElementById('projMiniScoreboard');
+      if (grid) {
+        grid.innerHTML = state.teamScores.map((sc, idx) => `
+          <div class="p-2.5 rounded-xl bg-white border border-rose-100 flex items-center justify-between shadow-sm">
+            <div>
+              <div class="text-[11px] font-bold text-gray-500">第 ${idx + 1} 組</div>
+              <div class="text-base font-black text-rose-500">⭐ ${sc}</div>
+            </div>
+            <div class="flex flex-col gap-1">
+              <button onclick="changeTeamScore(${idx}, 1)" class="px-2 py-0.5 rounded bg-rose-400 text-white text-xs font-black hover:opacity-90">+1</button>
+              <button onclick="changeTeamScore(${idx}, -1)" class="px-2 py-0.5 rounded bg-gray-100 text-gray-600 text-[10px] font-bold hover:bg-gray-200">-1</button>
+            </div>
+          </div>
+        `).join('');
+      }
+      if (mini) {
+        mini.innerHTML = state.teamScores.map((sc, idx) => `
+          <button onclick="changeTeamScore(${idx}, 1)" class="px-2.5 py-1 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-xs font-black text-gray-700 transition">
+            第${idx + 1}組 ⭐${sc} <span class="text-rose-500">+1</span>
+          </button>
+        `).join('');
+      }
+      const floatGrid = document.getElementById('floatTeamGrid');
+      if (floatGrid) {
+        floatGrid.innerHTML = state.teamScores.map((sc, idx) => `
+          <div class="p-2 rounded-xl bg-amber-50/50 border border-amber-200/80 flex items-center justify-between">
+            <div>
+              <div class="text-[11px] font-bold text-gray-600">第 ${idx + 1} 組</div>
+              <div class="text-sm font-black text-amber-900">⭐ ${sc}</div>
+            </div>
+            <div class="flex gap-1">
+              <button onclick="changeTeamScore(${idx}, 1)" class="px-2 py-1 rounded-lg bg-rose-400 text-white text-xs font-black hover:opacity-90">+1</button>
+              <button onclick="changeTeamScore(${idx}, -1)" class="px-1.5 py-1 rounded-lg bg-white border border-gray-200 text-gray-500 text-[10px] font-bold">-1</button>
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function changeTeamScore(idx, delta) {
+      state.teamScores[idx] = Math.max(0, (state.teamScores[idx] || 0) + delta);
+      localStorage.setItem('dora_team_scores', JSON.stringify(state.teamScores));
+      if (delta > 0) playTone(660, 0.15);
+      renderTeamScoreboard();
+    }
+
+    function resetTeamScores() {
+      state.teamScores = [0, 0, 0, 0, 0, 0];
+      localStorage.setItem('dora_team_scores', JSON.stringify(state.teamScores));
+      renderTeamScoreboard();
+    }
+
+    // ==================== Classroom Single-Question Projection Mode ====================
+    function getProjectionQuestions() {
+      if (state.projModeSource === 'custom' && state.customExamQuestions.length > 0) {
+        return state.customExamQuestions;
+      }
+      const unit = getCurrentUnit();
+      return state.difficultyFilter === 'all'
+        ? unit.quizzes
+        : unit.quizzes.filter(q => q.difficulty === state.difficultyFilter);
+    }
+
+    function playCheerSound() {
+      playTone(523.25, 0.12);
+      setTimeout(() => playTone(659.25, 0.12), 110);
+      setTimeout(() => playTone(783.99, 0.14), 220);
+      setTimeout(() => playTone(1046.5, 0.28), 330);
+    }
+
+    function pickProjOption(idx) {
+      const list = getProjectionQuestions();
+      const q = list[state.projIndex];
+      if (!q) return;
+      if (!state.projPickedOptions.includes(idx)) {
+        state.projPickedOptions.push(idx);
+      }
+      if (idx === q.answer) {
+        state.projLastWrongIdx = -1;
+        playCheerSound();
+        
+      } else {
+        state.projLastWrongIdx = idx;
+        playTone(220, 0.28, 'sawtooth');
+        
+      }
+      renderProjectionQuestion();
+      state.projLastWrongIdx = -1;
+    }
+
+    function openProjectionModal() {
+      state.projModeSource = 'unit';
+      state.projIndex = 0;
+      state.projRevealed = false;
+      state.projPickedOptions = [];
+      state.projLastWrongIdx = -1;
+      stopProjTimer();
+      document.getElementById('projectionModal').classList.remove('hidden');
+      renderProjectionQuestion();
+      renderTeamScoreboard();
+      renderMath();
+    }
+
+    function closeProjectionModal() {
+      stopProjTimer();
+      document.getElementById('projectionModal').classList.add('hidden');
+    }
+
+    function renderProjectionQuestion() {
+      const unit = getCurrentUnit();
+      const list = getProjectionQuestions();
+      if (list.length === 0) return;
+      if (state.projIndex >= list.length) state.projIndex = 0;
+      if (state.projIndex < 0) state.projIndex = list.length - 1;
+
+      const q = list[state.projIndex];
+      document.getElementById('projUnitTitle').textContent = state.projModeSource === 'custom'
+        ? (q.unitLabel || '跨單元動態智慧考卷')
+        : `${unit.semester} ${unit.subject}｜${unit.title}`;
+      document.getElementById('projProgressBadge').textContent = `第 ${state.projIndex + 1} / ${list.length} 題`;
+
+      const diffEl = document.getElementById('projDiffBadge');
+      diffEl.className = `px-3 py-1 rounded-full text-xs font-black ${getDiffBadgeStyle(q.difficulty)}`;
+      diffEl.textContent = `${getDiffIcon(q.difficulty)}${q.difficulty}`;
+
+      const assignedSeat = state.questionSeats[q.id] || state.globalDrawnSeat;
+      document.getElementById('projSeatBanner').textContent = assignedSeat
+        ? `🌟 請 ${assignedSeat} 號同學上台搶答！`
+        : '💡 點擊右上角「抽答題座號」選出幸運星';
+
+      document.getElementById('projQuestionText').innerHTML = q.question;
+
+      const optLabels = ['A', 'B', 'C', 'D'];
+      const statusBanner = document.getElementById('projGuessStatusBanner');
+      const hasGuessedCorrect = state.projPickedOptions.includes(q.answer) || state.projRevealed;
+
+      if (statusBanner) {
+        if (state.projPickedOptions.includes(q.answer)) {
+          statusBanner.className = 'px-3.5 py-1 rounded-full text-xs font-black bg-emerald-100 border border-emerald-300 text-emerald-900';
+          statusBanner.textContent = '🎉 答對了！太棒了！';
+        } else if (state.projPickedOptions.length > 0) {
+          statusBanner.className = 'px-3.5 py-1 rounded-full text-xs font-black bg-rose-100 border border-rose-300 text-rose-800';
+          statusBanner.textContent = '❌ 再想一下喔！其他同學可以繼續搶答～';
+        } else {
+          statusBanner.className = 'hidden';
+        }
+      }
+
+      document.getElementById('projOptionsGrid').innerHTML = q.options.map((opt, idx) => {
+        const isPicked = state.projPickedOptions.includes(idx);
+        const isCorrectShown = (isPicked && idx === q.answer) || (state.projRevealed && idx === q.answer);
+        const isWrongShown = isPicked && idx !== q.answer;
+        const shouldShake = state.projLastWrongIdx === idx;
+
+        let cardStyle = 'bg-rose-50/35 hover:bg-rose-100/50 border-rose-100 text-gray-800';
+        let badgeStyle = 'bg-rose-400 text-white';
+        let rightIcon = '';
+
+        if (isCorrectShown) {
+          cardStyle = 'bg-emerald-100/90 border-emerald-500 text-emerald-950 shadow-md';
+          badgeStyle = 'bg-emerald-500 text-white';
+          rightIcon = '<span class="ml-auto text-2xl">🎉✅</span>';
+        } else if (isWrongShown) {
+          cardStyle = `bg-rose-100/80 border-rose-400 text-rose-900 opacity-85 ${shouldShake ? 'animate-shake' : ''}`;
+          badgeStyle = 'bg-rose-500 text-white';
+          rightIcon = '<span class="ml-auto text-xl">❌</span>';
+        }
+
+        return `
+          <div onclick="pickProjOption(${idx})" class="p-4 sm:p-5 rounded-2xl border-2 cursor-pointer transition flex items-center gap-3 ${cardStyle}">
+            <span class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-base shrink-0 ${badgeStyle}">${optLabels[idx]}</span>
+            <span class="text-lg sm:text-xl font-bold">${opt}</span>
+            ${rightIcon}
+          </div>
+        `;
+      }).join('');
+
+      const expBox = document.getElementById('projExplanationBox');
+      const revBtn = document.getElementById('projRevealBtn');
+      if (state.projRevealed) {
+        expBox.classList.remove('hidden');
+        expBox.innerHTML = `<strong>✅ 正確答案：${optLabels[q.answer]}. ${q.options[q.answer]}</strong><br/>解析：${q.explanation}`;
+        revBtn.textContent = '🙈 隱藏答案';
+      } else {
+        expBox.classList.add('hidden');
+        revBtn.textContent = '👀 揭曉標準答案與解析';
+      }
+      renderMath();
+    }
+
+    function toggleProjAnswer() {
+      state.projRevealed = !state.projRevealed;
+      if (state.projRevealed) playTone(784, 0.2);
+      renderProjectionQuestion();
+    }
+
+    function nextProjQuestion() {
+      state.projIndex++;
+      state.projRevealed = false;
+      state.projPickedOptions = [];
+      state.projLastWrongIdx = -1;
+      stopProjTimer();
+      renderProjectionQuestion();
+    }
+
+    function prevProjQuestion() {
+      state.projIndex--;
+      state.projRevealed = false;
+      state.projPickedOptions = [];
+      state.projLastWrongIdx = -1;
+      stopProjTimer();
+      renderProjectionQuestion();
+    }
+
+    function startProjTimer(seconds) {
+      stopProjTimer();
+      state.projRemaining = seconds;
+      const disp = document.getElementById('projTimerDisplay');
+      disp.textContent = `${state.projRemaining}s`;
+      playTone(587, 0.12);
+      state.projTimer = setInterval(() => {
+        state.projRemaining--;
+        disp.textContent = `${Math.max(0, state.projRemaining)}s`;
+        if (state.projRemaining <= 3 && state.projRemaining > 0) {
+          playTone(440, 0.1);
+        }
+        if (state.projRemaining <= 0) {
+          stopProjTimer();
+          playTone(330, 0.4, 'triangle');
+          disp.textContent = '時間到!';
+        }
+      }, 1000);
+    }
+
+    function stopProjTimer() {
+      clearInterval(state.projTimer);
+    }
+
+    function drawSeatForProjection() {
+      const list = getProjectionQuestions();
+      const q = list[state.projIndex];
+      if (!q) return;
+      const max = state.maxSeat;
+      let pool = [];
+      for (let i = 1; i <= max; i++) {
+        if (!state.drawnSeats.includes(i)) pool.push(i);
+      }
+      if (pool.length === 0) {
+        state.drawnSeats = [];
+        for (let i = 1; i <= max; i++) pool.push(i);
+      }
+      let ticks = 0;
+      const timer = setInterval(() => {
+        ticks++;
+        const tmp = Math.floor(Math.random() * max) + 1;
+        document.getElementById('projSeatBanner').textContent = `🎲 抽籤中... ${tmp} 號`;
+        playTone(400 + ticks * 25, 0.05);
+        if (ticks >= 10) {
+          clearInterval(timer);
+          const chosen = pool[Math.floor(Math.random() * pool.length)];
+          state.drawnSeats.push(chosen);
+          state.questionSeats[q.id] = chosen;
+          playTone(880, 0.25);
+          renderSeatHistory();
+          renderProjectionQuestion();
+        }
+      }, 45);
+    }
+
+
+    // ==================== Parametric Dynamic Question Generator Engine ====================
+    function randInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function buildUniqueOptions(correctText, distractorList) {
+      const uniqueDistractors = [];
+      for (const d of distractorList) {
+        if (d !== correctText && !uniqueDistractors.includes(d)) {
+          uniqueDistractors.push(d);
+        }
+        if (uniqueDistractors.length === 3) break;
+      }
+      while (uniqueDistractors.length < 3) {
+        uniqueDistractors.push(`${correctText}（干擾項 ${uniqueDistractors.length + 1}）`);
+      }
+      const combined = shuffleArray([correctText, ...uniqueDistractors]);
+      return {
+        options: combined,
+        answer: combined.indexOf(correctText)
+      };
+    }
+
+    function createDynamicQuestionForUnit(unitId, difficulty, idxSeed) {
+      if (difficulty && difficulty !== 'all') {
+        for (let attempt = 0; attempt < 8; attempt++) {
+          const candidate = _generateSingleDynamicQuestion(unitId, difficulty, idxSeed + attempt);
+          if (candidate.difficulty === difficulty) return candidate;
+        }
+      }
+      return _generateSingleDynamicQuestion(unitId, difficulty, idxSeed);
+    }
+
+    function _generateSingleDynamicQuestion(unitId, difficulty, idxSeed) {
+      const uid = `dyn-${unitId}-${Date.now()}-${idxSeed}-${randInt(100, 999)}`;
+
+      // 1. 國小三年級 - 國語 (e3-chi)
+      if (unitId === 'e3-chi') {
+        const templates = [
+          () => {
+            const items = [
+              { s: '「微風輕輕撫摸著小草的頭，哄著小草快快睡覺。」', type: '擬人法', exp: '風本來不會撫摸和哄人睡覺，作者把微風當作人來寫，屬於擬人法。' },
+              { s: '「池塘裡的青蛙在荷葉上開演唱會，唱出清脆的歌聲。」', type: '擬人法', exp: '青蛙「開演唱會」是賦予動物人類的活動，屬於擬人法。' },
+              { s: '「太陽公公伸了個大懶腰，笑咪咪地從山頭爬起來。」', type: '擬人法', exp: '「伸懶腰、笑咪咪」都是人的動作與表情，屬於擬人法。' }
+            ];
+            const pick = items[randInt(0, items.length - 1)];
+            const opt = buildUniqueOptions(pick.type, ['譬喻法', '設問法', '誇飾法', '排比法']);
+            return { difficulty: '基礎', question: `${pick.s}這句話運用了哪一種修辭技巧？`, ...opt, explanation: pick.exp };
+          },
+          () => {
+            const items = [
+              { s: '「剛出爐的麵包香氣四溢，彷彿在向路過的行人招手。」', type: '擬人法', exp: '「向行人招手」賦予麵包人的動作，屬於擬人法。' },
+              { s: '「彎彎的彩虹像一座七彩的拱橋，橫跨在藍天白雲之間。」', type: '譬喻法', exp: '用「像」把彩虹比喻成七彩拱橋，屬於譬喻法。' },
+              { s: '「夜空中的煙火如同千萬朵綻放的菊花，美麗極了！」', type: '譬喻法', exp: '使用連接詞「如同」將煙火比喻成菊花，屬於譬喻法。' }
+            ];
+            const pick = items[randInt(0, items.length - 1)];
+            const opt = buildUniqueOptions(pick.type, ['擬人法', '譬喻法', '設問法', '回文法']);
+            return { difficulty: '基礎', question: `${pick.s}這句話主要運用了哪一種修辭？`, ...opt, explanation: pick.exp };
+          },
+          () => {
+            const pairs = [
+              { q: '「______ 天氣很冷，大家 ______ 準時到操場集合做早操。」', ans: '雖然……還是……', d: ['因為……所以……', '只要……就……', '不但……而且……'], exp: '前後兩句語意有轉折關係，填入「雖然……還是……」最通順。' },
+              { q: '「______ 每天持續練習，你的計算速度 ______ 會越來越快。」', ans: '只要……就……', d: ['雖然……但是……', '因為……所以……', '即使……也……'], exp: '「只要……就……」表示具備前面條件就會產生後面結果。' }
+            ];
+            const p = pairs[randInt(0, pairs.length - 1)];
+            const opt = buildUniqueOptions(p.ans, p.d);
+            return { difficulty: '進階', question: `請選出最適合填入空格的關聯詞：<br/>${p.q}`, ...opt, explanation: p.exp };
+          },
+          () => {
+            const words = [
+              { ok: '畫蛇添足', bad: ['畫蛇添腳', '劃蛇添足', '畫蛇天足'], exp: '成語正確寫法為「畫蛇添足」，比喻多此一舉。' },
+              { ok: '守株待兔', bad: ['守珠待兔', '手株待兔', '守株代兔'], exp: '成語正確寫法為「守株待兔」，比喻不知變通、心存僥倖。' },
+              { ok: '恍然大悟', bad: ['慌然大悟', '恍然大誤', '晃然大悟'], exp: '成語正確寫法為「恍然大悟」，形容忽然明白過來。' }
+            ];
+            const w = words[randInt(0, words.length - 1)];
+            const opt = buildUniqueOptions(w.ok, w.bad);
+            return { difficulty: '挑戰素養', question: '下列哪一個成語的用字「完全正確」？', ...opt, explanation: w.exp };
+          }
+        ];
+        const filtered = difficulty === 'all' ? templates : templates.filter(fn => fn().difficulty === difficulty);
+        const chosenFn = (filtered.length ? filtered : templates)[randInt(0, (filtered.length ? filtered : templates).length - 1)];
+        return { id: uid, ...chosenFn() };
+      }
+
+      // 2. 國小三年級 - 數學 (e3-math)
+      if (unitId === 'e3-math') {
+        const denoms = [6, 7, 8, 9, 10, 12];
+        const d = denoms[randInt(0, denoms.length - 1)];
+        const modes = ['add', 'sub', 'word'];
+        const mode = difficulty === '基礎' ? modes[randInt(0, 1)] : (difficulty === '挑戰素養' ? 'word' : modes[randInt(0, 2)]);
+
+        if (mode === 'add') {
+          const a = randInt(1, Math.floor(d / 2));
+          const b = randInt(1, d - a);
+          const ans = `$\\frac{${a + b}}{${d}}$`;
+          const opt = buildUniqueOptions(ans, [
+            `$\\frac{${a + b}}{${d * 2}}$`,
+            `$\\frac{${Math.abs(a - b) + 1}}{${d}}$`,
+            `$\\frac{${a * b}}{${d}}$`
+          ]);
+          return {
+            id: uid,
+            difficulty: '基礎',
+            question: `計算 $\\frac{${a}}{${d}} + \\frac{${b}}{${d}} = ?$`,
+            ...opt,
+            explanation: `同分母分數相加，分母維持 $${d}$ 不變，分子相加 $${a} + ${b} = ${a + b}$，答案為 $\\frac{${a + b}}{${d}}$。`
+          };
+        } else if (mode === 'sub') {
+          const used = randInt(2, d - 1);
+          const rem = d - used;
+          const items = [
+            { name: '彩帶', unit: '條', verb: '剪成', act: '做勞作用掉' },
+            { name: '大披薩', unit: '個', verb: '平分成', act: '午餐吃掉' },
+            { name: '巧克力', unit: '盒', verb: '平分成', act: '分給同學' },
+            { name: '長繩子', unit: '條', verb: '平分成', act: '綁包裹用掉' }
+          ];
+          const item = items[randInt(0, items.length - 1)];
+          const ans = `$\\frac{${rem}}{${d}}$ ${item.unit}`;
+          const opt = buildUniqueOptions(ans, [
+            `$\\frac{${used}}{${d}}$ ${item.unit}`,
+            `$\\frac{${rem}}{${d * 2}}$ ${item.unit}`,
+            `$${rem}$ ${item.unit}`
+          ]);
+          return {
+            id: uid,
+            difficulty: '進階',
+            question: `一${item.unit}${item.name}${item.verb} $${d}$ 份，${item.act} $\\frac{${used}}{${d}}$ ${item.unit}後，還剩下幾${item.unit}${item.name}？`,
+            ...opt,
+            explanation: `原本 $1$ ${item.unit} $= \\frac{${d}}{${d}}$ ${item.unit}，減去用掉的 $\\frac{${used}}{${d}}$ ${item.unit}，剩下 $\\frac{${d} - ${used}}{${d}} = \\frac{${rem}}{${d}}$ ${item.unit}。`
+          };
+        } else {
+          const a = randInt(2, Math.floor(d / 2));
+          const b = randInt(1, d - a - 1);
+          const left = d - a - b;
+          const ans = `$\\frac{${left}}{${d}}$ 盒`;
+          const opt = buildUniqueOptions(ans, [
+            `$\\frac{${a + b}}{${d}}$ 盒`,
+            `$\\frac{${left}}{${d * 2}}$ 盒`,
+            `$\\frac{${d - a}}{${d}}$ 盒`
+          ]);
+          return {
+            id: uid,
+            difficulty: '挑戰素養',
+            question: `一盒蛋塔有 $${d}$ 個。哥哥吃了 $\\frac{${a}}{${d}}$ 盒，妹妹吃了 $${b}$ 個，請問這盒蛋塔還剩下幾分之幾盒？`,
+            ...opt,
+            explanation: `妹妹吃的 $${b}$ 個是 $\\frac{${b}}{${d}}$ 盒，兩人共吃 $\\frac{${a + b}}{${d}}$ 盒；整盒 $\\frac{${d}}{${d}}$ 盒減去 $\\frac{${a + b}}{${d}}$ 盒，剩下 $\\frac{${left}}{${d}}$ 盒。`
+          };
+        }
+      }
+
+      // 3. 國小三年級 - 自然科學 (e3-sci)
+      if (unitId === 'e3-sci') {
+        const scenarios = [
+          () => {
+            const pole1 = Math.random() > 0.5 ? 'N' : 'S';
+            const same = Math.random() > 0.5;
+            const pole2 = same ? pole1 : (pole1 === 'N' ? 'S' : 'N');
+            const action = same ? '互相推開（相斥）' : '緊緊吸在一起（相吸）';
+            const opt = buildUniqueOptions(action, ['互相推開（相斥）', '緊緊吸在一起（相吸）', '完全沒有任何反應', '磁鐵磁力瞬間消失']);
+            return {
+              difficulty: '基礎',
+              question: `將左邊磁鐵的「${pole1} 極」與右邊磁鐵的「${pole2} 極」互相靠近，會發生什麼現象？`,
+              ...opt,
+              explanation: `根據「同極相斥、異極相吸」原理，${pole1} 極與 ${pole2} 極靠近會「${action}」。`
+            };
+          },
+          () => {
+            const plants = [
+              { name: '玉米葉', vein: '平行脈', exp: '玉米、竹子、水稻的葉脈呈直線平行排列，屬於平行脈。' },
+              { name: '榕樹葉', vein: '網狀脈', exp: '榕樹、朱槿、楓樹的葉脈像漁網般交錯，屬於網狀脈。' },
+              { name: '百合花葉子', vein: '平行脈', exp: '百合花葉子的葉脈直直平行排列，屬於平行脈。' }
+            ];
+            const p = plants[randInt(0, plants.length - 1)];
+            const opt = buildUniqueOptions(p.vein, ['平行脈', '網狀脈', '螺旋脈', '放射脈']);
+            return {
+              difficulty: '進階',
+              question: `在公園觀察「${p.name}」時，它的葉脈紋路主要屬於哪一種？`,
+              ...opt,
+              explanation: p.exp
+            };
+          },
+          () => {
+            const pieces = randInt(2, 4);
+            const ans = `每一段都同時擁有 N 極和 S 極`;
+            const opt = buildUniqueOptions(ans, [
+              '只有中間那段有磁力',
+              'N 極和 S 極會分開在兩塊不同磁鐵上',
+              '摔斷後所有磁鐵都失去磁力'
+            ]);
+            return {
+              difficulty: '挑戰素養',
+              question: `做實驗時，一根長條形磁鐵不小心摔斷成 $${pieces}$ 段，請問摔斷後的每一段磁鐵磁極會如何變化？`,
+              ...opt,
+              explanation: `無論磁鐵斷成幾段，每一小段都會重新形成完整的「N 極與 S 極」兩極。`
+            };
+          }
+        ];
+        const fn = scenarios[randInt(0, scenarios.length - 1)];
+        return { id: uid, ...fn() };
+      }
+
+      // 4. 國小三年級 - 社會 (e3-soc)
+      if (unitId === 'e3-soc') {
+        const scenarios = [
+          () => {
+            const rels = [
+              { q: '爸爸的哥哥', a: '伯父', d: ['叔叔', '舅舅', '姑丈'], exp: '爸爸的哥哥稱為「伯父」，弟弟稱為「叔叔」。' },
+              { q: '爸爸的弟弟', a: '叔叔', d: ['伯父', '舅舅', '姨丈'], exp: '爸爸的弟弟稱為「叔叔」，哥哥稱為「伯父」。' },
+              { q: '媽媽的哥哥或弟弟', a: '舅舅', d: ['叔叔', '伯父', '姑丈'], exp: '媽媽的兄弟都稱為「舅舅」。' },
+              { q: '媽媽的姊姊或妹妹', a: '阿姨', d: ['姑姑', '嬸嬸', '舅媽'], exp: '媽媽的姊妹都稱為「阿姨」。' }
+            ];
+            const r = rels[randInt(0, rels.length - 1)];
+            const opt = buildUniqueOptions(r.a, r.d);
+            return { difficulty: '基礎', question: `在家庭親屬稱謂中，「${r.q}」應該稱呼他／她為什麼？`, ...opt, explanation: r.exp };
+          },
+          () => {
+            const roles = [
+              { task: '主持會議、維持秩序並請舉手的同學發言', role: '主席', exp: '「主席」負責主持班會與點名發言。' },
+              { task: '把大家的提案內容和投票票數完整記錄下來', role: '紀錄', exp: '「紀錄」負責書寫會議紀錄與表決結果。' },
+              { task: '報告開會流程與宣讀會議程序', role: '司儀', exp: '「司儀」負責引導班級會議的進行流程。' }
+            ];
+            const item = roles[randInt(0, roles.length - 1)];
+            const opt = buildUniqueOptions(item.role, ['主席', '紀錄', '司儀', '衛生股長']);
+            return { difficulty: '進階', question: `在班級會議中，負責「${item.task}」的是哪一個幹部角色？`, ...opt, explanation: item.exp };
+          },
+          () => {
+            const v1 = randInt(15, 22);
+            const v2 = randInt(5, 11);
+            const ans = '遵守「少數服從多數」原則，和全班一起參加野餐活動';
+            const opt = buildUniqueOptions(ans, [
+              '生氣拒絕參加班級活動',
+              '要求老師直接取消投票結果',
+              '嘲笑投給野餐的同學'
+            ]);
+            return {
+              difficulty: '挑戰素養',
+              question: `班會投票決定同樂會活動，結果「草地野餐」獲得 $${v1}$ 票、「教室看電影」獲得 $${v2}$ 票。投給看電影的同學應該怎麼做？`,
+              ...opt,
+              explanation: `民主表決應遵守「少數服從多數，多數尊重少數」，接受多數決議並開心合作。`
+            };
+          }
+        ];
+        const fn = scenarios[randInt(0, scenarios.length - 1)];
+        return { id: uid, ...fn() };
+      }
+
+      // 5. 國小三年級 - 英語 (e3-eng)
+      if (unitId === 'e3-eng') {
+        const words = [
+          { w: 'eraser', art: 'an', zh: '橡皮擦' },
+          { w: 'apple', art: 'an', zh: '蘋果' },
+          { w: 'orange', art: 'an', zh: '柳橙' },
+          { w: 'ruler', art: 'a', zh: '直尺' },
+          { w: 'pencil', art: 'a', zh: '鉛筆' },
+          { w: 'book', art: 'a', zh: '書本' }
+        ];
+        const item = words[randInt(0, words.length - 1)];
+        const isFar = Math.random() > 0.5;
+        const pron = isFar ? 'that' : 'this';
+        const opt = buildUniqueOptions(item.art, ['a', 'an', 'two', 'are']);
+        if (difficulty === '挑戰素養') {
+          const opt2 = buildUniqueOptions(`It’s ${item.art} ${item.w}.`, [
+            `It’s ${item.art === 'an' ? 'a' : 'an'} ${item.w}.`,
+            'Yes, it is a book.',
+            'Good morning, teacher.'
+          ]);
+          return {
+            id: uid,
+            difficulty: '挑戰素養',
+            question: `A: Is it a book?（指著${item.zh}問）<br/>B: No, it isn’t. ______`,
+            ...opt2,
+            explanation: `否認之後要說出正確物品名稱：「It’s ${item.art} ${item.w}.」。`
+          };
+        }
+        return {
+          id: uid,
+          difficulty: item.art === 'an' ? '進階' : '基礎',
+          question: `A: What’s ${pron}?（${isFar ? '指著遠處的' : '拿著近處的'}${item.zh}）<br/>B: It’s ______ ${item.w}.`,
+          ...opt,
+          explanation: `單字「${item.w}」${item.art === 'an' ? '以母音字母 (a, e, i, o, u) 開頭，前面須用 an' : '以子音開頭，前面用 a'}。`
+        };
+      }
+
+      // 6. 國七上 - 一元一次方程式 (g7-u1)
+      if (unitId === 'g7-u1') {
+        const type = randInt(1, 3);
+        if (type === 1) {
+          // ax - b = c
+          const a = randInt(2, 6);
+          const x = randInt(2, 9);
+          const b = randInt(3, 15);
+          const c = a * x - b;
+          const opt = buildUniqueOptions(`$x = ${x}$`, [`$x = ${x + 2}$`, `$x = ${x - 1}$`, `$x = ${a + x}$`]);
+          return {
+            id: uid,
+            difficulty: '基礎',
+            question: `解一元一次方程式 $${a}x - ${b} = ${c}$，請問 $x$ 的值為何？`,
+            ...opt,
+            explanation: `移項得 $${a}x = ${c} + ${b} = ${a * x}$，兩邊同除以 $${a}$ 得 $x = ${x}$。`
+          };
+        } else if (type === 2) {
+          // a(x - b) = cx + d -> (a - c)x = ab + d
+          const x = randInt(-6, 6) || 3;
+          const c = randInt(2, 4);
+          const a = c + randInt(2, 3);
+          const b = randInt(1, 5);
+          const d = (a - c) * x - a * b;
+          const dStr = d === 0 ? '' : (d > 0 ? `+ ${d}` : `- ${Math.abs(d)}`);
+          const opt = buildUniqueOptions(`$x = ${x}$`, [`$x = ${-x}$`, `$x = ${x + 3}$`, `$x = ${x - 2}$`]);
+          return {
+            id: uid,
+            difficulty: '進階',
+            question: `解方程式 $${a}(x - ${b}) = ${c}x ${dStr}$，則 $x = ?$`,
+            ...opt,
+            explanation: `去括號得 $${a}x - ${a * b} = ${c}x ${dStr}$，移項合併得 $${a - c}x = ${(a - c) * x}$，故 $x = ${x}$。`
+          };
+        } else {
+          // Three consecutive odd numbers summing to 3 * mid
+          const mid = randInt(7, 25) * 2 + 1;
+          const sum = mid * 3;
+          const maxNum = mid + 2;
+          const opt = buildUniqueOptions(`$${maxNum}$`, [`$${mid}$`, `$${mid - 2}$`, `$${maxNum + 2}$`]);
+          return {
+            id: uid,
+            difficulty: '挑戰素養',
+            question: `已知三個連續奇數的總和為 $${sum}$，請問這三個奇數中「最大」的數是多少？`,
+            ...opt,
+            explanation: `設中間奇數為 $x$，則 $(x-2) + x + (x+2) = ${sum} \\Rightarrow 3x = ${sum} \\Rightarrow x = ${mid}$，最大奇數為 $${mid} + 2 = ${maxNum}$。`
+          };
+        }
+      }
+
+      // 7. 國七下 - 直角坐標平面 (g7-u2)
+      if (unitId === 'g7-u2') {
+        const type = randInt(1, 3);
+        if (type === 1) {
+          const sx = Math.random() > 0.5 ? 1 : -1;
+          const sy = Math.random() > 0.5 ? 1 : -1;
+          const x = sx * randInt(1, 9);
+          const y = sy * randInt(1, 9);
+          const quad = (x > 0 && y > 0) ? '第一象限' : (x < 0 && y > 0) ? '第二象限' : (x < 0 && y < 0) ? '第三象限' : '第四象限';
+          const opt = buildUniqueOptions(quad, ['第一象限', '第二象限', '第三象限', '第四象限']);
+          return {
+            id: uid,
+            difficulty: '基礎',
+            question: `在直角坐標平面上，點 $P(${x}, ${y})$ 位於哪一個象限？`,
+            ...opt,
+            explanation: `$x = ${x} ${x > 0 ? '> 0' : '< 0'}$，$y = ${y} ${y > 0 ? '> 0' : '< 0'}$，故點 $P$ 位於${quad}。`
+          };
+        } else if (type === 2) {
+          const x = (Math.random() > 0.5 ? 1 : -1) * randInt(2, 9);
+          const y = (Math.random() > 0.5 ? 1 : -1) * randInt(2, 9);
+          const sumDist = Math.abs(x) + Math.abs(y);
+          const opt = buildUniqueOptions(`$${sumDist}$`, [`$${Math.abs(Math.abs(x) - Math.abs(y))}$`, `$${x + y}$`, `$${sumDist + 2}$`]);
+          return {
+            id: uid,
+            difficulty: '進階',
+            question: `點 $Q(${x}, ${y})$ 到 $x$ 軸的距離與到 $y$ 軸的距離總和是多少？`,
+            ...opt,
+            explanation: `到 $x$ 軸距離為 $|${y}| = ${Math.abs(y)}$，到 $y$ 軸距離為 $|${x}| = ${Math.abs(x)}$，總和為 $${Math.abs(y)} + ${Math.abs(x)} = ${sumDist}$。`
+          };
+        } else {
+          const x0 = randInt(-5, 5);
+          const y0 = randInt(-5, 5);
+          const dx = randInt(2, 6);
+          const dy = randInt(2, 6);
+          const nx = x0 + dx;
+          const ny = y0 - dy;
+          const opt = buildUniqueOptions(`$(${nx}, ${ny})$`, [`$(${x0 - dx}, ${y0 + dy})$`, `$(${nx}, ${y0 + dy})$`, `$(${x0 - dx}, ${ny})$`]);
+          return {
+            id: uid,
+            difficulty: '挑戰素養',
+            question: `將坐標平面上的點 $A(${x0}, ${y0})$ 向右平移 $${dx}$ 單位，再向下平移 $${dy}$ 單位後到達點 $B$，則 $B$ 點坐標為何？`,
+            ...opt,
+            explanation: `向右移 $x$ 加 $${dx}$：$${x0} + ${dx} = ${nx}$；向下移 $y$ 減 $${dy}$：$${y0} - ${dy} = ${ny}$，故 $B(${nx}, ${ny})$。`
+          };
+        }
+      }
+
+      // 8. 國八上 - 畢氏定理 (g8-u1)
+      if (unitId === 'g8-u1') {
+        const triples = [
+          [3, 4, 5],
+          [5, 12, 13],
+          [7, 24, 25],
+          [8, 15, 17]
+        ];
+        const base = triples[randInt(0, triples.length - 1)];
+        const k = randInt(1, 3);
+        const a = base[0] * k;
+        const b = base[1] * k;
+        const c = base[2] * k;
+        const askHyp = Math.random() > 0.45;
+        if (askHyp) {
+          const opt = buildUniqueOptions(`$${c}$`, [`$${a + b}$`, `$${c + 2}$`, `$${b + 1}$`]);
+          return {
+            id: uid,
+            difficulty: '基礎',
+            question: `一直角三角形的兩股長分別為 $${a}$ 與 $${b}$，則斜邊長為何？`,
+            ...opt,
+            explanation: `由畢氏定理得斜邊 $= \\sqrt{${a}^2 + ${b}^2} = \\sqrt{${a * a + b * b}} = ${c}$。`
+          };
+        } else {
+          const opt = buildUniqueOptions(`$${b}$ 公尺`, [`$${c - a}$ 公尺`, `$${a + c}$ 公尺`, `$${b - 2}$ 公尺`]);
+          return {
+            id: uid,
+            difficulty: '挑戰素養',
+            question: `一把長 $${c}$ 公尺的梯子斜靠在垂直牆壁上，梯腳距離牆底 $${a}$ 公尺，請問梯頂距離地面幾公尺？`,
+            ...opt,
+            explanation: `梯長為斜邊 $${c}$，梯腳距牆底為一股 $${a}$，故梯頂高度 $= \\sqrt{${c}^2 - ${a}^2} = \\sqrt{${c * c - a * a}} = ${b}$ 公尺。`
+          };
+        }
+      }
+
+      // 9. 國九下 - 二次函數 (g9-u1)
+      const aVals = [-3, -2, -1, 1, 2, 3];
+      const a = aVals[randInt(0, aVals.length - 1)];
+      const h = randInt(-5, 5) || 2;
+      const k = randInt(-6, 6) || -3;
+      const hPart = h > 0 ? `(x - ${h})^2` : `(x + ${Math.abs(h)})^2`;
+      const kPart = k >= 0 ? `+ ${k}` : `- ${Math.abs(k)}`;
+      const aStr = a === 1 ? '' : (a === -1 ? '-' : `${a}`);
+      const type9 = randInt(1, 2);
+
+      if (type9 === 1) {
+        const opt = buildUniqueOptions(`$(${h}, ${k})$`, [`$(${-h}, ${k})$`, `$(${h}, ${-k})$`, `$(${-h}, ${-k})$`]);
+        return {
+          id: uid,
+          difficulty: '基礎',
+          question: `二次函數 $y = ${aStr}${hPart} ${kPart}$ 的頂點坐標為何？`,
+          ...opt,
+          explanation: `對照標準頂點式 $y = a(x - h)^2 + k$，可得頂點 $(h, k) = (${h}, ${k})$。`
+        };
+      } else {
+        const extType = a > 0 ? '最小值' : '最大值';
+        const wrongType = a > 0 ? '最大值' : '最小值';
+        const opt = buildUniqueOptions(`${extType} $${k}$`, [`${wrongType} $${k}$`, `${extType} $${h}$`, `${wrongType} $${a}$`]);
+        return {
+          id: uid,
+          difficulty: '進階',
+          question: `二次函數 $y = ${aStr}${hPart} ${kPart}$ 的圖形有最大值還是最小值？其值為多少？`,
+          ...opt,
+          explanation: `因為 $a = ${a} ${a > 0 ? '> 0' : '< 0'}$，開口向${a > 0 ? '上' : '下'}，頂點 $(${h}, ${k})$ 為最${a > 0 ? '低' : '高'}點，故有${extType} $${k}$。`
+        };
+      }
+    }
+
+    // ==================== Custom Multi-Unit Exam Modal Controls ====================
+    function openCustomExamModal() {
+      renderCustomUnitCheckboxes();
+      document.getElementById('customExamModal').classList.remove('hidden');
+      if (state.customExamQuestions.length === 0) {
+        generateCustomExam();
+      }
+    }
+
+    function closeCustomExamModal() {
+      document.getElementById('customExamModal').classList.add('hidden');
+    }
+
+    function renderCustomUnitCheckboxes() {
+      const grid = document.getElementById('customUnitCheckboxGrid');
+      if (!grid) return;
+      grid.innerHTML = CURRICULUM_DATA.map(u => {
+        const checked = state.selectedCustomUnits.includes(u.id);
+        return `
+          <label class="flex items-start gap-2.5 p-3 rounded-xl border cursor-pointer transition ${
+            checked ? 'bg-rose-50/80 border-rose-300 shadow-sm' : 'bg-white border-rose-100 hover:bg-rose-50/30'
+          }">
+            <input type="checkbox" value="${u.id}" ${checked ? 'checked' : ''} onchange="toggleCustomUnitSelection('${u.id}', this.checked)" class="mt-0.5 accent-rose-400 w-4 h-4" />
+            <div class="min-w-0">
+              <div class="flex items-center gap-1.5">
+                <span class="text-[11px] font-black text-rose-500">${u.semester}</span>
+                <span class="text-[11px] font-bold text-gray-600">${u.subjectIcon} ${u.subject}</span>
+              </div>
+              <div class="text-xs font-bold text-gray-800 truncate">${u.title}</div>
+            </div>
+          </label>
+        `;
+      }).join('');
+    }
+
+    function toggleCustomUnitSelection(unitId, isChecked) {
+      if (isChecked) {
+        if (!state.selectedCustomUnits.includes(unitId)) state.selectedCustomUnits.push(unitId);
+      } else {
+        state.selectedCustomUnits = state.selectedCustomUnits.filter(id => id !== unitId);
+      }
+      renderCustomUnitCheckboxes();
+    }
+
+    function selectCustomUnitGroup(group) {
+      if (group === 'elem') {
+        state.selectedCustomUnits = CURRICULUM_DATA.filter(u => u.stage === '國小三年級').map(u => u.id);
+      } else if (group === 'junior') {
+        state.selectedCustomUnits = CURRICULUM_DATA.filter(u => u.stage === '國中數學').map(u => u.id);
+      } else {
+        state.selectedCustomUnits = [];
+      }
+      renderCustomUnitCheckboxes();
+    }
+
+    function generateCustomExam() {
+      if (state.selectedCustomUnits.length === 0) {
+        alert('請至少勾選 1 個單元再產生考卷喔！');
+        return;
+      }
+      const perUnit = parseInt(document.getElementById('customPerUnitCount').value) || 2;
+      const diffFilter = document.getElementById('customDiffSelect').value;
+      const useDynamic = document.getElementById('dynamicMutateToggle').checked;
+
+      let generated = [];
+      state.selectedCustomUnits.forEach(uid => {
+        const unit = CURRICULUM_DATA.find(u => u.id === uid);
+        if (!unit) return;
+        const unitLabel = `${unit.semester} ${unit.subject}｜${unit.title}`;
+
+        if (useDynamic) {
+          for (let i = 0; i < perUnit; i++) {
+            const q = createDynamicQuestionForUnit(uid, diffFilter, i);
+            generated.push({ ...q, unitLabel, isElementary: unit.stage === '國小三年級' });
+          }
+        } else {
+          let pool = diffFilter === 'all'
+            ? unit.quizzes
+            : unit.quizzes.filter(q => q.difficulty === diffFilter);
+          if (pool.length === 0) pool = unit.quizzes;
+          const picked = shuffleArray(pool).slice(0, perUnit);
+          picked.forEach((q, idx) => {
+            generated.push({
+              ...q,
+              id: `static-${q.id}-${idx}`,
+              unitLabel,
+              isElementary: unit.stage === '國小三年級'
+            });
+          });
+        }
+      });
+
+      state.customExamQuestions = generated;
+      document.getElementById('customExamPaperCard').classList.remove('hidden');
+      document.getElementById('customExamTotalBadge').textContent = `共 ${generated.length} 題`;
+      document.getElementById('customExamSeedBadge').textContent = useDynamic ? '✨ 動態改數字新題' : '📖 原題庫抽題';
+      document.getElementById('customExamScoreBanner').textContent = '';
+
+      renderCustomExamList();
+      playTone(620, 0.14);
+      renderMath();
+    }
+
+    function renderCustomExamList() {
+      const container = document.getElementById('customExamQuestionsList');
+      container.innerHTML = state.customExamQuestions.map((q, idx) => {
+        const assignedSeat = state.questionSeats[q.id];
+        return `
+          <div class="p-4 rounded-2xl bg-rose-50/25 border border-rose-100">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="px-2 py-0.5 rounded-md text-[11px] font-black bg-rose-100 text-rose-600">${q.unitLabel}</span>
+                <span class="px-2 py-0.5 rounded-full text-[11px] font-black ${getDiffBadgeStyle(q.difficulty)}">${getDiffIcon(q.difficulty)}${q.difficulty}</span>
+                <span class="text-xs font-bold text-gray-500">第 ${idx + 1} 題</span>
+              </div>
+
+              ${q.isElementary ? `
+                <div class="flex items-center gap-1.5">
+                  <span id="qSeatBadge-${q.id}" class="${assignedSeat ? 'px-2.5 py-0.5 rounded-xl bg-amber-100 border border-amber-300 text-amber-900 text-xs font-black' : 'text-xs text-gray-400'}">
+                    ${assignedSeat ? `🌟 請 ${assignedSeat} 號作答` : ''}
+                  </span>
+                  <button type="button" onclick="drawSeatNumber('${q.id}')" class="px-2.5 py-1 rounded-xl bg-white hover:bg-rose-100 border border-rose-200 text-rose-500 text-xs font-black">
+                    🎲 抽座號
+                  </button>
+                </div>
+              ` : ''}
+            </div>
+
+            <div class="font-bold text-gray-800 text-sm sm:text-base mb-3">${q.question}</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              ${q.options.map((opt, oIdx) => `
+                <label class="flex items-center gap-2.5 p-2.5 rounded-xl bg-white border border-rose-100 hover:border-rose-300 cursor-pointer transition">
+                  <input type="radio" name="custom-q-${q.id}" value="${oIdx}" class="accent-rose-400 w-4 h-4" />
+                  <span class="text-xs sm:text-sm font-medium text-gray-800">${opt}</span>
+                </label>
+              `).join('')}
+            </div>
+            <div id="customFeedback-${q.id}" class="hidden mt-3 p-3 rounded-xl text-xs sm:text-sm"></div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function submitCustomExam() {
+      if (state.customExamQuestions.length === 0) return;
+      let correct = 0;
+      state.customExamQuestions.forEach(q => {
+        const selected = document.querySelector(`input[name="custom-q-${q.id}"]:checked`);
+        const fb = document.getElementById(`customFeedback-${q.id}`);
+        fb.classList.remove('hidden');
+        if (selected && parseInt(selected.value) === q.answer) {
+          correct++;
+          fb.className = 'mt-3 p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs sm:text-sm';
+          fb.innerHTML = `<strong>✅ 答對了！</strong> ${q.explanation}`;
+        } else {
+          fb.className = 'mt-3 p-3 rounded-xl bg-rose-50 border border-rose-200 text-gray-800 text-xs sm:text-sm';
+          fb.innerHTML = `<strong>❌ 正確答案是：${q.options[q.answer]}</strong><br/>解析：${q.explanation}`;
+          state.mistakes.push({
+            id: q.id,
+            unitTitle: `${q.unitLabel}（動態組卷）`,
+            question: q.question,
+            correctOption: q.options[q.answer],
+            explanation: q.explanation
+          });
+        }
+      });
+
+      const pct = Math.round((correct / state.customExamQuestions.length) * 100);
+      localStorage.setItem('dora_mistakes', JSON.stringify(state.mistakes));
+      updateTopStats();
+      
+      document.getElementById('customExamScoreBanner').innerHTML = `
+        自訂考卷得分：<span class="text-xl font-black text-rose-500">${pct} 分</span>（答對 ${correct} / ${state.customExamQuestions.length} 題）
+      `;
+      playTone(784, 0.2);
+      renderMath();
+    }
+
+    function projectCustomExam() {
+      if (state.customExamQuestions.length === 0) return;
+      state.projModeSource = 'custom';
+      state.projIndex = 0;
+      state.projRevealed = false;
+      state.projPickedOptions = [];
+      state.projLastWrongIdx = -1;
+      stopProjTimer();
+      document.getElementById('projectionModal').classList.remove('hidden');
+      renderProjectionQuestion();
+      renderTeamScoreboard();
+      renderMath();
+    }
+
+
+    document.addEventListener('keydown', (e) => {
+      const projModal = document.getElementById('projectionModal');
+      if (!projModal || projModal.classList.contains('hidden')) return;
+      if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextProjQuestion();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevProjQuestion();
+      } else if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        toggleProjAnswer();
+      } else if (e.key === 'Escape') {
+        closeProjectionModal();
+      }
     });
 
-    // Init
+
+    function resetCurrentProjQuestion() {
+      state.projRevealed = false;
+      state.projPickedOptions = [];
+      state.projLastWrongIdx = -1;
+      renderProjectionQuestion();
+    }
+
+    function copyDirectUnitLink() {
+      const url = new URL(window.location.href);
+      url.searchParams.set('unit', state.currentUnitId);
+      url.searchParams.set('tab', state.activeTab);
+      const shareStr = url.toString();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareStr).then(() => {
+          const btn = document.getElementById('copyLinkBtn');
+          if (btn) {
+            btn.innerHTML = '<span>✅ 已複製直達連結！</span>';
+            setTimeout(() => { btn.innerHTML = '<span>🔗 複製學生直達連結</span>'; }, 2200);
+          }
+        }).catch(() => {
+          prompt('請複製下方網址傳給學生：', shareStr);
+        });
+      } else {
+        prompt('請複製下方網址傳給學生：', shareStr);
+      }
+    }
+
+    function printCustomWorksheet() {
+      if (state.customExamQuestions.length === 0) return;
+      const area = document.getElementById('printableWorksheetArea');
+      const optLabels = ['A', 'B', 'C', 'D'];
+      const todayStr = new Date().toLocaleDateString('zh-TW');
+
+      const studentHtml = `
+        <div style="border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 18px;">
+          <h2 style="font-size: 18pt; font-weight: bold; margin: 0;">Dora老師的數位學習教室 — 隨堂練習卷</h2>
+          <div style="margin-top: 8px; font-size: 11pt;">
+            日期：${todayStr}　　班級：__________　　座號：______　　姓名：______________　　得分：________
+          </div>
+        </div>
+        ${state.customExamQuestions.map((q, idx) => `
+          <div style="margin-bottom: 16px; page-break-inside: avoid;">
+            <div style="font-weight: bold; margin-bottom: 6px;">
+              （　　）${idx + 1}. [${q.difficulty}] ${q.question}
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; padding-left: 20px;">
+              ${q.options.map((opt, oIdx) => `<div>(${optLabels[oIdx]}) ${opt}</div>`).join('')}
+            </div>
+          </div>
+        `).join('')}
+      `;
+
+      const answerKeyHtml = `
+        <div class="print-page-break" style="border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 16px;">
+          <h2 style="font-size: 16pt; font-weight: bold; margin: 0;">Dora老師專用 — 教師解答與詳解卷</h2>
+        </div>
+        ${state.customExamQuestions.map((q, idx) => `
+          <div style="margin-bottom: 12px; page-break-inside: avoid; border-bottom: 1px dashed #ccc; padding-bottom: 8px;">
+            <div><strong>第 ${idx + 1} 題答案：(${optLabels[q.answer]}) ${q.options[q.answer]}</strong></div>
+            <div style="font-size: 10.5pt; color: #333; margin-top: 2px;">解析：${q.explanation}</div>
+          </div>
+        `).join('')}
+      `;
+
+      area.innerHTML = studentHtml + answerKeyHtml;
+      area.classList.remove('hidden');
+      renderMath();
+      setTimeout(() => {
+        window.print();
+        area.classList.add('hidden');
+      }, 350);
+    }
+
+    function closeMobileDrawer() {
+      document.getElementById('sidebarDrawer').classList.add('hidden');
+      document.getElementById('mobileBackdrop').classList.add('hidden');
+    }
+
+
+    document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+      document.getElementById('sidebarDrawer').classList.toggle('hidden');
+      document.getElementById('mobileBackdrop').classList.toggle('hidden');
+    });
+
+    // Release button focus on click so presenter remote Space/Enter never double-triggers buttons
+    document.addEventListener('click', (e) => {
+      if (e.target && e.target.closest('button')) {
+        e.target.closest('button').blur();
+      }
+    });
+
     window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const paramUnit = params.get('unit');
+      const paramTab = params.get('tab');
+      if (paramUnit && CURRICULUM_DATA.some(u => u.id === paramUnit)) {
+        state.currentUnitId = paramUnit;
+      }
       updateTopStats();
+      
       renderSidebar();
       renderWorkspace();
+      if (paramTab && ['video', 'practice', 'quiz'].includes(paramTab)) {
+        switchTab(paramTab);
+      }
     });
   </script>
 </body>
